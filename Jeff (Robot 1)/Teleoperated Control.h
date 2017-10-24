@@ -134,6 +134,7 @@ void runController(const Mode mode = TANK)
 			MoveChassis();
 			MoveLift();
 			MoveClaw();
+			GoalLift();
 		break;
 
 		case ARCADE:
