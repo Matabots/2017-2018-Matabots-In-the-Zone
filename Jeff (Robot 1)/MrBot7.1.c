@@ -1,4 +1,5 @@
 #pragma config(Sensor, in1,    ClawLiftAngle,  sensorAnalog)
+#pragma config(Sensor, dgt1,   pneuBase,       sensorDigitalOut)
 #pragma config(Sensor, dgtl6,  leftLift,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl8,  rightLift,      sensorQuadEncoder)
 #pragma config(Motor,  port1,           CMot,          tmotorVex393_HBridge, openLoop)
