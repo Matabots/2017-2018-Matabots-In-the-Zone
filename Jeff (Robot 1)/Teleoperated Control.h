@@ -13,20 +13,22 @@ struct Controller
 	TVexJoysticks	leftMotors;
 	TVexJoysticks	clawOpen;
 	TVexJoysticks clawClose;
+	TVexJoysticks goalLift;
 };
 
 Controller controller;
 
 void setupController()
 {
-	controller.liftUp = Btn6U;
-	controller.liftDown = Btn6D;
-	controller.clawUp = Btn8D;
-	controller.clawDown = Btn8U;
+	controller.liftUp = Btn7U; //edited
+	controller.liftDown = Btn7D;
+	controller.clawUp = Btn5U; //mini 4 bar
+	controller.clawDown = Btn5D;
 	controller.rightMotors = Ch2;
 	controller.leftMotors = Ch3;
-	controller.clawOpen = Btn7D;
-	controller.clawClose = Btn7U;
+	controller.clawOpen = Btn6U;
+	controller.clawClose = Btn6D;
+	controller.goalLift = Btn8R;
 }
 
 
@@ -35,6 +37,20 @@ enum Mode
 	 TANK = 0,
 	 ARCADE =1
 };
+
+void GoalLift()
+{
+	if (vexRT[controller.goalLift] == 1 && (SensorValue[pneuBase] == 0))
+	{
+		SensorValue[pneuBase] = 1;
+		wait10Msec(20);
+	}
+	if (vexRT[controller.goalLift] == 1 && (SensorValue[pneuBase] == 1))
+	{
+		SensorValue[pneuBase] = 0;
+		wait10Msec(20);
+	}
+}
 
 void MoveLift()
 {
