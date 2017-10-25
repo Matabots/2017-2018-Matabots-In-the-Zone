@@ -5,7 +5,7 @@ float degToInt(float deg);
 
 /*Robot Defintion*/
 void initializeRobot();
-float ClawEndpoint();
+float ClawEndpointTo(float height);
 int stackHeight();
 void moveTime(int powerLeft, int powerRight, int time);
 void moveDeg(int powerLeft, int powerRight, int deg);
