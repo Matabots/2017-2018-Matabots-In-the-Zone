@@ -38,20 +38,6 @@ enum Mode
 	 ARCADE =1
 };
 
-void GoalLift()
-{
-	if (vexRT[controller.goalLift] == 1 && (SensorValue[pneuBase] == 0))
-	{
-		SensorValue[pneuBase] = 1;
-		wait10Msec(20);
-	}
-	if (vexRT[controller.goalLift] == 1 && (SensorValue[pneuBase] == 1))
-	{
-		SensorValue[pneuBase] = 0;
-		wait10Msec(20);
-	}
-}
-
 void MoveLift()
 {
 	//moves the entire arm up/down
