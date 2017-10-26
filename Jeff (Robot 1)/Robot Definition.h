@@ -59,6 +59,7 @@ void initializeRobot()
 	robot.lift.armTopLength = 0;
 	SensorValue[leftLiftEnc] = 0;
 	SensorValue[rightLiftEnc] =0;
+	SensorValue[ClawLiftAngle]=0;
 	robot.lift.theta = Avg(SensorValue[leftLiftEnc],SensorValue[rightLiftEnc]);
 	robot.claw.alpha = SensorValue[ClawLiftAngle];
 	robot.lift.endPoint.y =(sin(robot.lift.theta)*(robot.lift.armBotLength+robot.lift.armTopLength))+ robot.lift.c1 + robot.lift.c2;
@@ -80,11 +81,9 @@ void moveClawEndPointTo(int targetHeight)
 		error = targetHeight - robot.claw.endPoint.y;
 		totalError += error;
 		output = error*kp + totalError*ki;
-		motor[LLift] = output;
-		motor[RLift] = output;
+		motor[CLift] = output;
 	}
-	motor[LLift] = 0;
-	motor[RLift] = 0;
+	motor[CLift] = 0;
 }
 
 void moveLiftEndPointTo(int targetHeight)
@@ -94,21 +93,30 @@ void moveLiftEndPointTo(int targetHeight)
 	float error = targetHeight - robot.lift.endPoint.y;
 	float totalError = 0;
 	int output = 0;
+	int shift =0;
 	while(abs(error)> 0.1)
 	{
 		error = targetHeight - robot.claw.endPoint.y;
 		totalError += error;
 		output = error*kp + totalError*ki;
-		motor[LLift] = output;
-		motor[RLift] = output;
+		if(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]>0)
+		{
+			motor[LLift] = output-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+			motor[RLift] = output+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+		}
+		else
+		{
+			motor[LLift] = output+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+			motor[RLift] = output-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+		}
 	}
 	motor[LLift] = 0;
 	motor[RLift] = 0;
 }
 
-int stackHeight()
+int stackHeight(int towerHeight)
 {
-
+	//
 }
 
 void moveTime(int powerLeft, int powerRight, int time)

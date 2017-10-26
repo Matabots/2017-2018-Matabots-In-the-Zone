@@ -43,13 +43,19 @@ void MoveLift()
 	//moves the entire arm up/down
 	 	if(vexRT[controller.liftUp])
 	 	{
-    	motor[RLift] = 127;
-  		motor[LLift] = 127;
+	 		if(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]>0)
+		 	{
+	    	motor[RLift] = 127+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+	  		motor[LLift] = 127-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+  		}
     }
 	  else if(vexRT[controller.liftDown])
 	 	{
-	   	motor[RLift] = -127;
-   		motor[LLift] = -127;
+	   	if(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]>0)
+		 	{
+	    	motor[RLift] = -127+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+	  		motor[LLift] = -127-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+  		}
     }
     else
     {

@@ -7,7 +7,7 @@ typedef struct{
   tMotor name1;
   tSensors sensorname;
   float target; 						//speed desired to the motor
-  float error
+  float error;
   float prevError;			 	//last error calculated for that motor
   float totalError;
   float kP;
