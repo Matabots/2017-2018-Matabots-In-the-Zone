@@ -64,13 +64,6 @@ task autonomous()
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 
-task update()
-{
-
-	//robot.lift.theta = Avg(SensorValue[],SenorValue[]);
-	robot.lift.alpha = SensorValue[ClawLiftAngle];
-	robot.lift.clawEndpoint =(sin(robot.lift.theta)*(robot.lift.armBotLength+robot.lift.armTopLength))+(robot.lift.armClawLength*sin(robot.lift.alpha))+ robot.lift.c1 + robot.lift.c2 + robot.lift.c3;
-}
 
 task usercontrol()
 {

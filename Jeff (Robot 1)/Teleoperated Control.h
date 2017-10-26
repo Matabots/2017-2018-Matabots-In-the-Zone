@@ -20,15 +20,15 @@ Controller controller;
 
 void setupController()
 {
-	controller.liftUp = Btn7U; //edited
-	controller.liftDown = Btn7D;
-	controller.clawUp = Btn5U; //mini 4 bar
-	controller.clawDown = Btn5D;
-	controller.rightMotors = Ch2;
-	controller.leftMotors = Ch3;
-	controller.clawOpen = Btn6U;
-	controller.clawClose = Btn6D;
-	controller.goalLift = Btn8R;
+	controller.liftUp = Btn7U; //move the lift up
+	controller.liftDown = Btn7D;	//move the lift down
+	controller.clawUp = Btn5U; //move claw up
+	controller.clawDown = Btn5D;	//move claw down
+	controller.rightMotors = Ch2;	//move the right side of the robot
+	controller.leftMotors = Ch3;	//move the left side of the robot
+	controller.clawOpen = Btn6U;	//open claw
+	controller.clawClose = Btn6D;	//close claw
+	controller.goalLift = Btn8R;	//lift/lower the goal
 }
 
 

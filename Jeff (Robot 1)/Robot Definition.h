@@ -5,7 +5,7 @@ and aspects of a robot*/
 struct Chassis
 {
 	float wheelDiameter;	//inches
-	Vector COR;	//center of rotation. x = 0, y = 0 at middle. + faces forward and right
+	Vector2 COR;	//center of rotation. x = 0, y = 0 at middle. + faces forward and right
 };
 
 /*define the double 4 bar with lever arm*/
@@ -14,23 +14,39 @@ struct Lift
 	//define combination of bars
 	float armBotLength;
 	float armTopLength;
-	float armClawLength;
 	float theta;
-	float alpha;
 	float c1;	//the vertical distance of the side towers in inches
 	float c2;	//the vertical distance between the two 4-bars in inches
-	float c3;	//the vertical distance between the end of the 4-bars and the claw
-	float clawEndPoint;
+	Vector2 endPoint;
 };
+
+struct Claw
+{
+	float armLength;
+	float alpha;	//the angle between the claw arm and the vertical y-axis
+	float c3;	//the vertical distance between the end of the 4-bars and the claw
+	Vector2 endPoint;
+}
+
 
 /*define the robot as a sum of other assemblies*/
 struct Robot
 {
+	Claw claw;
 	Chassis chassis;
 	Lift lift;
 };
 
 Robot robot;	//create the global robot that will be controlled by the program
+
+/*once started, this task will constantly update the robot values based on current sensor input*/
+task update()
+{
+	robot.lift.theta = Avg(SensorValue[leftLiftEnc],SensorValue[rightLiftEnc]);
+	robot.claw.alpha = SensorValue[ClawLiftAngle];
+	robot.lift.endPoint.y =(sin(robot.lift.theta)*(robot.lift.armBotLength+robot.lift.armTopLength))+ robot.lift.c1 + robot.lift.c2;
+	robot.claw.endPoint.y = robot.claw.c3+robot.claw.armLength*cos(robot.claw.alpha);
+}
 
 /* Initializes the sensors, dimensions, and qualities of the robot.
 edit this function to redefine the robot properties*/
@@ -41,22 +57,46 @@ void initializeRobot()
 	robot.chassis.COR.y = 0;
 	robot.lift.armBotLength = 0;
 	robot.lift.armTopLength = 0;
-	//robot.lift.theta = Avg(SensorValue[],SenorValue[]);
-	robot.lift.alpha = SensorValue[ClawLiftAngle];
-	robot.lift.clawEndPoint =(sin(robot.lift.theta)*(robot.lift.armBotLength+robot.lift.armTopLength))+(robot.lift.armClawLength*sin(robot.lift.alpha))+ robot.lift.c1 + robot.lift.c2 + robot.lift.c3;
+	SensorValue[leftLiftEnc] = 0;
+	SensorValue[rightLiftEnc] =0;
+	robot.lift.theta = Avg(SensorValue[leftLiftEnc],SensorValue[rightLiftEnc]);
+	robot.claw.alpha = SensorValue[ClawLiftAngle];
+	robot.lift.endPoint.y =(sin(robot.lift.theta)*(robot.lift.armBotLength+robot.lift.armTopLength))+ robot.lift.c1 + robot.lift.c2;
+	robot.claw.endPoint.y = robot.claw.c3+robot.claw.armLength*cos(robot.claw.alpha);
+	startTask(update);
 }
+
 
 /*Move the claw to a target height*/
 void moveClawEndPointTo(int targetHeight)
 {
 	float kp = 1;
 	float ki = 1;
-	float error = targetHeight - robot.lift.clawEndPoint;
+	float error = targetHeight - robot.claw.endPoint.y;
 	float totalError = 0;
 	int output = 0;
 	while(abs(error)> 0.1)
 	{
-		error = targetHeight - robot.lift.clawEndPoint;
+		error = targetHeight - robot.claw.endPoint.y;
+		totalError += error;
+		output = error*kp + totalError*ki;
+		motor[LLift] = output;
+		motor[RLift] = output;
+	}
+	motor[LLift] = 0;
+	motor[RLift] = 0;
+}
+
+void moveLiftEndPointTo(int targetHeight)
+{
+	float kp = 1;
+	float ki = 1;
+	float error = targetHeight - robot.lift.endPoint.y;
+	float totalError = 0;
+	int output = 0;
+	while(abs(error)> 0.1)
+	{
+		error = targetHeight - robot.claw.endPoint.y;
 		totalError += error;
 		output = error*kp + totalError*ki;
 		motor[LLift] = output;
