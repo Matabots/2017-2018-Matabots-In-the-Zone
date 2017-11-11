@@ -48,6 +48,11 @@ void MoveLift()
 	    	motor[RLift] = 127+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
 	  		motor[LLift] = 127-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
   		}
+  		else
+  		{
+	    	motor[RLift] = 127-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+	  		motor[LLift] = 127+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+  		}
     }
 	  else if(vexRT[controller.liftDown])
 	 	{
@@ -55,6 +60,11 @@ void MoveLift()
 		 	{
 	    	motor[RLift] = -127+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
 	  		motor[LLift] = -127-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+  		}
+  		else
+  		{
+	    	motor[RLift] = -127-(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
+	  		motor[LLift] = -127+(SensorValue[leftLiftEnc]-SensorValue[rightLiftEnc]);
   		}
     }
     else
@@ -79,18 +89,19 @@ void MoveLift()
 
 void MoveClaw()
 {
-	if(vexRT(controller.clawOpen))
+	if(vexRT(controller.clawOpen)) //&& abs(SensorValue[CMEnc]) < 90)
 	{
-		motor[CMot] = 127;
+		motor[CMot] = -127;
   }
-  else if(vexRT(controller.clawClose))
+  else if(vexRT(controller.clawClose)) //&& abs(SensorValue[CMEnc]) > 0)
   {
-    motor[CMot] = -127;
+    motor[CMot] = 127;
   }
   else
   {
   	motor[CMot] = 0;
   }
+  displayLCDNumber(1,3,getMotorEncoder(CMot))
 }
 
 void MoveChassis()
@@ -98,7 +109,7 @@ void MoveChassis()
 	int deadZone = 15;
 	if (abs(vexRT[controller.rightMotors]) > DEADZONE)
 	{
-		motor[RRevs] = -vexRT[controller.rightMotors];
+		motor[RRevs] = vexRT[controller.rightMotors];
 		motor[RFors] = vexRT[controller.rightMotors]; //wires have reverse polarity
 	}
 	else
@@ -108,7 +119,7 @@ void MoveChassis()
 	}
 	if (abs(vexRT[controller.leftMotors]) > DEADZONE)
 	{
-		motor[LRevs] = -vexRT[controller.leftMotors];
+		motor[LRevs] = vexRT[controller.leftMotors];
 		motor[LFors] = vexRT[controller.leftMotors]; //wires have reverse polarity
 	}
 	else

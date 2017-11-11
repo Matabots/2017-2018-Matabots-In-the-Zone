@@ -1,10 +1,14 @@
+#pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, in1,    ClawLiftAngle,  sensorPotentiometer)
 #pragma config(Sensor, dgtl1,  pneuBase,       sensorDigitalOut)
 #pragma config(Sensor, dgtl2,  rightEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl4,  leftEnc,        sensorQuadEncoder)
 #pragma config(Sensor, dgtl6,  leftLiftEnc,    sensorQuadEncoder)
 #pragma config(Sensor, dgtl8,  rightLiftEnc,   sensorQuadEncoder)
-#pragma config(Motor,  port1,           CMot,          tmotorVex393_HBridge, openLoop)
+#pragma config(Sensor, I2C_1,  LMLeftEnc,      sensorNone)
+#pragma config(Sensor, I2C_2,  LMRightEnc,     sensorNone)
+#pragma config(Sensor, I2C_3,  CMEnc,          sensorQuadEncoderOnI2CPort,    , AutoAssign )
+#pragma config(Motor,  port1,           CMot,          tmotorVex393_HBridge, openLoop, encoderPort, I2C_3)
 #pragma config(Motor,  port2,           RRevs,         tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port3,           LFors,         tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port4,           RLift,         tmotorVex393_MC29, openLoop)
@@ -23,6 +27,7 @@
 #include "Vex_Competition_Includes.c"
 #include "Teleoperated Control.h"
 #include "Robot Definition.h"
+#include "autoData.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -51,7 +56,8 @@ void pre_auton()
 task autonomous()
 {
   // Remove this function call once you have "real" code.
-  AutonomousCodePlaceholderForTesting();
+  autoGO();
+
 }
 
 /*---------------------------------------------------------------------------*/

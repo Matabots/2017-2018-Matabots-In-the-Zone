@@ -17,6 +17,8 @@
 int deadZone = 15;
 bool which = false;
 int width = 20;
+bool opened = false;
+bool up = true;
 
 
 float degToInt(float deg)
@@ -130,7 +132,7 @@ void moveDeg(int powerLeft, int powerRight, int deg)
   }
   Halt();
 }
-void liftUp()
+void mobileUp()
 {
 	if (SensorValue[pneuBase] == 0) {
 		SensorValue[pneuBase] = 1;
@@ -141,75 +143,106 @@ void liftUp()
   }
 
 }
-void clawOpen()
+
+void MoveClawTwo() //copied from drive, then modified
 {
 
+	if(!opened) //&& abs(SensorValue[CMEnc]) < 90)
+	{
+		motor[CMot] = 127;
+		opened = true;
+		wait10Msec(100);
+  }
+  else if(opened) //&& abs(SensorValue[CMEnc]) > 0)
+  {
+    motor[CMot] = -127;
+    opened = false;
+    wait10Msec(100);
+  }
+  else
+  {
+  	motor[CMot] = 0;
+  }
+  displayLCDNumber(1,3,getMotorEncoder(CMot))
 }
+int full = 80;
+int small = 40;
+
+void tinyLift(int power, int time)
+{
+    	motor[CLift] = power;
+    	wait10Msec(time);
+
+		  motor[CLift] = 0;
+
+}
+
 task main()
 {
-	bool autoOn = false;
+	//needs to have a full tank of air and fresh batteries
 	reSetDEnc();
   SensorValue[pneuBase] = 1;
 
-  //while(true)
-  //{
-  //  if(vexRT[Btn7D] == 1) //Placeholder for control, removed when code is complete
-  //	{
-  //  	autoOn = true;
-  //  }
-  //  if(autoOn) // beginning of auton
-  //  {
-  //  	turnRight(15);
-  //  	wait1Msec(1000);
-  //	  goStraight(24);
-  // 	  wait1Msec(1000);
-  //  	spinLeft(180);
-  //    wait1Msec(1000);
-  //    goStraight(45);
-  //    wait1Msec(1000);
-  //    autoOn = false; //end of auton
-  //  }
-  //}
-
-  moveInch(0,80,4.25); //moving //was 3.75 //changed to 4.25 with a fresh battery
+  moveInch(0,80,5.75);//moving //works with 5.75 and fresh battery
   wait10Msec(50);
-  moveInch(127,127,25); //was 28
+  moveInch(127,127,29);
   wait10Msec(100);
-  moveInch(60,-30,6);
+  moveInch(60,-60,4);
   wait10Msec(50);
-  moveInch(-127,-127,9);
+  moveInch(60,60,5);
+  moveInch(-127,-127,11);
   wait10Msec(50);
 
   moveInch(127,127,2); //grabbing
   wait10Msec(50);
-  moveInch(-127,127,10);// was 10
+  moveInch(-127,127,6);
   wait10Msec(50);
-  moveInch(127,127,8.5);
+  moveInch(80,80,8.5);
   wait10Msec(50);
-  liftUp();
+  moveInch(80,80,2);
+  wait10Msec(50);
+  moveInch(0,80,3);
+  wait10Msec(50);
+  mobileUp();
   wait10Msec(100);
+  tinyLift(127, full);
+  wait10Msec(100);
+
+  MoveClawTwo();
+  wait10Msec(100);
+  MoveClawTwo();
+  wait10Msec(100);
+
+  moveInch(-80,0,3);
+  wait10Msec(50);
   moveInch(-127,-127,9);
   wait10Msec(50);
 
-  moveInch(-75,75,12); //returning was 13
+  moveInch(-75,75,14.5); //returning
   wait10Msec(50);
-  moveInch(100,100,28);
+  moveInch(100,100,27.75); //scored on 28
   wait10Msec(50);
-  moveInch(75,-75,5);//was 5
+  moveInch(75,-75,6); //scored on 5
   wait10Msec(50);
 
   moveInch(-80,-80,6); // Scoring
   wait10Msec(100);
-  moveInch(127,127,18);
+  moveInch(127,127,17);
+  wait10Msec(90);
+  moveInch(-70,-70,1);
+  moveInch(-127,127,.5);
+  wait10Msec(90);
   wait10Msec(50);
   moveInch(-127,-127,5);
   wait10Msec(50);
-  moveInch(-75,75,13);
+  moveInch(-75,75,8);
   wait10Msec(50);
 
-  liftUp();
+  mobileUp();
   wait10Msec(50);
-  moveInch(100,100,2);
+  moveInch(100,100,3);
+  wait10Msec(50);
+  moveInch(127,127,7);
   wait10Msec(50);
 
 }
