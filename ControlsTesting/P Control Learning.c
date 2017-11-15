@@ -31,48 +31,47 @@ task main()
 	resetEnc();
 	while(true)
 	{
-	if (vexRT[Btn8D] == 1)
-	{
-		//drive forward for 500 degrees using P control
-	  float minS = 5;
-	  float target = 720;
-	  float encAvg = 0;
-		float error = target - encAvg;	//error is the difference between the goal and current distance
-
-		float tolerance = 1;	//how accurate do I want the robot to be
-
-		float Kp = 1;		//Kp is a multiplier to calibrate the power
-
-
-		while(abs(error) > tolerance)
+		if (vexRT[Btn8D] == 1)
 		{
-			encAvg = ((SensorValue[rightEnc] + SensorValue[leftEnc])/2);
-			error = target - encAvg;
-			float motSpeed = error * Kp;//constantly updates as I get closer to target
+			//drive forward for 500 degrees using P control
+		  float minS = 5;
+		  float target = 720;
+		  float encAvg = 0;
+			float error = target - encAvg;	//error is the difference between the goal and current distance
 
-			if (motSpeed < minS)
+			float tolerance = 1;	//how accurate do I want the robot to be
+
+			float Kp = 1;		//Kp is a multiplier to calibrate the power
+
+
+			while(abs(error) > tolerance)
 			{
-			  Right(minS);
-	  	  Left(minS);
-			}
+				encAvg = ((SensorValue[rightEnc] + SensorValue[leftEnc])/2);
+				error = target - encAvg;
+				float motSpeed = error * Kp;//constantly updates as I get closer to target
+
+				if (motSpeed < minS)
+				{
+				  Right(minS);
+		  		Left(minS);
+				}
 			  else
-			{
-		    Right(motSpeed);
-	  	  Left(motSpeed);
-	    }
+				{
+			    Right(motSpeed);
+		  		Left(motSpeed);
+		    }
 
-			//motor power limits itself to 127 if too large.
-			//check to make sure the robot is not stalling before it reaches the target point
-				//Note: stalling is either from Kp being too low and doesn't have enough power to push last bit of distance
-				//Note: You can eliminate stalling with a minimum speed limit i.e: if(error*kp < MIN){ motor[port[1]] = MIN};
+				//motor power limits itself to 127 if too large.
+				//check to make sure the robot is not stalling before it reaches the target point
+					//Note: stalling is either from Kp being too low and doesn't have enough power to push last bit of distance
+					//Note: You can eliminate stalling with a minimum speed limit i.e: if(error*kp < MIN){ motor[port[1]] = MIN};
 
-
-
-			//*****STEPS TO CALIBRATE Kp*****
-			//1. keep increasing Kp until the robot starts to oscillate about the target point physically
-			//2. once Kp oscillates, decrease Kp a little so it is stable
-	  }
-	  Halt();
+				//*****STEPS TO CALIBRATE Kp*****
+				//1. keep increasing Kp until the robot starts to oscillate about the target point physically
+				//2. once Kp oscillates, decrease Kp a little so it is stable
+		  }
+	  	Halt();
+			resetEnc();
 	  }
 
 		//Things to know about P Controllers
