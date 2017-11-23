@@ -35,18 +35,18 @@ task main()
 		{
 			//drive forward for 500 degrees using P control
 		  float minS = 5;
-		  float target = 720;
+		  float target = 48;
 		  float encAvg = 0;
 			float error = target - encAvg;	//error is the difference between the goal and current distance
 
 			float tolerance = 1;	//how accurate do I want the robot to be
 
-			float Kp = 1;		//Kp is a multiplier to calibrate the power
+			float Kp = 0.9;		//Kp is a multiplier to calibrate the power
 
 
 			while(abs(error) > tolerance)
 			{
-				encAvg = ((SensorValue[rightEnc] + SensorValue[leftEnc])/2);
+				encAvg = ((degToInt(SensorValue[rightEnc]) + degToInt(SensorValue[leftEnc]))/2);
 				error = target - encAvg;
 				float motSpeed = error * Kp;//constantly updates as I get closer to target
 
