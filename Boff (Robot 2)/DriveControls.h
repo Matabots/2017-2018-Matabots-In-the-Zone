@@ -53,16 +53,16 @@ void autoLift(int degr)
 {
 	while(abs(SensorValue[stackEnc]) <= degr)
 	{
-  	motor[LiftMots] = -127;
+  	motor[LiftMot] = -127;
   }
-	motor[LiftMots] = 0;
+	motor[LiftMot] = 0;
 	autoClaw();
 
 	while(abs(SensorValue[stackEnc]) >= 0)
 	{
-		motor[LiftMots] = 127;
+		motor[LiftMot] = 127;
   }
-  motor[LiftMots] = 0;
+  motor[LiftMot] = 0;
   currentStack = currentStack + 1;
 }
 
@@ -85,7 +85,7 @@ void MoveClaw()
   displayLCDNumber(1,3,getMotorEncoder(CMot));
 }
 
-
+/*
 void MoveLift()
 {
 	//moves stacker up to 4 cones
@@ -111,14 +111,15 @@ void MoveLift()
 	  }
   }
 }
-
+*/
 
 void MoveChassis()
 {
+
 	if (abs(vexRT[controller.rightMotors]) > DEADZONE)
 	{
-		motor[RMots1] = vexRT[controller.rightMotors];
-		motor[RMots2] = vexRT[controller.rightMotors];
+		motor[RMots1] = n*vexRT[controller.rightMotors];
+		motor[RMots2] = n*vexRT[controller.rightMotors];
 	}
 	else
 	{
@@ -127,8 +128,8 @@ void MoveChassis()
 	}
 	if (abs(vexRT[controller.leftMotors]) > DEADZONE)
 	{
-		motor[LMots1] = vexRT[controller.leftMotors];
-		motor[LMots2] = vexRT[controller.leftMotors];
+		motor[LMots1] = n*vexRT[controller.leftMotors];
+		motor[LMots2] = n*vexRT[controller.leftMotors];
 	}
 	else
 	{
@@ -150,8 +151,8 @@ void liftBase()
 void runController(const Mode mode = TANK)
 {
 	MoveChassis();
-	MoveLift();
+	//MoveLift(); //not working correctly (Adrian 11/24/2017)
 	MoveClaw();
-	liftBase();
+	//liftBase();
 	resetStackerNum();
 }
