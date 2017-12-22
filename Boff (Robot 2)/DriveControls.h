@@ -3,6 +3,8 @@ Drive Functions (some code taken from Jeff (Robot 1)/Teleoperated Control.h"
 */
 
 #define DEADZONE 15
+bool turning = false;
+int potentVal = 0;
 
 struct Controller
 {
@@ -42,14 +44,14 @@ void autoClaw()
 	  motor[CMot] = 127;
   }
   motor[CMot] = 0;
-  */
+
 
 	motor[CMot] = -127;
 	wait10Msec(80);
-	motor[CMot] = 0;
+	motor[CMot] = 0;*/
 }
 
-void autoLift(int degr)
+/*void autoLift(int degr)
 {
 	while(abs(SensorValue[stackEnc]) <= degr)
 	{
@@ -64,25 +66,23 @@ void autoLift(int degr)
   }
   motor[LiftMot] = 0;
   currentStack = currentStack + 1;
-}
+}*/
 
 
 void MoveClaw()
 {
-	if(vexRT(controller.clawOpen)) //&& abs(SensorValue[CMEnc]) < 90)
-	{
-		motor[CMot] = -127;
+	if(vexRT[Btn7D] == 1 && (SensorValue[Potent] > potentVal - 200)) //&& abs(SensorValue[CMEnc]) < 90)
+	{ //open
+		motor[CMot] = 127;
   }
-
-  else if(vexRT(controller.clawClose)) //&& abs(SensorValue[CMEnc]) > 0)
-  {
-    motor[CMot] = 127;
+  else if(vexRT[Btn7R] == 1 && (SensorValue[Potent] < (potentVal + 1000))) //&& abs(SensorValue[CMEnc]) > 0)
+  { //close
+    motor[CMot] = -127;
   }
   else
   {
   	motor[CMot] = 0;
   }
-  displayLCDNumber(1,3,getMotorEncoder(CMot));
 }
 
 /*
@@ -120,21 +120,25 @@ void MoveChassis()
 	{
 		motor[RMots1] = n*vexRT[controller.rightMotors];
 		motor[RMots2] = n*vexRT[controller.rightMotors];
+		motor[RMots3] = n*vexRT[controller.rightMotors];
 	}
 	else
 	{
 		motor[RMots1] = 0;
 		motor[RMots2] = 0;
+		motor[RMots3] = 0;
 	}
 	if (abs(vexRT[controller.leftMotors]) > DEADZONE)
 	{
 		motor[LMots1] = n*vexRT[controller.leftMotors];
 		motor[LMots2] = n*vexRT[controller.leftMotors];
+		motor[LMots3] = n*vexRT[controller.leftMotors];
 	}
 	else
 	{
 		motor[LMots1] = 0;
 		motor[LMots2] = 0;
+		motor[LMots3] = 0;
 	}
 }
 void resetStackerNum()
@@ -146,13 +150,44 @@ void resetStackerNum()
 }
 void liftBase()
 {
-	//lift base
+		if (vexRT[Btn5U] == 1 && (SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0))
+		{
+			motor[MobMots1] = -127;
+			motor[MobMots2] = -127;
+		}
+		else if (vexRT[Btn5D] == 1)
+		{
+			motor[MobMots1] = 127;
+			motor[MobMots2] = 127;
+		}
+		else
+		{
+			motor[MobMots1] = 0;
+			motor[MobMots2] = 0;
+		}
 }
+void SensCheck()
+{
+	if (turning == false)
+  {
+		SensorValue[Gyro] = 0;
+  }
+}
+void SetupSens()
+{
+	SensorValue[LEnc] = 0;
+	SensorValue[REnc] = 0;
+	SensorValue[Gyro] = 0;
+  SensorValue[stackEnc] = 0;
+  potentVal = SensorValue[Potent];
+}
+
 void runController(const Mode mode = TANK)
 {
 	MoveChassis();
+	SensCheck();
 	//MoveLift(); //not working correctly (Adrian 11/24/2017)
 	MoveClaw();
-	//liftBase();
+	liftBase();
 	resetStackerNum();
 }

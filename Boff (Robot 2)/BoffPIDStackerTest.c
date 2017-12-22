@@ -1,8 +1,14 @@
+#pragma config(Sensor, in1,    Gyro,           sensorGyro)
+#pragma config(Sensor, in8,    Potent,         sensorPotentiometer)
+#pragma config(Sensor, dgtl5,  LimL1,          sensorTouch)
+#pragma config(Sensor, dgtl6,  LimR1,          sensorTouch)
 #pragma config(Sensor, dgtl11, stackEnc,       sensorQuadEncoder)
+#pragma config(Sensor, dgtl9, REnc,       sensorQuadEncoder)
+#pragma config(Sensor, dgtl7, LEnc,       sensorQuadEncoder)
 #pragma config(Motor,  port1,           CMot,          tmotorVex393_HBridge, openLoop, reversed)
 #pragma config(Motor,  port2,           LMots1,        tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           LMots2,        tmotorVex393_MC29, openLoop)
-#pragma config(Motor,  port4,           LMots3,        tmotorVex393_MC29, openLoop, reversed)
+#pragma config(Motor,  port4,           LMots3,        tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port5,           MobMots1,      tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port6,           RMots1,        tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port7,           RMots2,        tmotorVex393_MC29, openLoop, reversed)
@@ -47,7 +53,7 @@ void MoveArm(float input)
 		{
 			enc = (SensorValue[stackEnc]);
 			error = target - enc;
-			float motSpeed = (error * Kp) + (totalError * ki) + (error - prevError)*kD;//constantly updates as I get closer to target
+			float motSpeed = -((error * Kp) + (totalError * ki) + (error - prevError)*kD);//constantly updates as I get closer to target
 
 			if (abs(motSpeed) < minS)
 			{
@@ -93,15 +99,15 @@ task main()
 		//if (vexRT[controller.stack] == 1)
 		//{
 			//rotatate for  degrees using P control
-		  motor[CMot] = -127;
+		  motor[CMot] = 127;
 	    wait10Msec(50);
-	    motor[CMot] = -20;
+	    motor[CMot] = 20;
 	    wait10Msec(100);
 
-	    MoveArm(220);
+	    MoveArm(230);
 
 
-	    motor[CMot] = 127;
+	    motor[CMot] = -127;
 	    wait10Msec(50);
 	    motor[CMot] = 0;
 	    wait10Msec(100);
