@@ -2,9 +2,9 @@
 #pragma config(Sensor, in8,    Potent,         sensorPotentiometer)
 #pragma config(Sensor, dgtl5,  LimL1,          sensorTouch)
 #pragma config(Sensor, dgtl6,  LimR1,          sensorTouch)
+#pragma config(Sensor, dgtl7,  LEnc,           sensorQuadEncoder)
+#pragma config(Sensor, dgtl9,  REnc,           sensorQuadEncoder)
 #pragma config(Sensor, dgtl11, stackEnc,       sensorQuadEncoder)
-#pragma config(Sensor, dgtl9, REnc,       sensorQuadEncoder)
-#pragma config(Sensor, dgtl7, LEnc,       sensorQuadEncoder)
 #pragma config(Motor,  port1,           CMot,          tmotorVex393_HBridge, openLoop, reversed)
 #pragma config(Motor,  port2,           LMots1,        tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           LMots2,        tmotorVex393_MC29, openLoop)
@@ -24,22 +24,25 @@ void resetEnc()
 	SensorValue[stackEnc] = 0;
 }
 
-/*task runControl()
+task runControl()
 {
 	while (true)
 	{
 		runPID();
+		wait1Msec(10); // avoids cpu hog
   }
-}*/
+}
 task main()
 {
+	SetupSens();
 	setupController();
 	resetEnc();
-	//startTask(runControl);
+	startTask(runControl);
   while(true){
 		runController();
 		//if (vexRT[controller.stack] == 1)
 		//{
 			//rotatate for  degrees using P control
+		wait1Msec(10); // avoids cpu hog
   }
 }

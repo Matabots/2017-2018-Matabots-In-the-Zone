@@ -4,7 +4,6 @@ Version 2 (added PID controlled lift)
 */
 //drive stalls when lift hits an obstacle
 
-
 int lastPost = 0;
 int n =  1;
 float minS;
@@ -15,32 +14,42 @@ float tolerance;	//how accurate do I want the robot to be
 float Kp;		//Kp is a multiplier to calibrate the power
 float totalError;
 float ki;
+float currentDeg;
 bool cone = false;
+bool same;
 #define DEADZONE 15
 int potentVal = 0;
 
 struct Controller
 {
 	TVexJoysticks stack;
+	TVexJoysticks stackUp;
+	TVexJoysticks GroLift;
+	TVexJoysticks autoLLift;
 	TVexJoysticks rightMotors;
 	TVexJoysticks	leftMotors;
 	TVexJoysticks	clawOpen;
 	TVexJoysticks clawClose;
-	TVexJoysticks goalLift;
-	TVexJoysticks resetStack;
+	TVexJoysticks goalLiftU;
+	TVexJoysticks goalLiftD;
+	TVexJoysticks resStackNeut;
 };
 
 Controller controller;
 
 void setupController()
 {
-	controller.stack = Btn7U; //activate lift
+	controller.GroLift = Btn7D; //ground collector position
+	controller.autoLLift = Btn7L; //autoload position
+	controller.stack = Btn8R; //activate stacker
+	controller.stackUp = Btn8L;
 	controller.rightMotors = Ch2;	//move the right side of the robot
 	controller.leftMotors = Ch3;	//move the left side of the robot
-	controller.clawOpen = Btn6U;	//open claw
-	controller.clawClose = Btn6D;	//close claw
-	controller.goalLift = Btn8R;	//lift/lower the goal
-	controller.resetStack = Btn7L; //reset stack #
+	controller.clawOpen = Btn5D;	//open claw
+	controller.clawClose = Btn5U;	//close claw
+	controller.goalLiftU = Btn6U; //lift  the goal
+	controller.goalLiftD = Btn6D; //lower the goal
+	controller.resStackNeut = Btn7U; //reset stack # and set lift to neut
 }
 int currentStack = 0;
 enum Mode
@@ -74,7 +83,7 @@ void MoveArm(float input)
 	float kD = 200;
 	time1[T1] = 0;
 
-	while(abs(error) > tolerance || time1[T1] < 2000)
+	while(same)
 		{
 			enc = SensorValue[stackEnc];
 			error = target - enc;
@@ -118,12 +127,16 @@ void MoveArm(float input)
 				//2. once Kp oscillates, decrease Kp a little so it is stable
 		  totalError += error;
 		  prevError = error;
+	    if (currentDeg != input) {
+	    	same = false;
+	    }
 		}
 	  //}
 
 		//Things to know about P Controllers
 		//
 		lastPost = target;
+		same = true;
 
 }
 
@@ -150,25 +163,28 @@ void AutoClaw(int IO) //0 is open, 1 is closed
 	{
   case 0:
     time1[T1] = 0;
-    while((SensorValue[Potent] > potentVal - 200) && (time1[T1] < 3000))
+    while((SensorValue[Potent] > potentVal - 300) && (time1[T1] < 3000))
 	  {
 		  motor[CMot] = 127;
 	  }
-    motor[CMot] = 0;
+    motor[CMot] = 20;
     wait10Msec(100);
     cone = false;
   	break;
 
   case 1:
+
+    cone = true;
+    /* //old code to close. We now close manualy
     time1[T1] = 0;
-    while((SensorValue[Potent] < potentVal + 2000) && (time1[T1] < 3000))//&& abs(SensorValue[CMEnc]) > 0)
+    while((SensorValue[Potent] < potentVal + 850) && (time1[T1] < 3000))//&& abs(SensorValue[CMEnc]) > 0)
     { //close
       motor[CMot] = -127;
     }
-    motor[CMot] = 0;
+    motor[CMot] = -20;
     wait10Msec(100);
     cone = true;
-
+    */
   	break;
   }
 }
@@ -176,81 +192,67 @@ void AutoClaw(int IO) //0 is open, 1 is closed
 
 void AutoLift()
 {
-	//moves stacker up to 4 cones
+	float oldDeg;
 	if(vexRT[controller.stack])
 	{
 	  switch ( currentStack )
 	 	{
 		case 0:
-		  MoveArm(-138);
-		  wait10Msec(300);
+		  oldDeg = currentDeg;
 
 		  AutoClaw(1);
 
-	    MoveArm(100);
+	    currentDeg = 85;
 			wait10Msec(100);
 
 	    AutoClaw(0);
+	    wait10Msec(100);
 
-			MoveArm(0); // parameter will be "lastPos"
+			currentDeg = oldDeg; // parameter will be "lastPos"
 
+		  /*old code with currentDeg starting at 0. We added a reset to old Position and took off claw closure
+		  currentDeg = -138;
+		  wait10Msec(300);
+
+		  AutoClaw(1);
+
+	    currentDeg = 85;
+			wait10Msec(100);
+
+	    AutoClaw(0);
+	    wait10Msec(100);
+
+			currentDeg = 0; // parameter will be "lastPos"
+			*/
 			break;
 
 		case 1:
-		  MoveArm(-138);
-		  wait10Msec(300);
+		  oldDeg = currentDeg;
 
 		  AutoClaw(1);
 
-	    MoveArm(80);
-
+	    currentDeg = 70;
+			wait10Msec(100);
 
 	    AutoClaw(0);
+	    wait10Msec(100);
 
-			MoveArm(0); // parameter will be "lastPos"
+			currentDeg = oldDeg;
 			break;
 
 		case 2:
-		  MoveArm(-138);
-		  wait10Msec(300);
+		  oldDeg = currentDeg;
 
 		  AutoClaw(1);
 
-	    MoveArm(80);
-
+	    currentDeg = 60;
+			wait10Msec(100);
 
 	    AutoClaw(0);
+	    wait10Msec(100);
 
-			MoveArm(0); // parameter will be "lastPos"
+			currentDeg = oldDeg;
 			break;
-
-		case 3:
-		  MoveArm(-138);
-		  wait10Msec(300);
-
-		  AutoClaw(1);
-
-	    MoveArm(75);
-
-
-	    AutoClaw(0);
-
-			MoveArm(0); // parameter will be "lastPos"
-			break;
-
-		case 4:
-		  MoveArm(-138);
-		  wait10Msec(300);
-
-		  AutoClaw(1);
-
-	    MoveArm(60);
-
-
-	    AutoClaw(0);
-
-			MoveArm(0); // parameter will be "lastPos"
-		  break;
 	  }
 	  currentStack++;
   }
@@ -284,109 +286,65 @@ void MoveChassis()
 		motor[LMots3] = 0;
 	}
 }
-void resetStackerNum()
+void StackerSetter()
 {
-	if(vexRT[controller.resetStack])
+	if(vexRT[controller.GroLift])
 	{
+		currentDeg = -138;
+	}
+	if(vexRT[controller.autoLLift])
+	{
+		currentDeg = -80;
+	}
+	if(vexRT[controller.resStackNeut])
+	{
+		currentDeg = 0;
 		currentStack = 0;
   }
+  if(vexRT[controller.stackUp])
+	{
+		currentStack = currentStack + 1;
+	}
+
 }
 void liftBase()
 {
-	//lift base
+		if (vexRT[controller.goalLiftU] == 1 && (SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0))
+		{
+			motor[MobMots1] = -127;
+			motor[MobMots2] = -127;
+		}
+		else if (vexRT[controller.goalLiftD] == 1)
+		{
+			motor[MobMots1] = 127;
+			motor[MobMots2] = 127;
+		}
+		else
+		{
+			motor[MobMots1] = 0;
+			motor[MobMots2] = 0;
+		}
 }
 void SetupSens()
 {
-	//SensorValue[LEnc] = 0;
-	//SensorValue[REnc] = 0;
-	//SensorValue[Gyro] = 0;
-  //SensorValue[stackEnc] = 0;
+	currentDeg = 0; //PID arm setup
+	//SensorValue[LEnc] = 0; //may affect lift , unsure
+	SensorValue[REnc] = 0;
+	SensorValue[Gyro] = 0;
+  //SensorValue[stackEnc] = 0; //may affect lift enc, unsure
   potentVal = SensorValue[Potent];
-}
-
-void armControl(int deg)
-{
-	enc = SensorValue[stackEnc];
-	minS = 20;
-	target = deg;
-	error = target - enc;	//error is the difference between the goal and current distance
-
-	tolerance = 3;	//how accurate do I want the robot to be was at .25
-  if (cone) {
-    Kp = 1.8;
-    minS = 30;
-  } else  {
-	  Kp = 1.3;		//Kp is a multiplier to calibrate the power //1.3 works
-  }
-  if (target == 0) {
-  	minS = 20;
-  	tolerance = 5;
-  	Kp = 1.7;
-  }
-	totalError= 0;
-	ki = 0;
-
-	float prevError = 0;
-	float kD = 200;
-	while(abs(error) > tolerance)
-		{
-			target = deg;
-			enc = SensorValue[stackEnc];
-			error = target - enc;
-			float motSpeed;
-			if (target == 0)
-		  {
-		    motSpeed = -((error * Kp) + (totalError * ki) + ((error - prevError) * 0/*kD*/)) ;//constantly updates as I get closer to target
-		  } else {
-			  motSpeed = -((error * Kp) + (totalError * ki) + ((error - prevError) * kD)) ;//constantly updates as I get closer to target
-		  }
-			if (abs(motSpeed) < minS)
-			{
-			  if (motSpeed < 0) {
-			    motor[LiftMot] = -minS;
-			  } else {
-			    motor[LiftMot] = minS;
-			  }
-			}
-		  else
-		  {
-
-		  		motor[LiftMot] = motSpeed;
-
-		  }
-			if(abs(error) < tolerance*50)
-			{
-					//kD = 20;
-				//	ki = 1;
-			}
-			if(abs(error)>tolerance)
-			{
-		 		time1[T1] = 0;
-			}
-				//motor power limits itself to 127 if too large.
-				//check to make sure the robot is not stalling before it reaches the target point
-					//Note: stalling is either from Kp being too low and doesn't have enough power to push last bit of distance
-					//Note: You can eliminate stalling with a minimum speed limit i.e: if(error*kp < MIN){ motor[port[1]] = MIN};
-
-				//*****STEPS TO CALIBRATE Kp*****
-				//1. keep increasing Kp until the robot starts to oscillate about the target point physically
-				//2. once Kp oscillates, decrease Kp a little so it is stable
-		  totalError += error;
-		  prevError = error;
-		}
 }
 
 void runPID()
 {
-	armControl(lastPost);
+	MoveArm(currentDeg);
 }
 void runController(const Mode mode = TANK)
 {
-	//MoveChassis();
+	MoveChassis();
 	AutoLift();
-	SetupSens();
-	//MoveLift();
-	//MoveClaw();
-	//liftBase();
-	resetStackerNum();
+	MoveClaw();
+	liftBase();
+	StackerSetter();
+
 }
