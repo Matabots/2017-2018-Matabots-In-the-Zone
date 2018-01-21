@@ -2,23 +2,11 @@
 Drive Functions (some code taken from Jeff (Robot 1)/Teleoperated Control.h"
 Version 2 (added PID controlled lift)
 */
-//drive stalls when lift hits an obstacle
-
-int lastPost = 0;
-int n =  1;
-float minS;
-float target;
-float enc = 0;
-float error;	//error is the difference between the goal and current distance
-float tolerance;	//how accurate do I want the robot to be
+//since the auton code uses the same value names, the letter "D" was added to avoid similarity since values are different.
 float Kp;		//Kp is a multiplier to calibrate the power
-float totalError;
-float ki;
-float currentDeg;
-bool cone = false;
-bool same;
+
 #define DEADZONE 15
-int potentVal = 0;
+//bool declined = false;
 
 struct Controller
 {
@@ -33,6 +21,9 @@ struct Controller
 	TVexJoysticks goalLiftU;
 	TVexJoysticks goalLiftD;
 	TVexJoysticks resStackNeut;
+	TVexJoysticks coneBool;
+	TVexJoysticks decliner;
+	TVexJoysticks revDrive;
 };
 
 Controller controller;
@@ -42,7 +33,7 @@ void setupController()
 	controller.GroLift = Btn7D; //ground collector position
 	controller.autoLLift = Btn7L; //autoload position
 	controller.stack = Btn8R; //activate stacker
-	controller.stackUp = Btn8L;
+	//controller.stackUp = Btn8L;
 	controller.rightMotors = Ch2;	//move the right side of the robot
 	controller.leftMotors = Ch3;	//move the left side of the robot
 	controller.clawOpen = Btn5D;	//open claw
@@ -50,8 +41,10 @@ void setupController()
 	controller.goalLiftU = Btn6U; //lift  the goal
 	controller.goalLiftD = Btn6D; //lower the goal
 	controller.resStackNeut = Btn7U; //reset stack # and set lift to neut
+  //controller.coneBool = Btn8D; //was temporary, not used atm
+	//controller.decliner = Btn8L; //stops a function (incase button is needed)
+	controller.revDrive = Btn8U;
 }
-int currentStack = 0;
 enum Mode
 {
 	 TANK = 0,
@@ -62,12 +55,15 @@ void MoveArm(float input)
 {
 	minS = 20;
 	target = input;
-	error = target - enc;	//error is the difference between the goal and current distance
+	error = target - pitch;	//error is the difference between the goal and current distance
+	float prevError = 0;
+	float kD = 200;
 
-	tolerance = 3;	//how accurate do I want the robot to be was at .25
+	tolerance = 3;	//how accurate do I want  robot to be was at .25
   if (cone) {
-    Kp = 1.8;
+    Kp = 1.7; //was 1.8the
     minS = 30;
+    tolerance = 8;
   } else  {
 	  Kp = 1.3;		//Kp is a multiplier to calibrate the power //1.3 works
   }
@@ -76,17 +72,21 @@ void MoveArm(float input)
   	tolerance = 5;
   	Kp = 1.7;
   }
-	totalError= 0;
+  if (targetDeg == firstCone) //was currentStack, but that caused issues
+  {
+    Kp = 2.0;
+    kD = 400;
+    tolerance = 8;
+  }
+	totalError = 0;
 	ki = 0;
-
-	float prevError = 0;
-	float kD = 200;
 	time1[T1] = 0;
 
 	while(same)
 		{
 			enc = SensorValue[stackEnc];
-			error = target - enc;
+			pitch = enc + offSet;
+			error = target - pitch;
 			float motSpeed;
 			if (target == 0)
 		  {
@@ -127,7 +127,7 @@ void MoveArm(float input)
 				//2. once Kp oscillates, decrease Kp a little so it is stable
 		  totalError += error;
 		  prevError = error;
-	    if (currentDeg != input) {
+	    if (targetDeg != input) {
 	    	same = false;
 	    }
 		}
@@ -144,11 +144,11 @@ void MoveClaw()
 {
 	if(vexRT[controller.clawOpen] == 1 && (SensorValue[Potent] > potentVal - 200)) //&& abs(SensorValue[CMEnc]) < 90)
 	{ //open
-		motor[CMot] = 127;
+		motor[CMot] = -127;
   }
   else if(vexRT[controller.clawClose] == 1 && (SensorValue[Potent] < (potentVal + 1000))) //&& abs(SensorValue[CMEnc]) > 0)
   { //close
-    motor[CMot] = -127;
+    motor[CMot] = 127;
   }
   else
   {
@@ -156,25 +156,27 @@ void MoveClaw()
   }
 }
 
-void AutoClaw(int IO) //0 is open, 1 is closed
+void AutoClawD(int IO) //0 is open, 1 is closed
 {
 	//open claw
 	switch(IO)
 	{
   case 0:
     time1[T1] = 0;
-    while((SensorValue[Potent] > potentVal - 300) && (time1[T1] < 3000))
+    while((SensorValue[Potent] > potentVal - 300) && (time1[T1] < 1500))
 	  {
-		  motor[CMot] = 127;
+		  motor[CMot] = -127;
 	  }
-    motor[CMot] = 20;
+    motor[CMot] = -20;
     wait10Msec(100);
     cone = false;
+    same = false;
   	break;
 
   case 1:
 
     cone = true;
+    motor[CMot] = 25;
     /* //old code to close. We now close manualy
     time1[T1] = 0;
     while((SensorValue[Potent] < potentVal + 850) && (time1[T1] < 3000))//&& abs(SensorValue[CMEnc]) > 0)
@@ -190,7 +192,7 @@ void AutoClaw(int IO) //0 is open, 1 is closed
 }
 
 
-void AutoLift()
+void AutoLiftD()
 {
 	float oldDeg;
 	if(vexRT[controller.stack])
@@ -198,17 +200,18 @@ void AutoLift()
 	  switch ( currentStack )
 	 	{
 		case 0:
-		  oldDeg = currentDeg;
+		  oldDeg = targetDeg;
 
-		  AutoClaw(1);
+		  AutoClawD(1);
 
-	    currentDeg = 85;
-			wait10Msec(100);
+	    targetDeg = firstCone;
+			wait10Msec(170);
 
-	    AutoClaw(0);
-	    wait10Msec(100);
+	    AutoClawD(0);
+	    wait10Msec(50);
 
-			currentDeg = oldDeg; // parameter will be "lastPos"
+		  targetDeg = oldDeg;
+			same = false;// goes back to old position
 
 		  /*old code with currentDeg starting at 0. We added a reset to old Position and took off claw closure
 		  currentDeg = -138;
@@ -227,31 +230,31 @@ void AutoLift()
 			break;
 
 		case 1:
-		  oldDeg = currentDeg;
+		  oldDeg = targetDeg;
 
-		  AutoClaw(1);
+		  AutoClawD(1);
 
-	    currentDeg = 70;
-			wait10Msec(100);
+	    targetDeg = secondCone;
+			wait10Msec(150);
 
-	    AutoClaw(0);
-	    wait10Msec(100);
+	    AutoClawD(0);
+	    wait10Msec(50);
 
-			currentDeg = oldDeg;
+			targetDeg = oldDeg;
 			break;
 
 		case 2:
-		  oldDeg = currentDeg;
+		  oldDeg = targetDeg;
 
-		  AutoClaw(1);
+		  AutoClawD(1);
 
-	    currentDeg = 60;
-			wait10Msec(100);
+	    targetDeg = thirdCone;
+			wait10Msec(130);
 
-	    AutoClaw(0);
-	    wait10Msec(100);
+	    AutoClawD(0);
+	    wait10Msec(50);
 
-			currentDeg = oldDeg;
+			targetDeg = oldDeg;
 			break;
 	  }
 	  currentStack++;
@@ -260,51 +263,80 @@ void AutoLift()
 
 void MoveChassis()
 {
-
-	if (abs(vexRT[controller.rightMotors]) > DEADZONE)
-	{
-		motor[RMots1] = n*vexRT[controller.rightMotors];
-		motor[RMots2] = n*vexRT[controller.rightMotors];
-		motor[RMots3] = n*vexRT[controller.rightMotors];
-	}
-	else
-	{
-		motor[RMots1] = 0;
-		motor[RMots2] = 0;
-		motor[RMots3] = 0;
-	}
-	if (abs(vexRT[controller.leftMotors]) > DEADZONE)
-	{
-		motor[LMots1] = n*vexRT[controller.leftMotors];
-		motor[LMots2] = n*vexRT[controller.leftMotors];
-		motor[LMots3] = n*vexRT[controller.leftMotors];
-	}
-	else
-	{
-		motor[LMots1] = 0;
-		motor[LMots2] = 0;
-		motor[LMots3] = 0;
-	}
+  if (polarity)
+  {
+	  if (abs(vexRT[controller.rightMotors]) > DEADZONE)
+	  {
+		  motor[LMots1] = -n*vexRT[controller.rightMotors];
+		  motor[LMots2] = -n*vexRT[controller.rightMotors];
+		  motor[LMots3] = -n*vexRT[controller.rightMotors];
+	  }
+	  else
+	  {
+		  motor[LMots1] = 0;
+		  motor[LMots2] = 0;
+		  motor[LMots3] = 0;
+	  }
+	  if (abs(vexRT[controller.leftMotors]) > DEADZONE)
+	  {
+		  motor[RMots1] = -n*vexRT[controller.leftMotors];
+		  motor[RMots2] = -n*vexRT[controller.leftMotors];
+		  motor[RMots3] = -n*vexRT[controller.leftMotors];
+	  }
+	  else
+	  {
+		  motor[RMots1] = 0;
+		  motor[RMots2] = 0;
+		  motor[RMots3] = 0;
+	  }
+  }
+  else
+  {
+  	if (abs(vexRT[controller.rightMotors]) > DEADZONE)
+	  {
+		  motor[RMots1] = n*vexRT[controller.rightMotors];
+		  motor[RMots2] = n*vexRT[controller.rightMotors];
+		  motor[RMots3] = n*vexRT[controller.rightMotors];
+	  }
+	  else
+	  {
+		  motor[RMots1] = 0;
+		  motor[RMots2] = 0;
+		  motor[RMots3] = 0;
+	  }
+	  if (abs(vexRT[controller.leftMotors]) > DEADZONE)
+	  {
+		  motor[LMots1] = n*vexRT[controller.leftMotors];
+		  motor[LMots2] = n*vexRT[controller.leftMotors];
+		  motor[LMots3] = n*vexRT[controller.leftMotors];
+	  }
+	  else
+	  {
+		  motor[LMots1] = 0;
+		  motor[LMots2] = 0;
+		  motor[LMots3] = 0;
+	  }
+  }
 }
 void StackerSetter()
 {
 	if(vexRT[controller.GroLift])
 	{
-		currentDeg = -138;
+		targetDeg = -136;
 	}
 	if(vexRT[controller.autoLLift])
 	{
-		currentDeg = -80;
+		targetDeg = -80;
 	}
 	if(vexRT[controller.resStackNeut])
 	{
-		currentDeg = 0;
+		targetDeg = 0;
 		currentStack = 0;
   }
-  if(vexRT[controller.stackUp])
+  /*if(vexRT[controller.stackUp])
 	{
 		currentStack = currentStack + 1;
-	}
+	}*/ //broken code
 
 }
 void liftBase()
@@ -327,24 +359,98 @@ void liftBase()
 }
 void SetupSens()
 {
-	currentDeg = 0; //PID arm setup
+	targetDeg = 0; //PID arm setup to neutral
 	//SensorValue[LEnc] = 0; //may affect lift , unsure
 	SensorValue[REnc] = 0;
 	SensorValue[Gyro] = 0;
-  //SensorValue[stackEnc] = 0; //may affect lift enc, unsure
+  SensorValue[stackEnc] = 0; //may affect lift enc, unsure
   potentVal = SensorValue[Potent];
 }
 
 void runPID()
 {
-	MoveArm(currentDeg);
+	MoveArm(targetDeg);
 }
+
+/*void clawPow() //temporary claw control
+{
+	if (vexRT[controller.coneBool] == 1 && cone == false) {
+		cone = true;
+		wait10Msec(50);
+	}
+	if (cone)
+	{
+	  motor[CMot] = 30;
+	  if (vexRT[controller.coneBool] == 1) {
+	    cone = false;
+	    wait10Msec(50);
+	  }
+  }
+
+}
+void liftCheck()
+{
+
+	if (declined)
+	{
+	  same = false;
+	  wait10Msec(50);
+	  currentDeg = 0;
+  }
+}*/
+void lift()
+{
+	AutoLiftD();
+}
+void driveCheck()
+{
+  if(vexRT[controller.revDrive] == 1)
+  {
+  	polarity = !polarity;
+  	wait10Msec(20);
+  }
+}
+void LEDSet()
+{
+	int i = 8 + currentStack;
+	if (currentStack  != 0)
+	{
+		SensorValue[(tSensors) i ] = 1;
+  }
+  else
+  {
+		SensorValue[(tSensors) i + 1 ] = 0;
+		SensorValue[(tSensors) i + 2 ] = 0;
+		SensorValue[(tSensors) i + 3 ] = 0;
+	}
+	if (polarity == true)
+	{
+		SensorValue[(tSensors) 8 ] = 1;
+	}
+	else
+  {
+  	SensorValue[(tSensors) 8 ] = 0;
+  }
+}
+void setVariables()
+{
+	lastPost = 0;
+	n =  1;
+	firstCone = 83;
+	secondCone = 75;
+	thirdCone = 58;
+	cone = false;
+	potentVal = 0;
+	currentStack = 0;
+	offset = 0;
+}
+
 void runController(const Mode mode = TANK)
 {
+	driveCheck();
 	MoveChassis();
-	AutoLift();
 	MoveClaw();
 	liftBase();
 	StackerSetter();
-
+	LEDSet();
 }
