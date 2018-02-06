@@ -6,8 +6,6 @@ Version 2 (added PID controlled lift)
 float Kp;		//Kp is a multiplier to calibrate the power
 
 #define DEADZONE 15
-//bool declined = false;
-
 struct Controller
 {
 	TVexJoysticks stack;
@@ -41,8 +39,6 @@ void setupController()
 	controller.goalLiftU = Btn6U; //lift  the goal
 	controller.goalLiftD = Btn6D; //lower the goal
 	controller.resStackNeut = Btn7U; //reset stack # and set lift to neut
-  //controller.coneBool = Btn8D; //was temporary, not used atm
-	//controller.decliner = Btn8L; //stops a function (incase button is needed)
 	controller.revDrive = Btn8U;
 }
 enum Mode
@@ -61,7 +57,7 @@ void MoveArm(float input)
 
 	tolerance = 3;	//how accurate do I want  robot to be was at .25
   if (cone) {
-    Kp = 1.7; //was 1.8the
+    Kp = 1.7; //was 1.8
     minS = 30;
     tolerance = 8;
   } else  {
@@ -131,10 +127,6 @@ void MoveArm(float input)
 	    	same = false;
 	    }
 		}
-	  //}
-
-		//Things to know about P Controllers
-		//
 		lastPost = target;
 		same = true;
 
@@ -177,16 +169,6 @@ void AutoClawD(int IO) //0 is open, 1 is closed
 
     cone = true;
     motor[CMot] = 25;
-    /* //old code to close. We now close manualy
-    time1[T1] = 0;
-    while((SensorValue[Potent] < potentVal + 850) && (time1[T1] < 3000))//&& abs(SensorValue[CMEnc]) > 0)
-    { //close
-      motor[CMot] = -127;
-    }
-    motor[CMot] = -20;
-    wait10Msec(100);
-    cone = true;
-    */
   	break;
   }
 }
@@ -212,21 +194,6 @@ void AutoLiftD()
 
 		  targetDeg = oldDeg;
 			same = false;// goes back to old position
-
-		  /*old code with currentDeg starting at 0. We added a reset to old Position and took off claw closure
-		  currentDeg = -138;
-		  wait10Msec(300);
-
-		  AutoClaw(1);
-
-	    currentDeg = 85;
-			wait10Msec(100);
-
-	    AutoClaw(0);
-	    wait10Msec(100);
-
-			currentDeg = 0; // parameter will be "lastPos"
-			*/
 			break;
 
 		case 1:
@@ -357,47 +324,10 @@ void liftBase()
 			motor[MobMots2] = 0;
 		}
 }
-void SetupSens()
-{
-	targetDeg = 0; //PID arm setup to neutral
-	//SensorValue[LEnc] = 0; //may affect lift , unsure
-	SensorValue[REnc] = 0;
-	SensorValue[Gyro] = 0;
-  SensorValue[stackEnc] = 0; //may affect lift enc, unsure
-  potentVal = SensorValue[Potent];
-}
-
 void runPID()
 {
 	MoveArm(targetDeg);
 }
-
-/*void clawPow() //temporary claw control
-{
-	if (vexRT[controller.coneBool] == 1 && cone == false) {
-		cone = true;
-		wait10Msec(50);
-	}
-	if (cone)
-	{
-	  motor[CMot] = 30;
-	  if (vexRT[controller.coneBool] == 1) {
-	    cone = false;
-	    wait10Msec(50);
-	  }
-  }
-
-}
-void liftCheck()
-{
-
-	if (declined)
-	{
-	  same = false;
-	  wait10Msec(50);
-	  currentDeg = 0;
-  }
-}*/
 void lift()
 {
 	AutoLiftD();
@@ -442,7 +372,7 @@ void setVariables()
 	cone = false;
 	potentVal = 0;
 	currentStack = 0;
-	offset = 0;
+	offSet = 0;
 }
 
 void runController(const Mode mode = TANK)

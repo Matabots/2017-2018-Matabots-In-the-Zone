@@ -13,11 +13,6 @@ void tasksFinished()
 	}
 }
 
-void MoveArmTo(float input)
-{
-	targetDeg = input;
-}
-
 void MoveArm()// to targetDeg
 {
 	minS = 20;
@@ -98,26 +93,10 @@ void MoveArm()// to targetDeg
 	    {
 	    	same = false;
 	    }
-	    /*if (doneStacking)
-	    {
-	    	doneStacking = false;
-	    	same = false;
-	    }*/
 		}
-	  //}
-
-		//Things to know about P Controllers
-		//
 		lastPost = targetDeg;
 		same = true;
 
-}
-void CloseClaw()
-{
-	motor[CMot] = 127;
-	wait10Msec(50);
-  motor[CMot] = 30;
-  wait10Msec(50);
 }
 void AutoClaw(int IO) //0 is open, 1 is closed
 {
@@ -132,7 +111,7 @@ void AutoClaw(int IO) //0 is open, 1 is closed
 	  //}
 		wait10Msec(90);
     motor[CMot] = -20;
-    wait10Msec(80);
+    //wait10Msec(80);
     cone = false;
   	break;
 
@@ -140,16 +119,6 @@ void AutoClaw(int IO) //0 is open, 1 is closed
 
     cone = true;
     motor[CMot] = 30;
-    /* //old code to close. We now close manualy
-    time1[T1] = 0;
-    while((SensorValue[Potent] < potentVal + 850) && (time1[T1] < 3000))//&& abs(SensorValue[CMEnc]) > 0)
-    { //close
-      motor[CMot] = -127;
-    }
-    motor[CMot] = -20;
-    wait10Msec(100);
-    cone = true;
-    */
   	break;
   }
 }
@@ -169,25 +138,11 @@ void AutoLift()
 			wait10Msec(165);
 
 	    AutoClaw(0);
-	    wait10Msec(25);
+	    wait10Msec(20);
 
 			targetDeg = oldDeg;
 			same = false;// goes back to old position
 
-		  /*old code with targetDeg starting at 0. We added a reset to old Position and took off claw closure
-		  targetDeg = -138;
-		  wait10Msec(300);
-
-		  AutoClaw(1);
-
-	    targetDeg = 85;
-			wait10Msec(100);
-
-	    AutoClaw(0);
-	    wait10Msec(100);
-
-			targetDeg = 0; // parameter will be "lastPos"
-			*/
 			break;
 
 		case 1:
@@ -250,7 +205,6 @@ void reSetGyro() // probably not needed
 {
   SensorValue[Gyro] = 0;
 }
-
 void Right(int speed)
 {
 	motor[RMots1] = speed;
@@ -307,10 +261,19 @@ void SetupSens()
   potentVal = SensorValue[Potent];
   Halt();
 }
+void setGyroInGame()
+{
+	gyroOn = false;
+	GyroCalibrate();
+	reSetGyro();
+	targetGyro = 0;
+	Halt();
+	gyroOn = true;
+}
 
 void GyroUpdate()
 {
-	gyroVal = ((SensorValue[Gyro]) - deltaGyro)/10; //used instead of gyroVal
+	gyroVal = ((SensorValue[Gyro]) - deltaGyro)/10;
 }
 
 void moveGyro()
@@ -379,8 +342,6 @@ void PIDDrive(float targetIn) //using drive to? not continuous
   kp2 = 4.1;
 	totalErrorD = 0;
 	ki2 = 0;
-
-	float prevErrorD = 0;
 	kd2 = 0;
 	time1[T3] = 0;
 	float dSpeed =0;
@@ -414,16 +375,6 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 			{
 		 		time1[T3] = 0;
 			}
-				//motor power limits itself to 127 if too large.
-				//check to make sure the robot is not stalling before it reaches the target point
-					//Note: stalling is either from Kp being too low and doesn't have enough power to push last bit of distance
-					//Note: You can eliminate stalling with a minimum speed limit i.e: if(error*kp < MIN){ motor[port[1]] = MIN};
-
-				//*****STEPS TO CALIBRATE Kp*****
-				//1. keep increasing Kp until the robot starts to oscillate about the target point physically
-				//2. once Kp oscillates, decrease Kp a little so it is stable
-		 // totalErrorD += errorD;
-		 // prevErrorD = errorD;
 		}
 	Halt();
 	  //}
@@ -431,53 +382,29 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 		//Things to know about P Controllers
 		//
 }
-void gyroStraight(int lPower, int rPower)
-{
-	int angleDiff = 10;
-	oldGyro = SensorValue[Gyro];
-  while (true)
-  {
-    if (oldGyro < SensorValue[Gyro])
-    {
-      Left(rPower - angleDiff);
-      Right(rPower);
-    }
-    else if (oldGyro > SensorValue[Gyro])
-    {
-    	Right(lPower - angleDiff);
-    	Left(lPower);
-    }
-    else
-    {
-    	Left(lPower);
-    	Right(rPower);
-    }
-  }
-}
-
 
 //------------------Mobile Goal Lift --------------
-
-void tinyLiftDown(int time)
+void oldtinyLiftDown(float time)
 {
-	motor[MobMots1] = 127;
-  motor[MobMots2] = 127;
+	  motor[MobMots1] = 127;
+    motor[MobMots2] = 127;
 
-	wait10Msec(time * 100);
+	  wait10Msec(time * 100);
 
-	motor[MobMots1] = 0;
-	motor[MobMots2] = 0;
+	  motor[MobMots1] = 0;
+	  motor[MobMots2] = 0;
+}
+
+void tinyLiftDown(float time)
+{
+	timeVal = time;
+  mobDown = true;
+  wait10Msec(40);
 }
 void tinyLiftUp()
 {
-	while(SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0)
-	{
-    motor[MobMots1] = -127;
-    motor[MobMots2] = -127;
-  }
-  motor[MobMots1] = 0;
-	motor[MobMots2] = 0;
-
+  mobUp = true;
+  wait10Msec(40);
 }
 void tinyLiftUpTmp(float time)
 {
@@ -489,6 +416,32 @@ void tinyLiftUpTmp(float time)
   motor[MobMots1] = 0;
 	motor[MobMots2] = 0;
 
+}
+
+void checkMobile()
+{
+  if (mobUp)
+  {
+  	while(SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0)
+	  {
+      motor[MobMots1] = -127;
+      motor[MobMots2] = -127;
+    }
+    motor[MobMots1] = 0;
+	  motor[MobMots2] = 0;
+  }
+  else if (mobDown)
+  {
+    motor[MobMots1] = 127;
+    motor[MobMots2] = 127;
+
+	  wait10Msec(timeVal * 100);
+
+	  motor[MobMots1] = 0;
+	  motor[MobMots2] = 0;
+  }
+  mobUp = false;
+  mobDown = false;
 }
 
 void score(float leftP, float rightP, float sec)
@@ -519,132 +472,56 @@ void PreLoad()
   wait10Msec(50);
   targetDeg = 0;
 }
-void shake()
+//-----------------Temporary, for Line Sensors
+void ToLine(float targetIn) //using drive to? not continuous
 {
-	tinyLiftUpTmp(0.10);
-	wait1Msec(100);
-	tinyLiftDown(0.10);
-	wait1Msec(100);
-	tinyLiftUpTmp(0.10);
-	wait1Msec(100);
-	tinyLiftDown(0.10);
-	wait1Msec(100);
-	tinyLiftUpTmp(0.10);
-	wait1Msec(100);
-	tinyLiftDown(0.10);
-	wait1Msec(100);
-	tinyLiftUpTmp(0.10);
-	wait1Msec(100);
-	tinyLiftDown(0.10);
-	wait1Msec(100);
+	reSetDEnc();
+	minGo = 9;
+	encAvg = 0;
+	errorD = targetIn - encAvg;	//error is the difference between the goal and current distance
 
-	tinyLiftUp();
+	toleranceD =3.7; //3.7;	//how accurate do I want the robot to be was at .25
+  kp2 = 4.1;
+	totalErrorD = 0;
+	ki2 = 0;
+	kd2 = 0;
+	time1[T3] = 0;
+	float dSpeed =0;
+	SensorValue[REnc]=0;
+	float gyroOrig = gyroVal;
+	float gyroCorr = 3;//3.5
+	while(abs(errorD) > toleranceD || (time1[T3] < 1000))
+		{
+			//SensorValue[(tSensors) 10 ] = 1;
+			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
+			errorD = targetIn - degToInt(SensorValue[LEnc]);
+		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
+
+		  if (abs(dSpeed) < minGo)
+			{
+				 dSpeed = dSpeed/abs(dSpeed);
+			   Right((minGo*dSpeed)+(gyroOrig-gyroVal)*gyroCorr);
+			   Left((minGo*dSpeed)-(gyroOrig-gyroVal)*gyroCorr);
+			}
+		  else
+		  {
+		  		Right(dSpeed+(gyroOrig-gyroVal)*gyroCorr);
+			    Left(dSpeed-(gyroOrig-gyroVal)*gyroCorr);
+		  }
+			//if(abs(errorD) < toleranceD*50)
+			//{
+			//		//kD = 20;
+			//	//	ki = 1;
+			//}
+			if(abs(errorD) > toleranceD)
+			{
+		 		time1[T3] = 0;
+			}
+			if(!lineFound && ((SensorValue[lineSens1] < 1500 )||(SensorValue[lineSens2] < 1500 )||(SensorValue[lineSens3] < 1500 )))
+			{
+				targetIn = encAvg;
+				lineFound = true;
+			}
+		}
+	Halt();
 }
-//-----------------Temporary \/ / old PIDLift
-
-
-
-void moveInchTwo(int powerLeft, int powerRight, int inch)
-{
-  reSetDEnc();
-	while (abs(degToInt(SensorValue[LEnc])) < inch && abs(degToInt(SensorValue[REnc])) < inch)
-	{
-		gyroStraight(powerLeft,powerRight);
-  }
-  Halt();
-}
-
-//----------------------
-
-//void OldMoveArm(float input)
-//{
-//	minS = 20;
-//	target = input;
-//	error = target - pitch;	//error is the difference between the goal and current distance
-//	float prevError = 0;
-//	float kD = 200;
-
-//	tolerance = 3;	//how accurate do I want the robot to be was at .25
-//  if (cone) {
-//    Kp = 1.7; //was 1.8
-//    minS = 30;
-//    tolerance = 8;
-//  } else  {
-//	  Kp = 1.3;		//Kp is a multiplier to calibrate the power //1.3 works
-//  }
-//  if (input == 0) {
-//  	minS = 20;
-//  	tolerance = 5;
-//  	Kp = 1.7;
-//  }
-//  if (targetDeg == firstCone) //was currentStack, but that caused issues
-//  {
-//    Kp = 2.0;
-//    kD = 400;
-//    tolerance = 8;
-//  }
-//	totalError= 0;
-//	ki = 0;
-//	time1[T1] = 0;
-
-//	while(same)
-//		{
-//			enc = SensorValue[stackEnc];
-//			pitch = enc + offSet;
-//			error = target - pitch;
-//			float motSpeed;
-//			if (target == 0)
-//		  {
-//		    motSpeed = -((error * Kp) + (totalError * ki) + ((error - prevError) * 0/*kD*/)) ;//constantly updates as I get closer to target
-//		  } else {
-//			  motSpeed = -((error * Kp) + (totalError * ki) + ((error - prevError) * kD)) ;//constantly updates as I get closer to target
-//		  }
-//			if (abs(motSpeed) < minS)
-//			{
-//			  if (motSpeed < 0) {
-//			    motor[LiftMot] = -minS;
-//			  } else {
-//			    motor[LiftMot] = minS;
-//			  }
-//			}
-//		  else
-//		  {
-
-//		  		motor[LiftMot] = motSpeed;
-
-//		  }
-//			if(abs(error) < tolerance*50)
-//			{
-//					//kD = 20;
-//				//	ki = 1;
-//			}
-//			if(abs(error)>tolerance)
-//			{
-//		 		time1[T1] = 0;
-//			}
-//				//motor power limits itself to 127 if too large.
-//				//check to make sure the robot is not stalling before it reaches the target point
-//					//Note: stalling is either from Kp being too low and doesn't have enough power to push last bit of distance
-//					//Note: You can eliminate stalling with a minimum speed limit i.e: if(error*kp < MIN){ motor[port[1]] = MIN};
-
-//				//*****STEPS TO CALIBRATE Kp*****
-//				//1. keep increasing Kp until the robot starts to oscillate about the target point physically
-//				//2. once Kp oscillates, decrease Kp a little so it is stable
-//		  totalError += error;
-//		  prevError = error;
-//	    if (targetDeg != input) {
-//	    	same = false;
-//	    }
-//		}
-//	  //}
-
-//		//Things to know about P Controllers
-//		//
-//		lastPost = target;
-//		same = true;
-
-//}
-//void runPID()
-//{
-//	OldMoveArm(targetDeg);
-//}
