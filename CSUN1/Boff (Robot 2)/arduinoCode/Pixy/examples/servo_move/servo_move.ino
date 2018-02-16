@@ -12,8 +12,8 @@
 //
 // end license header
 //
-// This sketch is demonstrates the setLED() function.  Running this sketch
-// will cycle the Pixy's RGB LED through its colors.   
+// This sketch is demonstrates the setServos() function.  Running this sketch
+// will move the servos to their limits, back and forth, back and forth. 
 //
 
 #include <SPI.h>  
@@ -23,6 +23,7 @@ Pixy pixy;
 
 void setup()
 {
+
   Serial.begin(9600);
   Serial.print("Starting...\n");
 
@@ -31,24 +32,13 @@ void setup()
 
 void loop() 
 { 
-   uint32_t i=0;
-   uint8_t r, g, b;
-   
-   while(1)
-   {
-     // calculate r, g, b such that it cycles through the colors
-     r = i&0xff;
-     g = (i*3)&0xff;
-     b = (i/3)&0xff;
-     pixy.setLED(r, g, b);
-     // We need to delay here because serial requests are handled 
-     // every frame period (20ms). If we don't delay, we'll
-     // overrun Pixy's receive queue. But that's all OK because 
-     // we normally only update the LED once per frame anyway.
-     delay(20);
-     
-     i++;
-   }
+  Serial.println("Moving pan-tilt to max positions");
+  pixy.setServos(PIXY_RCS_MAX_POS, PIXY_RCS_MAX_POS);
+  delay(1000);
+
+  Serial.println("Moving pan-tilt to min positions");
+  pixy.setServos(PIXY_RCS_MIN_POS, PIXY_RCS_MIN_POS);
+  delay(1000);
 }
 
 
