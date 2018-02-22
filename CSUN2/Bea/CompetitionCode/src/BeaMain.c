@@ -30,8 +30,7 @@
 
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
-#include "BeaDriverFunctions.h"
-#include "v2DriveControls.h"
+#include "robotSetup.h"
 #include "Variables.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -93,8 +92,12 @@ task usercontrol()
 {
   // User control code here, inside the loop
 	SensorValue[TopEncoder] = 0;
+	setupController();
+	robotSetup();
   while (true)
   {
+
+    controllerInputs();
   	//driveControl();
   	// This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
