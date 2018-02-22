@@ -27,7 +27,7 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 #include "BeaDriverFunctions.h"
-
+#include "v2DriveControls.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */

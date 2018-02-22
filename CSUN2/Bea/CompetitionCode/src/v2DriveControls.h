@@ -8,38 +8,37 @@ float Kp;		//Kp is a multiplier to calibrate the power
 #define DEADZONE 15
 struct Controller
 {
-	TVexJoysticks stack;
+	TVexJoysticks smallLiftGround;
 	TVexJoysticks stackUp;
-	TVexJoysticks GroLift;
-	TVexJoysticks autoLLift;
+	TVexJoysticks mobileGoalLiftGround;
+	TVexJoysticks mobileGoalLiftHigh;
 	TVexJoysticks rightMotors;
 	TVexJoysticks	leftMotors;
-	TVexJoysticks	clawOpen;
-	TVexJoysticks clawClose;
-	TVexJoysticks goalLiftU;
-	TVexJoysticks goalLiftD;
+	TVexJoysticks	smallLiftDown;
+	TVexJoysticks smallLiftUp;
+	TVexJoysticks mobileGoalLiftUp;
+	TVexJoysticks mobileGoalLiftDown;
 	TVexJoysticks resStackNeut;
 	TVexJoysticks coneBool;
 	TVexJoysticks decliner;
-	TVexJoysticks revDrive;
+	TVexJoysticks smallLiftHigh;
 };
 
 Controller controller;
 
 void setupController()
 {
-	controller.GroLift = Btn7D; //ground collector position
-	controller.autoLLift = Btn7L; //autoload position
-	controller.stack = Btn8R; //activate stacker
-	//controller.stackUp = Btn8L;
 	controller.rightMotors = Ch2;	//move the right side of the robot
 	controller.leftMotors = Ch3;	//move the left side of the robot
-	controller.clawOpen = Btn5D;	//open claw
-	controller.clawClose = Btn5U;	//close claw
-	controller.goalLiftU = Btn6U; //lift  the goal
-	controller.goalLiftD = Btn6D; //lower the goal
-	controller.resStackNeut = Btn7U; //reset stack # and set lift to neut
-	controller.revDrive = Btn8U;
+	controller.smallLiftDown = Btn5D;	//open claw
+	controller.smallLiftUp = Btn5U;	//close claw
+	controller.smallLiftGround = Btn7D; //activate stacker
+	controller.smallLiftHigh = Btn7L; //closes the claw
+	controller.mobileGoalLiftUp = Btn6U; //lift  the goal
+	controller.mobileGoalLiftDown = Btn6D; //lower the goal
+	controller.mobileGoalLiftGround = Btn8R; //ground collector position
+	controller.mobileGoalLiftHigh = Btn8D; //autoload position
+	controller.resStackNeut = Btn7U; //reset smallLiftGround # and set lift to neut
 }
 enum Mode
 {
@@ -134,11 +133,11 @@ void MoveArm(float input)
 
 void MoveClaw()
 {
-	if(vexRT[controller.clawOpen] == 1 && (SensorValue[Potent] > potentVal - 200)) //&& abs(SensorValue[CMEnc]) < 90)
+	if(vexRT[controller.smallLiftDown] == 1 && (SensorValue[Potent] > potentVal - 200)) //&& abs(SensorValue[CMEnc]) < 90)
 	{ //open
 		motor[CMot] = -127;
   }
-  else if(vexRT[controller.clawClose] == 1 && (SensorValue[Potent] < (potentVal + 1000))) //&& abs(SensorValue[CMEnc]) > 0)
+  else if(vexRT[controller.smallLiftUp] == 1 && (SensorValue[Potent] < (potentVal + 1000))) //&& abs(SensorValue[CMEnc]) > 0)
   { //close
     motor[CMot] = 127;
   }
@@ -177,7 +176,7 @@ void AutoClawD(int IO) //0 is open, 1 is closed
 void AutoLiftD()
 {
 	float oldDeg;
-	if(vexRT[controller.stack])
+	if(vexRT[controller.smallLiftGround])
 	{
 	  switch ( currentStack )
 	 	{
@@ -287,11 +286,11 @@ void MoveChassis()
 }
 void StackerSetter()
 {
-	if(vexRT[controller.GroLift])
+	if(vexRT[controller.mobileGoalLiftGround])
 	{
 		targetDeg = -136;
 	}
-	if(vexRT[controller.autoLLift])
+	if(vexRT[controller.mobileGoalLiftHigh])
 	{
 		targetDeg = -80;
 	}
@@ -308,12 +307,12 @@ void StackerSetter()
 }
 void liftBase()
 {
-		if (vexRT[controller.goalLiftU] == 1 && (SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0))
+		if (vexRT[controller.mobileGoalLiftUp] == 1 && (SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0))
 		{
 			motor[MobMots1] = -127;
 			motor[MobMots2] = -127;
 		}
-		else if (vexRT[controller.goalLiftD] == 1)
+		else if (vexRT[controller.mobileGoalLiftDown] == 1)
 		{
 			motor[MobMots1] = 127;
 			motor[MobMots2] = 127;
@@ -334,7 +333,7 @@ void lift()
 }
 void driveCheck()
 {
-  if(vexRT[controller.revDrive] == 1)
+  if(vexRT[controller.smallLiftHigh] == 1)
   {
   	polarity = !polarity;
   	wait10Msec(20);
