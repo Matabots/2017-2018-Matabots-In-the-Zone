@@ -10,8 +10,8 @@ The system also enables the implementation of a short power drop after firing so
 
 int changeAmount = 20;
 int change;
-int timeSegment = 250;
-int motorSpeed = 0;
+int timeSegment = 10;
+int motorSpeed = 100;
 bool ready;
 
 task ControlMonitor()

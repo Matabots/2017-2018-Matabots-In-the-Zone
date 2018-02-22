@@ -2,10 +2,10 @@
 
 //remenber, remember, variables in define are float. Of course, some of the are int, but just leave the code take care of it
 
-#define P_GAIN 10.0 //gain for only proportinal controller
-#define PROPORTIONAL_GAIN 3.48 //PID controller proportinal
-#define INTEGRAL_CONST 896.9 //PID controller integral
-#define SAMPLE_PERIOD 100  //Sample period for digital control
+#define P_GAIN 1//0.0 //gain for only proportinal controller
+#define PROPORTIONAL_GAIN 1//3.48 //PID controller proportinal
+#define INTEGRAL_CONST 1//896.9 //PID controller integral
+#define SAMPLE_PERIOD 10  //Sample period for digital control
 
 #define PI_RANGE 5 	//we are switching between proportional controller and PI controller.
 										//P is so fast and awesome but does not allow stationary error equals to zero. And have a huge, huge noise.
@@ -27,13 +27,14 @@ typedef struct {
   float errorK0speed;			 	//last error calculated for that motor
   float errorK0output;
   float controller_output; 	//controller output to the motor
-  float speedRead; 					//speed calculated from the encoder values
+  float speedRead; 					//speed calculated from the encoder values in RPM
+  float linearSpeedRead;		//linear speed of the robot wheels in in/s
   int lastEncoderRead;			//last encoder read. Necessary to calulate the speed
   bool proportional;
 } MOTOR_PI;
 
 void ReadSpeed(MOTOR_PI* motorA, int time);
-void motor_Control(MOTOR_PI* motorA, MOTOR_PI* motorB);
+void motor_Control(MOTOR_PI* motorA);
 void PI_Control(MOTOR_PI* motorA);
 void motorInit (MOTOR_PI* motorA, tMotor title1, tSensors sensor);
 
@@ -49,14 +50,14 @@ void motorInit (MOTOR_PI* motorA, tMotor title1, tSensors sensor);
 void ReadSpeed(MOTOR_PI* motorA, int time){
   int encoder;
   encoder = SensorValue[(*motorA).sensorname];
-  (*motorA).speedRead = abs(5.88235*(float)(encoder - (*motorA).lastEncoderRead)/((float)time) ); //that is not a unit. You should multiply for a constant. I will leave this way by now.
+  (*motorA).speedRead = abs(0.16667*(float)(encoder - (*motorA).lastEncoderRead)/((float)time/1000));//*5.88235; //that is not a unit. You should multiply for a constant. I will leave this way by now.
   (*motorA).lastEncoderRead = encoder;
 
 }
 
 void PI_Control(MOTOR_PI* motorA){
     float errorK1speed;
-
+    ReadSpeed(motorA, timeSegment);
     //make the calculation for the speed errors
     errorK1speed = (*motorA).errorK0speed;
     (*motorA).errorK0speed = (*motorA).speedSet-(*motorA).speedRead;
@@ -69,7 +70,7 @@ void PI_Control(MOTOR_PI* motorA){
     		(*motorA).controller_output = PI_SETUP;
     		(*motorA).proportional = false;
     	}
-			(*motorA).controller_output = A0*(*motorA).controller_output+B0*((*motorA).errorK0speed)+B1*errorK1speed;
+			(*motorA).controller_output = A0*(*motorA).controller_output + B0*((*motorA).errorK0speed)+B1*errorK1speed;
 		}
 
 		//but, if the controller is to far from the point i want to, I want it to go faster. Fast as hell. Now, I would like to play with a proportional
@@ -94,30 +95,27 @@ void PI_Control(MOTOR_PI* motorA){
 
     //set power in the motor
     motor[(*motorA).name1] = (*motorA).controller_output;
-    motor[(*motorA).name2] = (*motorA).controller_output;
 
     //the controller output can`t be less the saturation dowm
     if ( (*motorA).controller_output < SATURATION_DOWN ) (*motorA).controller_output = SATURATION_DOWN;
 }
 
-void motor_Control(MOTOR_PI* motorA, MOTOR_PI* motorB){
-	int storeTime;
-	storeTime=time1[T1];
-	if(storeTime >= SAMPLE_PERIOD/2){
-		ReadSpeed(motorA, storeTime);
-		ReadSpeed(motorB, storeTime);
-		clearTimer(T1);
+void motor_Control(MOTOR_PI* motorA){
+
+	if(time1[T1] >= SAMPLE_PERIOD/2){
+		ReadSpeed(motorA, time1[T1]);
+		time1[T1] = 0;
 	}
-	if(time1[T2] >= SAMPLE_PERIOD){
-		PI_Control(motorA);
-  	PI_Control(motorB);
-		clearTimer(T2);
+	if(time1[T2]>= SAMPLE_PERIOD){
+		ReadSpeed(motorA, time1[T2]);
+		time1[T2] =0;
 	}
 }
 
 void motorInit (MOTOR_PI* motorA, tMotor title1, tSensors sensor){
 		(*motorA).name1 = title1;
 		(*motorA).sensorname = sensor;
+		SensorValue[(*motorA).sensorname] = 0;
     (*motorA).speedSet = 0;
     (*motorA).errorK0speed = 0;
     (*motorA).errorK0output=0;
