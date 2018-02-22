@@ -1,6 +1,8 @@
 #pragma config(Sensor, in2,    BottomLift,     sensorPotentiometer)
 #pragma config(Sensor, in3,    TopLift,        sensorPotentiometer)
+#pragma config(Sensor, dgtl2,  REnc,           sensorQuadEncoder)
 #pragma config(Sensor, dgtl5,  TopEncoder,     sensorQuadEncoder)
+#pragma config(Sensor, dgtl8,  LEnc,           sensorQuadEncoder)
 #pragma config(Motor,  port2,           LEdgeMots,     tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           REdgeMots,     tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port4,           claw,          tmotorVex393_MC29, openLoop)
