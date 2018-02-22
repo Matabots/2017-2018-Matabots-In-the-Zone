@@ -31,7 +31,7 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 #include "robotSetup.h"
-#include "Variables.h"
+//#include "Variables.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -92,8 +92,9 @@ task usercontrol()
 {
   // User control code here, inside the loop
 	SensorValue[TopEncoder] = 0;
-	setupController();
 	robotSetup();
+	setupController();
+
   while (true)
   {
 

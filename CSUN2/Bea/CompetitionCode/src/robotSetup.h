@@ -21,14 +21,10 @@ struct RobotMotor{
   tMotor rearLeft;
   tMotor frontRight;
   tMotor rearRight;
-
   tMotor lift1;
   tMotor lift2;
-
   tMotor smallLift1;
-
   tMotor ef;
-
 };
 RobotMotor rMotors;
 
@@ -40,33 +36,33 @@ struct Communications{
 Communications comms;
 
 struct Robot{
-  struct AnalogSensor aSensors;
-  struct DigitalSensor dSensors;
-  struct RobotMotor rMotors;
-  struct Communications comms;
+  struct AnalogSensor *aSensors;
+  struct DigitalSensor *dSensors;
+  struct RobotMotor *rMotors;
+  struct Communications *comms;
 };
 
 Robot robot;
 
 void setupAnalogSensor(){
-  aSensors.liftPotentiometer1 = BottomLift; //this will have control of the goal lift
-  aSensors.liftPotentiometer2 = TopLift;  //this will have control of the cone lift
+  (aSensors).liftPotentiometer1 = BottomLift; //this will have control of the goal lift
+  (aSensors).liftPotentiometer2 = TopLift;  //this will have control of the cone lift
 }
 
 void setupDigitalSensor(){
-  dSensors.rightEncoder1 = REnc; //right wheel encoder
-  dSensors.leftEncoder1 = LEnc; //left wheel encoder
+  (dSensors).rightEncoder1 = REnc; //right wheel encoder
+  (dSensors).leftEncoder1 = LEnc; //left wheel encoder
 }
 
 void setupMotors(){
-   rMotors.frontLeft = LEdgeMots;
-   rMotors.rearLeft = LInsideMots;
-   rMotors.frontRight = REdgeMots;
-   rMotors.rearRight = RInsideMots;
-   rMotors.lift1 = liftMotor1;
-   rMotors.lift2 = liftMotor2;
-   rMotors.smallLift1 = ConeLift;
-   rMotors.ef = claw;
+	 (rMotors).frontRight = REdgeMots;
+   (rMotors).rearRight = RInsideMots;
+   (rMotors).frontLeft = LEdgeMots;
+   (rMotors).rearLeft = LInsideMots;
+   (rMotors).lift1 = liftMotor1;
+   (rMotors).lift2 = liftMotor2;
+   (rMotors).smallLift1 = ConeLift;
+   (rMotors).ef = claw;
 }
 
 void setupCommunications(){
@@ -79,20 +75,20 @@ void robotSetup(){
   setupCommunications();
   setupDigitalSensor();
   setupMotors();
-  robot.aSensors = aSensors;
-  robot.dSensors = dSensors;
-  robot.rMotors = rMotors;
-  robot.comms = comms;
+  robot.aSensors = &aSensors;
+  robot.dSensors = &dSensors;
+  robot.rMotors = &rMotors;
+  robot.comms = &comms;
 }
 
 void left(int speed){
-  motor[robot.rMotors.frontLeft] = speed;
-  motor[robot.rMotors.rearLeft] = speed;
+  motor[robot.rMotors->frontLeft] = speed;
+  motor[robot.rMotors->rearLeft] = speed;
 }
 
 void right(int speed){
-  motor[robot.rMotors.frontRight] = -speed;
-  motor[robot.rMotors.rearRight] = speed;
+  motor[robot.rMotors->frontRight] = -speed;
+  motor[robot.rMotors->rearRight] = speed;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////This will define a struct to control the ////////////////////////////////////////////////////////////////////////////////////////
