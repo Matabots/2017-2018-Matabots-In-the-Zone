@@ -7,13 +7,13 @@ Drive Functions
 
 void rightMotors(int speed)
 {
-	motor[REdgeMots] = speed;
-	motor[RInsideMots] = -speed;
+	motor[REdgeMots] = -speed;
+	motor[RInsideMots] = speed;
 }
 void leftMotors(int speed)
 {
 	motor[LEdgeMots] = speed;
-	motor[LInsideMots] = -speed;
+	motor[LInsideMots] = speed;
 }
 void moveLift(int speed){
 	motor[liftMotor1] = speed;
