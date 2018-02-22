@@ -46,7 +46,7 @@ void MoveArm()// to targetDeg
   time1[T2] = 0;
 	while(same )//&& time1[T1] < 5000)
 		{
-			enc = SensorValue[stackEnc];
+			enc = SensorValue[TopEncoder];
 			pitch = enc + offSet;
 			error = target - pitch;
 			float motSpeed;
@@ -59,15 +59,15 @@ void MoveArm()// to targetDeg
 			if (abs(motSpeed) < minS)
 			{
 			  if (motSpeed < 0) {
-			    motor[LiftMot] = -minS;
+			    motor[ConeLift] = -minS;
 			  } else {
-			    motor[LiftMot] = minS;
+			    motor[ConeLift] = minS;
 			  }
 			}
 		  else
 		  {
 
-		  		motor[LiftMot] = motSpeed;
+		  		motor[ConeLift] = motSpeed;
 
 		  }
 			if(abs(error) < tolerance*50)
@@ -105,12 +105,11 @@ void AutoClaw(int IO) //0 is open, 1 is closed
 	{
   case 0:
     //time1[T1] = 0;
-    //while(/*(SensorValue[Potent] > potentVal - 275) &&*/ (time1[T1] < 1500))
     //{
-		  motor[CMot] = -127;
+		  motor[claw] = -127;
 	  //}
 		wait10Msec(90);
-    motor[CMot] = -20;
+    motor[claw] = -20;
     //wait10Msec(80);
     cone = false;
   	break;
@@ -118,7 +117,7 @@ void AutoClaw(int IO) //0 is open, 1 is closed
   case 1:
 
     cone = true;
-    motor[CMot] = 30;
+    motor[claw] = 30;
   	break;
   }
 }
@@ -207,15 +206,13 @@ void reSetGyro() // probably not needed
 }
 void Right(int speed)
 {
-	motor[RMots1] = speed;
-  motor[RMots2] = speed;
-	motor[RMots3] = speed;
+	motor[REdgeMots] = -speed;
+	motor[RInsideMots] = speed;
 }
 void Left(int speed)
 {
-	motor[LMots1] = speed;
-	motor[LMots2] = speed;
-	motor[LMots3] = speed;
+	motor[LEdgeMots] = speed;
+	motor[LInsideMots] = speed;
 }
 void Halt()
 {
@@ -257,8 +254,7 @@ void SetupSens()
 	SensorValue[REnc] = 0;
 	reSetGyro();
 	targetGyro = 0;
-  SensorValue[stackEnc] = 0; //may affect lift enc, unsure
-  potentVal = SensorValue[Potent];
+  SensorValue[TopEncoder] = 0; //may affect lift enc, unsure
   Halt();
 }
 void setGyroInGame()
@@ -315,13 +311,12 @@ void moveGyro()
         	power = 25*KpT;
       	}
 
-        motor[LMots1] = -power;
-        motor[LMots2] = -power;
-        motor[LMots3] = -power;
+        motor[LEdgeMots] = -power;
+        motor[REdgeMots] = -power;
 
-        motor[RMots1] = power;
-        motor[RMots2] = power;
-        motor[RMots3] = power;
+
+        motor[LInsideMots] = power;
+        motor[RInsideMots] = power;
         delay(10);
 		}
 		atGyro = true;
@@ -386,13 +381,13 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 //------------------Mobile Goal Lift --------------
 void oldtinyLiftDown(float time)
 {
-	  motor[MobMots1] = 127;
-    motor[MobMots2] = 127;
+	  motor[liftMotor1] = 127;
+    motor[liftMotor2] = 127;
 
 	  wait10Msec(time * 100);
 
-	  motor[MobMots1] = 0;
-	  motor[MobMots2] = 0;
+	  motor[liftMotor1] = 0;
+	  motor[liftMotor2] = 0;
 }
 
 void tinyLiftDown(float time)
@@ -408,13 +403,13 @@ void tinyLiftUp()
 }
 void tinyLiftUpTmp(float time)
 {
-	motor[MobMots1] = -127;
-  motor[MobMots2] = -127;
+	motor[liftMotor1] = 127;
+	motor[liftMotor2] = 127;
 
-  wait10Msec(time * 100);
+	wait10Msec(time * 100);
 
-  motor[MobMots1] = 0;
-	motor[MobMots2] = 0;
+	motor[liftMotor1] = 0;
+	motor[liftMotor2] = 0;
 
 }
 
@@ -424,21 +419,21 @@ void checkMobile()
   {
   	while(SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0)
 	  {
-      motor[MobMots1] = -127;
-      motor[MobMots2] = -127;
+      motor[liftMotor1] = -127;
+      motor[liftMotor2] = -127;
     }
-    motor[MobMots1] = 0;
-	  motor[MobMots2] = 0;
+    motor[liftMotor1] = 0;
+	  motor[liftMotor2] = 0;
   }
   else if (mobDown)
   {
-    motor[MobMots1] = 127;
-    motor[MobMots2] = 127;
+    motor[liftMotor1] = 127;
+    motor[liftMotor2] = 127;
 
 	  wait10Msec(timeVal * 100);
 
-	  motor[MobMots1] = 0;
-	  motor[MobMots2] = 0;
+	  motor[liftMotor1] = 0;
+	  motor[liftMotor2] = 0;
   }
   mobUp = false;
   mobDown = false;
@@ -466,62 +461,62 @@ void driveBack(float leftP, float rightP, float sec)
 }
 void PreLoad()
 {
-  motor[CMot] = 30;
+  motor[claw] = 30;
   //delay lift
   targetDeg = pitch;
   wait10Msec(50);
   targetDeg = 0;
 }
 //-----------------Temporary, for Line Sensors
-void ToLine(float targetIn) //using drive to? not continuous
-{
-	reSetDEnc();
-	minGo = 9;
-	encAvg = 0;
-	errorD = targetIn - encAvg;	//error is the difference between the goal and current distance
-
-	toleranceD =3.7; //3.7;	//how accurate do I want the robot to be was at .25
-  kp2 = 4.1;
-	totalErrorD = 0;
-	ki2 = 0;
-	kd2 = 0;
-	time1[T3] = 0;
-	float dSpeed =0;
-	SensorValue[REnc]=0;
-	float gyroOrig = gyroVal;
-	float gyroCorr = 3;//3.5
-	while(abs(errorD) > toleranceD || (time1[T3] < 1000))
-		{
-			//SensorValue[(tSensors) 10 ] = 1;
-			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
-			errorD = targetIn - degToInt(SensorValue[LEnc]);
-		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
-
-		  if (abs(dSpeed) < minGo)
-			{
-				 dSpeed = dSpeed/abs(dSpeed);
-			   Right((minGo*dSpeed)+(gyroOrig-gyroVal)*gyroCorr);
-			   Left((minGo*dSpeed)-(gyroOrig-gyroVal)*gyroCorr);
-			}
-		  else
-		  {
-		  		Right(dSpeed+(gyroOrig-gyroVal)*gyroCorr);
-			    Left(dSpeed-(gyroOrig-gyroVal)*gyroCorr);
-		  }
-			//if(abs(errorD) < toleranceD*50)
-			//{
-			//		//kD = 20;
-			//	//	ki = 1;
-			//}
-			if(abs(errorD) > toleranceD)
-			{
-		 		time1[T3] = 0;
-			}
-			if(!lineFound && ((SensorValue[lineSens1] < 1500 )||(SensorValue[lineSens2] < 1500 )||(SensorValue[lineSens3] < 1500 )))
-			{
-				targetIn = encAvg;
-				lineFound = true;
-			}
-		}
-	Halt();
-}
+// void ToLine(float targetIn) //using drive to? not continuous
+// {
+// 	reSetDEnc();
+// 	minGo = 9;
+// 	encAvg = 0;
+// 	errorD = targetIn - encAvg;	//error is the difference between the goal and current distance
+//
+// 	toleranceD =3.7; //3.7;	//how accurate do I want the robot to be was at .25
+//   kp2 = 4.1;
+// 	totalErrorD = 0;
+// 	ki2 = 0;
+// 	kd2 = 0;
+// 	time1[T3] = 0;
+// 	float dSpeed =0;
+// 	SensorValue[REnc]=0;
+// 	float gyroOrig = gyroVal;
+// 	float gyroCorr = 3;//3.5
+// 	while(abs(errorD) > toleranceD || (time1[T3] < 1000))
+// 		{
+// 			//SensorValue[(tSensors) 10 ] = 1;
+// 			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
+// 			errorD = targetIn - degToInt(SensorValue[LEnc]);
+// 		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
+//
+// 		  if (abs(dSpeed) < minGo)
+// 			{
+// 				 dSpeed = dSpeed/abs(dSpeed);
+// 			   Right((minGo*dSpeed)+(gyroOrig-gyroVal)*gyroCorr);
+// 			   Left((minGo*dSpeed)-(gyroOrig-gyroVal)*gyroCorr);
+// 			}
+// 		  else
+// 		  {
+// 		  		Right(dSpeed+(gyroOrig-gyroVal)*gyroCorr);
+// 			    Left(dSpeed-(gyroOrig-gyroVal)*gyroCorr);
+// 		  }
+// 			//if(abs(errorD) < toleranceD*50)
+// 			//{
+// 			//		//kD = 20;
+// 			//	//	ki = 1;
+// 			//}
+// 			if(abs(errorD) > toleranceD)
+// 			{
+// 		 		time1[T3] = 0;
+// 			}
+// 			if(!lineFound && ((SensorValue[lineSens1] < 1500 )||(SensorValue[lineSens2] < 1500 )||(SensorValue[lineSens3] < 1500 )))
+// 			{
+// 				targetIn = encAvg;
+// 				lineFound = true;
+// 			}
+// 		}
+// 	Halt();
+// }
