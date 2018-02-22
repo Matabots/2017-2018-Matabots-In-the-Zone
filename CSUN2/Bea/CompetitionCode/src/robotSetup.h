@@ -58,7 +58,7 @@ void setupDigitalSensor(){
   dSensors.leftEncoder1 = LEnc; //left wheel encoder
 }
 
-void setupRobotMotors(){
+void setupMotors(){
    rMotors.frontLeft = LEdgeMots;
    rMotors.rearLeft = LInsideMots;
    rMotors.frontRight = REdgeMots;
@@ -78,7 +78,7 @@ void robotSetup(){
   setupAnalogSensor();
   setupCommunications();
   setupDigitalSensor();
-  setupRobotMotors();
+  setupMotors();
   robot.aSensors = aSensors;
   robot.dSensors = dSensors;
   robot.rMotors = rMotors;
