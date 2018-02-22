@@ -1,8 +1,7 @@
 /*
 Drive Functions
 */
-
-#define DEADZONE 15
+/*#include "Variables.h"
 
 
 void rightMotors(int speed)
@@ -88,4 +87,4 @@ void driveControl()
 		haltClaw();
 	}
 
-}
+}*/

@@ -30,6 +30,7 @@
 #include "Vex_Competition_Includes.c"
 #include "BeaDriverFunctions.h"
 #include "v2DriveControls.h"
+#include "Variables.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -89,10 +90,10 @@ task autonomous()
 task usercontrol()
 {
   // User control code here, inside the loop
-resetSensor();
+	SensorValue[TopEncoder] = 0;
   while (true)
   {
-  	driveControl();
+  	//driveControl();
   	// This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.

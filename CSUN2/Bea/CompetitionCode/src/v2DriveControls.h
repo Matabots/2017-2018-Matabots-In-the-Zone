@@ -4,7 +4,7 @@ Version 2 (added PID controlled lift)
 */
 //since the auton code uses the same value names, the letter "D" was added to avoid similarity since values are different.
 float Kp;		//Kp is a multiplier to calibrate the power
-
+#include "Variables.h"
 #define DEADZONE 15
 struct Controller
 {
