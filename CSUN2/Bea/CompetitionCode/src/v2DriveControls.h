@@ -79,7 +79,7 @@ void MoveArm(float input)
 
 	while(same)
 		{
-			enc = SensorValue[stackEnc];
+			enc = SensorValue[TopEncoder];
 			pitch = enc + offSet;
 			error = target - pitch;
 			float motSpeed;
@@ -92,15 +92,15 @@ void MoveArm(float input)
 			if (abs(motSpeed) < minS)
 			{
 			  if (motSpeed < 0) {
-			    motor[LiftMot] = -minS;
+			    motor[ConeLift] = -minS;
 			  } else {
-			    motor[LiftMot] = minS;
+			    motor[ConeLift] = minS;
 			  }
 			}
 		  else
 		  {
 
-		  		motor[LiftMot] = motSpeed;
+		  		motor[ConeLift] = motSpeed;
 
 		  }
 			if(abs(error) < tolerance*50)
@@ -133,43 +133,45 @@ void MoveArm(float input)
 
 void MoveClaw()
 {
-	if(vexRT[controller.smallLiftDown] == 1 && (SensorValue[Potent] > potentVal - 200)) //&& abs(SensorValue[CMEnc]) < 90)
-	{ //open
-		motor[CMot] = -127;
-  }
-  else if(vexRT[controller.smallLiftUp] == 1 && (SensorValue[Potent] < (potentVal + 1000))) //&& abs(SensorValue[CMEnc]) > 0)
-  { //close
-    motor[CMot] = 127;
-  }
-  else
-  {
-  	motor[CMot] = 0;
-  }
+	//ADJUST FOR INTEGRATED ENCODER
+	// if(vexRT[controller.smallLiftDown] == 1 && (SensorValue[Potent] > potentVal - 200)) //&& abs(SensorValue[CMEnc]) < 90)
+	// { //open
+	// 	motor[CMot] = -127;
+  // }
+  // else if(vexRT[controller.smallLiftUp] == 1 && (SensorValue[Potent] < (potentVal + 1000))) //&& abs(SensorValue[CMEnc]) > 0)
+  // { //close
+  //   motor[CMot] = 127;
+  // }
+  // else
+  // {
+  // 	motor[CMot] = 0;
+  // }
 }
 
 void AutoClawD(int IO) //0 is open, 1 is closed
 {
-	//open claw
-	switch(IO)
-	{
-  case 0:
-    time1[T1] = 0;
-    while((SensorValue[Potent] > potentVal - 300) && (time1[T1] < 1500))
-	  {
-		  motor[CMot] = -127;
-	  }
-    motor[CMot] = -20;
-    wait10Msec(100);
-    cone = false;
-    same = false;
-  	break;
-
-  case 1:
-
-    cone = true;
-    motor[CMot] = 25;
-  	break;
-  }
+	//ADJUST FOR INTEGRATED ENCODER
+	// //open claw
+	// switch(IO)
+	// {
+  // case 0:
+  //   time1[T1] = 0;
+  //   while((SensorValue[Potent] > potentVal - 300) && (time1[T1] < 1500))
+	//   {
+	// 	  motor[CMot] = -127;
+	//   }
+  //   motor[CMot] = -20;
+  //   wait10Msec(100);
+  //   cone = false;
+  //   same = false;
+  // 	break;
+	//
+  // case 1:
+	//
+  //   cone = true;
+  //   motor[CMot] = 25;
+  // 	break;
+  // }
 }
 
 
@@ -233,54 +235,46 @@ void MoveChassis()
   {
 	  if (abs(vexRT[controller.rightMotors]) > DEADZONE)
 	  {
-		  motor[LMots1] = -n*vexRT[controller.rightMotors];
-		  motor[LMots2] = -n*vexRT[controller.rightMotors];
-		  motor[LMots3] = -n*vexRT[controller.rightMotors];
+		  motor[LEdgeMots] = -n*vexRT[controller.rightMotors];
+		  motor[LInsideMots] = -n*vexRT[controller.rightMotors];
 	  }
 	  else
 	  {
-		  motor[LMots1] = 0;
-		  motor[LMots2] = 0;
-		  motor[LMots3] = 0;
+		  motor[LEdgeMots] = 0;
+		  motor[LInsideMots] = 0;
 	  }
 	  if (abs(vexRT[controller.leftMotors]) > DEADZONE)
 	  {
-		  motor[RMots1] = -n*vexRT[controller.leftMotors];
-		  motor[RMots2] = -n*vexRT[controller.leftMotors];
-		  motor[RMots3] = -n*vexRT[controller.leftMotors];
+		  motor[REdgeMots] = -n*vexRT[controller.leftMotors];
+		  motor[RInsideMots] = -n*vexRT[controller.leftMotors];
 	  }
 	  else
 	  {
-		  motor[RMots1] = 0;
-		  motor[RMots2] = 0;
-		  motor[RMots3] = 0;
+		  motor[REdgeMots] = 0;
+		  motor[RInsideMots] = 0;
 	  }
   }
   else
   {
   	if (abs(vexRT[controller.rightMotors]) > DEADZONE)
 	  {
-		  motor[RMots1] = n*vexRT[controller.rightMotors];
-		  motor[RMots2] = n*vexRT[controller.rightMotors];
-		  motor[RMots3] = n*vexRT[controller.rightMotors];
+		  motor[REdgeMots] = n*vexRT[controller.rightMotors];
+		  motor[RInsideMots] = n*vexRT[controller.rightMotors];
 	  }
 	  else
 	  {
-		  motor[RMots1] = 0;
-		  motor[RMots2] = 0;
-		  motor[RMots3] = 0;
+		  motor[REdgeMots] = 0;
+		  motor[RInsideMots] = 0;
 	  }
 	  if (abs(vexRT[controller.leftMotors]) > DEADZONE)
 	  {
-		  motor[LMots1] = n*vexRT[controller.leftMotors];
-		  motor[LMots2] = n*vexRT[controller.leftMotors];
-		  motor[LMots3] = n*vexRT[controller.leftMotors];
+		  motor[LEdgeMots] = n*vexRT[controller.leftMotors];
+		  motor[LInsideMots] = n*vexRT[controller.leftMotors];
 	  }
 	  else
 	  {
-		  motor[LMots1] = 0;
-		  motor[LMots2] = 0;
-		  motor[LMots3] = 0;
+		  motor[LEdgeMots] = 0;
+		  motor[LInsideMots] = 0;
 	  }
   }
 }
@@ -307,21 +301,22 @@ void StackerSetter()
 }
 void liftBase()
 {
-		if (vexRT[controller.mobileGoalLiftUp] == 1 && (SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0))
-		{
-			motor[MobMots1] = -127;
-			motor[MobMots2] = -127;
-		}
-		else if (vexRT[controller.mobileGoalLiftDown] == 1)
-		{
-			motor[MobMots1] = 127;
-			motor[MobMots2] = 127;
-		}
-		else
-		{
-			motor[MobMots1] = 0;
-			motor[MobMots2] = 0;
-		}
+	//ADJUST FOR POTENTIOMETER
+		// if (vexRT[controller.mobileGoalLiftUp] == 1 && (SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0))
+		// {
+		// 	motor[MobMots1] = -127;
+		// 	motor[MobMots2] = -127;
+		// }
+		// else if (vexRT[controller.mobileGoalLiftDown] == 1)
+		// {
+		// 	motor[MobMots1] = 127;
+		// 	motor[MobMots2] = 127;
+		// }
+		// else
+		// {
+		// 	motor[MobMots1] = 0;
+		// 	motor[MobMots2] = 0;
+		// }
 }
 void runPID()
 {
