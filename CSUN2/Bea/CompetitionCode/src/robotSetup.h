@@ -5,7 +5,7 @@
 
 struct AnalogSensor{
   tSensors liftPot; //this will have control of the goal lift
-  tSensors gyro;
+  tSensors gyroscope;
 };
 
 AnalogSensor aSensors;
@@ -32,7 +32,6 @@ RobotMotor rMotors;
 struct Communications{
  	TI2CStatus i2c;
 
-
 };
 
 Communications comms;
@@ -50,7 +49,7 @@ Robot robot;
 
 void setupAnalogSensor(){
   (aSensors).liftPot = LiftPotentiometer; //this will have control of the goal lift
-  (aSensors).gyro = Gyro;
+  (aSensors).gyroscope = Gyro;
 }
 
 void setupDigitalSensor(){
@@ -234,4 +233,8 @@ void controllerInputs(){
 	goalLiftControls();
 	coneLiftControls();
 	clawControls();
+}
+
+void readSensors(){
+
 }
