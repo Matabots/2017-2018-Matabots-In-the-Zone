@@ -10,8 +10,9 @@ struct AnalogSensor{
 AnalogSensor aSensors;
 
 struct DigitalSensor{
-  tSensors rightEncoder1; //right wheel encoder
-  tSensors leftEncoder1; //left wheel encoder
+  tSensors rightEncoder; //right wheel encoder
+  tSensors leftEncoder; //left wheel encoder
+  tSensors coneLiftEnc;	//the cone lift encoder
 };
 DigitalSensor dSensors;
 
@@ -22,7 +23,7 @@ struct RobotMotor{
   tMotor rearRight;
   tMotor lift1;
   tMotor lift2;
-  tMotor smallLift1;
+  tMotor smallLift;
   tMotor ef;
 };
 RobotMotor rMotors;
@@ -51,8 +52,9 @@ void setupAnalogSensor(){
 }
 
 void setupDigitalSensor(){
-  (dSensors).rightEncoder1 = REnc; //right wheel encoder
-  (dSensors).leftEncoder1 = LEnc; //left wheel encoder
+  (dSensors).rightEncoder = REnc; //right wheel encoder
+  (dSensors).leftEncoder = LEnc; //left wheel encoder
+  (dSensors).coneLiftEnc = ConeLiftEncoder;
 }
 
 void setupMotors(){
@@ -62,7 +64,7 @@ void setupMotors(){
    (rMotors).rearLeft = LInsideMots;
    (rMotors).lift1 = LiftMotor1;
    (rMotors).lift2 = LiftMotor2;
-   (rMotors).smallLift1 = ConeLift;
+   (rMotors).smallLift = ConeLift;
    (rMotors).ef = Claw;
 }
 
