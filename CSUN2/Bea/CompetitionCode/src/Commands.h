@@ -32,30 +32,6 @@ void MoveConeLift(int speed, int targetDeg)// to targetDeg at speed
 	}
 	smallLift(0);
 }
-void AutoClaw(int IO) //0 is open, 1 is closed
-{
-	//open claw
-	switch(IO)
-	{
-  case 0:
-    //time1[T1] = 0;
-    //{
-		  motor[robot.rMotors->ef ] = -127;
-	  //}
-		wait10Msec(90);
-    motor[robot.rMotors->ef] = -20;
-    //wait10Msec(80);
-    cone = false;
-  	break;
-
-  case 1:
-
-    cone = true;
-    motor[robot.rMotors->ef] = 30;
-  	break;
-  }
-}
-
 void AutoLift()
 {
 	float oldDeg;
