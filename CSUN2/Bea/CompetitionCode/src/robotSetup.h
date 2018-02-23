@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Variables.h"
 struct AnalogSensor{
-  tSensors liftPot; //this will have control of the goal lift
   tSensors gyroscope;
 };
 
@@ -14,6 +13,7 @@ struct DigitalSensor{
   tSensors rightEncoder; //right wheel encoder
   tSensors leftEncoder; //left wheel encoder
   tSensors coneLiftEnc;	//the cone lift encoder
+  tSensors LiftEnc; //the goal lift encoder
 };
 DigitalSensor dSensors;
 
@@ -52,7 +52,6 @@ struct Robot{
 Robot robot;
 
 void setupAnalogSensor(){
-  (aSensors).liftPot = LiftPotentiometer; //this will have control of the goal lift
   (aSensors).gyroscope = Gyro;
 }
 
@@ -60,6 +59,7 @@ void setupDigitalSensor(){
   (dSensors).rightEncoder = REnc; //right wheel encoder
   (dSensors).leftEncoder = LEnc; //left wheel encoder
   (dSensors).coneLiftEnc = ConeLiftEncoder; //lift above the encoder of the
+  (dSensors).LiftEnc = LiftEncoder; //encoder for the goal lift
 }
 
 void setupMotors(){
@@ -87,9 +87,9 @@ void robotSetup(){
   robot.dSensors = &dSensors;
   robot.rMotors = &rMotors;
   robot.comms = &comms;
- 	robot.smallLiftLimitDown = 0;
+ 	robot.smallLiftLimitDown = 600;
   robot.smallLiftLimitUp = 0;
-  robot.goalLiftLimitDown = 0;
+  robot.goalLiftLimitDown = 55;
   robot.goalLiftLimitUp = 0;
 }
 
@@ -131,12 +131,13 @@ void resetGyro() //this function can be used to subtract a rate of change for th
 }
 
 void goalLiftMovement(int moveUp){
-	if(moveUp == 1){
+	if(moveUp == 1 && SensorValue[robot.dSensors->LiftEnc] > robot.goalLiftLimitUp){
 		motor[robot.rMotors->lift1] = 127;
 		motor[robot.rMotors->lift2] = -127;
-	}else if(moveUp == -1){
+	}else if(moveUp == -1 && SensorValue[robot.dSensors->LiftEnc] < robot.goalLiftLimitDown){
 		motor[robot.rMotors->lift1] = -127;
 		motor[robot.rMotors->lift2] = 127;
+		robot.goalLiftLimitUp = 5;
 	}else{
 		motor[robot.rMotors->lift1] = 0;
 		motor[robot.rMotors->lift2] = 0;
@@ -144,10 +145,11 @@ void goalLiftMovement(int moveUp){
 }
 
 void coneLiftMovement(int moveUp){
-	if(moveUp == 1){
+	if(moveUp == 1 && (SensorValue[robot.dSensors->ConeLiftEnc] > robot.smallLiftLimitUp)){
 		motor[robot.rMotors->smallLift] = -127;
-	}else if(moveUp == -1){
+	}else if(moveUp == -1 && (SensorValue[robot.dSensors->ConeLiftEnc] < robot.smallLiftLimitDown)){
 		motor[robot.rMotors->smallLift] = 127;
+		robot.smallLiftLimitUp = 5;
 	}else{
 		motor[robot.rMotors->smallLift] = 0;
 	}
@@ -265,12 +267,13 @@ void intializeSensorValues(){
 	SensorValue(robot.dSensors->rightEncoder) = 0;
 	SensorValue(robot.dSensors->leftEncoder) = 0;
 	SensorValue(robot.dSensors->coneLiftEnc) = 0;
+	SensorValue(robot.dSensors->LiftEnc) = 0;
 }
 
 void outputSensorData(){
-	writeDebugStream("%d\n", SensorValue(robot.aSensors->liftPot));
-	writeDebugStream("%d\n", SensorValue(robot.aSensors->gyroscope));
-	writeDebugStream("%d\n", SensorValue(robot.dSensors->rightEncoder));
-	writeDebugStream("%d\n", SensorValue(robot.dSensors->leftEncoder));
-	writeDebugStream("%d\n", SensorValue(robot.dSensors->coneLiftEnc));
+		writeDebugStream("%d\n", SensorValue(robot.dSensors->LiftEnc));
+//	//writeDebugStream("%d\n", SensorValue(robot.aSensors->gyroscope));
+//	writeDebugStream("%d\n", SensorValue(robot.dSensors->rightEncoder));
+	//writeDebugStream("%d\n", SensorValue(robot.dSensors->leftEncoder));
+	//writeDebugStream("%d\n", SensorValue(robot.dSensors->coneLiftEnc));
 }
