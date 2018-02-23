@@ -102,7 +102,7 @@ void resetChassisEnc()
 }
 void resetGyro() // probably not needed
 {
-  SensorValue[robot.aSensors->gyro] = 0;
+  SensorValue[robot.aSensors->gyroscope] = 0;
 }
 
 void goalLiftMovement(int moveUp){
@@ -235,6 +235,16 @@ void controllerInputs(){
 	clawControls();
 }
 
-void readSensors(){
+void intializeSensorValues(){
+	SensorValue(robot.dSensors->rightEncoder) = 0;
+	SensorValue(robot.dSensors->leftEncoder) = 0;
+	SensorValue(robot.dSensors->coneLiftEnc) = 0;
+}
 
+void outputSensorData(){
+	writeDebugStream("%d\n", SensorValue(robot.aSensors->liftPot));
+	writeDebugStream("%d\n", SensorValue(robot.aSensors->gyroscope));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->rightEncoder));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->leftEncoder));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->coneLiftEnc));
 }

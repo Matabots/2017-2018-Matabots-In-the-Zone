@@ -97,9 +97,11 @@ task usercontrol()
 	setupController();
 	resetChassisEnc();
 	resetGyro();
+	intializeSensorValues();
   while (true)
   {
     controllerInputs();
+    outputSensorData();
   	// This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
