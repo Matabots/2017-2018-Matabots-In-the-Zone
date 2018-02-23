@@ -4,8 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct AnalogSensor{
-  tSensors liftPotentiometer1; //this will have control of the goal lift
-  tSensors liftPotentiometer2;  //this will have control of the cone lift
+  tSensors liftPot; //this will have control of the goal lift
 };
 
 AnalogSensor aSensors;
@@ -36,6 +35,8 @@ struct Communications{
 Communications comms;
 
 struct Robot{
+	//reference child struct data types with pointers
+	//Ex: robot.rMotors->frontLeft
   struct AnalogSensor *aSensors;
   struct DigitalSensor *dSensors;
   struct RobotMotor *rMotors;
@@ -45,8 +46,7 @@ struct Robot{
 Robot robot;
 
 void setupAnalogSensor(){
-  (aSensors).liftPotentiometer1 = BottomLift; //this will have control of the goal lift
-  (aSensors).liftPotentiometer2 = TopLift;  //this will have control of the cone lift
+  (aSensors).liftPot = LiftPotentiometer; //this will have control of the goal lift
 }
 
 void setupDigitalSensor(){
@@ -59,10 +59,10 @@ void setupMotors(){
    (rMotors).rearRight = RInsideMots;
    (rMotors).frontLeft = LEdgeMots;
    (rMotors).rearLeft = LInsideMots;
-   (rMotors).lift1 = liftMotor1;
-   (rMotors).lift2 = liftMotor2;
+   (rMotors).lift1 = LiftMotor1;
+   (rMotors).lift2 = LiftMotor2;
    (rMotors).smallLift1 = ConeLift;
-   (rMotors).ef = claw;
+   (rMotors).ef = Claw;
 }
 
 void setupCommunications(){
