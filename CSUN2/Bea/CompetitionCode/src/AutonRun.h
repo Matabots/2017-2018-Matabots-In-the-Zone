@@ -9,7 +9,14 @@ bool preloading = true;
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 void autonGo()
 {
-	if (red)
+	if(red)
+	{
+		//MoveConeLift(50,260);
+	}
+	else
+	{
+	}
+	/*if (red)
 	{	//needs to have fresh batteries and good rubber bands. starts at 7 inches from the wall
 		if (preloading)
 		{
@@ -89,10 +96,5 @@ void autonGo()
 
 
 		}
-      tasksFinished();
-  }
-  else
-  { //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-      tasksFinished();
-  }
+  }*/
 }

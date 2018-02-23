@@ -6,9 +6,7 @@ int firstCone = 80;
 int secondCone = 75;
 int thirdCone = 58;
 
-float pitch;
 float enc = 0;
-float offSet = 126;
 float minS;
 float target;
 float error;

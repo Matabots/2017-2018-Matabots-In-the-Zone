@@ -3,7 +3,7 @@
 */
 #include "Variables.h"
 #include "AutonRun.h"
-
+#include "robotSetup.h"
 /*
 	 (rMotors).frontRight = REdgeMots;
    (rMotors).rearRight = RInsideMots;
@@ -22,28 +22,15 @@ void tasksFinished()
 }
 
 //moves the cone lift arm to a darget degree
-void MoveConeLift(int speed, int deg)// to targetDeg at speed
+// 0<targetDeg<600
+void MoveConeLift(int speed, int targetDeg)// to targetDeg at speed
 {
 	minS = 20;
-	target = targetDeg;
-
-			enc = SensorValue[robot.dSensors->coneLiftEnc];
-			pitch = enc + offSet;
-			error = target - pitch;
-
-			if (abs(motSpeed) < minS)
-			{
-			  if (motSpeed < 0) {
-			    motor[robot.rMotors->smallLift] = -minS;
-			  } else {
-			    motor[robot.rMotors->smallLift] = minS;
-			  }
-			}
-		  else
-		  {
-		  		motor[robot.rMotors->smallLift] = motSpeed;
-		  }
-
+	while(SensorValue[robot.dSensors->coneLiftEnc] < targetDeg)
+	{
+		    smallLift(speed);
+	}
+	smallLift(0);
 }
 void AutoClaw(int IO) //0 is open, 1 is closed
 {
@@ -144,49 +131,6 @@ float degToInt(float deg)
 }
 
 
-void Halt()
-{
-	Right(0);
-	Left(0);
-}
-
-void GyroCalibrate()
-{
- //calibrate
- /*SensorType[Gyro] = sensorNone;
- wait1Msec(100);
- //Reconfigure Analog Port 8 as a Gyro sensor and allow time for ROBOTC to calibrate it
- SensorType[Gyro] = sensorGyro;
- wait1Msec(2000);
-
-//Adjust SensorScale to correct the scaling for your gyro
- SensorScale[in1] = 260;
- //Adjust SensorFullCount to set the "rollover" point. 3600 sets the rollover point to +/-3600
- SensorFullCount[in1] = 3600;*/
- SensorValue[Gyro]=0;
-	float prevGyro;
-	time1[T1] = 0;
-  while(time1[T1] < 2000)
-  {
-	  Halt();
-		prevGyro = gyroVal;
-		wait1Msec(10);
-		gyroVal = SensorValue[Gyro];
-		deltaGyro = (gyroVal - prevGyro);
-	}
-}
-
-void SetupSens()
-{
-	GyroCalibrate();
-	targetDeg = 0; //PID arm setup to neutral
-	SensorValue[LEnc] = 0; //may affect lift , unsure
-	SensorValue[REnc] = 0;
-	reSetGyro();
-	targetGyro = 0;
-  SensorValue[TopEncoder] = 0; //may affect lift enc, unsure
-  Halt();
-}
 void setGyroInGame()
 {
 	gyroOn = false;
@@ -393,7 +337,6 @@ void PreLoad()
 {
   motor[robot.rMotors->ef] = 30;
   //delay lift
-  targetDeg = pitch;
   wait10Msec(50);
   targetDeg = 0;
 }
