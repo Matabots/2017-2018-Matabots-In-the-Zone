@@ -95,7 +95,8 @@ task usercontrol()
 	nMotorEncoder[ClawEnc] = 0;
 	robotSetup();
 	setupController();
-
+	resetChassisEnc();
+	resetGyro();
   while (true)
   {
     controllerInputs();

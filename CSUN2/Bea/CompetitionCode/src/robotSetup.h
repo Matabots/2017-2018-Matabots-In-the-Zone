@@ -55,7 +55,7 @@ void setupAnalogSensor(){
 void setupDigitalSensor(){
   (dSensors).rightEncoder = REnc; //right wheel encoder
   (dSensors).leftEncoder = LEnc; //left wheel encoder
-  (dSensors).coneLiftEnc = ConeLiftEncoder;
+  (dSensors).coneLiftEnc = ConeLiftEncoder; //lift above the encoder of the
 }
 
 void setupMotors(){
@@ -93,6 +93,16 @@ void left(int speed){
 void right(int speed){
   motor[robot.rMotors->frontRight] = -speed;
   motor[robot.rMotors->rearRight] = speed;
+}
+
+void resetChassisEnc()
+{
+	SensorValue[robot.dSensors->rightEncoder] = 0;
+	SensorValue[robot.dSensors->leftEncoder] = 0;
+}
+void resetGyro() // probably not needed
+{
+  SensorValue[robot.aSensors->gyro] = 0;
 }
 
 void goalLiftMovement(int moveUp){

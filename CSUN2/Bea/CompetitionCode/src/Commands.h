@@ -142,25 +142,8 @@ float degToInt(float deg)
 {
 	return ((deg * (3.14 * 4))/107);
 }
-void reSetDEnc()
-{
-	SensorValue[REnc] = 0;
-	SensorValue[LEnc] = 0;
-}
-void reSetGyro() // probably not needed
-{
-  SensorValue[Gyro] = 0;
-}
-void Right(int speed)
-{
-	motor[REdgeMots] = -speed;
-	motor[RInsideMots] = speed;
-}
-void Left(int speed)
-{
-	motor[LEdgeMots] = speed;
-	motor[LInsideMots] = speed;
-}
+
+
 void Halt()
 {
 	Right(0);
