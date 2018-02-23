@@ -29,7 +29,7 @@ struct RobotMotor{
 RobotMotor rMotors;
 
 struct Communications{
- 	TI2CStatus i2c;
+ 	//TI2CStatus i2c;
 
 
 };
@@ -222,4 +222,8 @@ void controllerInputs(){
 	goalLiftControls();
 	coneLiftControls();
 	clawControls();
+}
+
+void readSensors(){
+
 }
