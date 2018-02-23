@@ -28,7 +28,8 @@ struct RobotMotor{
 RobotMotor rMotors;
 
 struct Communications{
- 	int fun;
+ 	TI2CStatus i2c;
+
 
 };
 
@@ -90,6 +91,41 @@ void right(int speed){
   motor[robot.rMotors->frontRight] = -speed;
   motor[robot.rMotors->rearRight] = speed;
 }
+
+void goalLiftMovement(int moveUp){
+	if(moveUp == 1){
+		motor[robot.rMotors->lift1] = 127;
+		motor[robot.rMotors->lift2] = -127;
+	}else if(moveUp == -1){
+		motor[robot.rMotors->lift1] = -127;
+		motor[robot.rMotors->lift2] = 127;
+	}else{
+		motor[robot.rMotors->lift1] = 0;
+		motor[robot.rMotors->lift2] = 0;
+	}
+}
+
+void coneLiftMovement(int moveUp){
+	if(moveUp == 1){
+		motor[robot.rMotors->smallLift1] = -127;
+	}else if(moveUp == -1){
+		motor[robot.rMotors->smallLift1] = 127;
+	}else{
+		motor[robot.rMotors->smallLift1] = 0;
+	}
+}
+
+void controlClaw(int grasp){
+	if(grasp == 1){
+		motor[robot.rMotors->ef] = -127;
+		wait1Msec(10);
+	}else if(grasp == -1){
+		motor[robot.rMotors->ef] = 127;
+		wait1Msec(10);
+	}else{
+		motor[robot.rMotors->ef] = 0;
+	}
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////This will define a struct to control the ////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////controller/////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +144,8 @@ struct Controller
 	TVexJoysticks mobileGoalLiftUp;
 	TVexJoysticks mobileGoalLiftDown;
 	TVexJoysticks resStackNeut;
-	TVexJoysticks coneBool;
+	TVexJoysticks clawOpen;
+	TVexJoysticks clawClose;
 	TVexJoysticks decliner;
 	TVexJoysticks smallLiftHigh;
 };
@@ -128,6 +165,8 @@ void setupController()
 	controller.mobileGoalLiftDown = Btn6D; //lower the goal
 	controller.mobileGoalLiftGround = Btn8R; //ground collector position
 	controller.mobileGoalLiftHigh = Btn8D; //autoload position
+	controller.clawOpen = Btn8U;
+	controller.clawClose = Btn8L;
 	controller.resStackNeut = Btn7U; //reset smallLiftGround # and set lift to neut
 }
 
@@ -144,7 +183,41 @@ void joystickControls(){
   }
 }
 
+void goalLiftControls(){
+	//-1 move goal down //0 kills movement //and 1 sends it up
+	if(vexRT[controller.mobileGoalLiftDown] == 1){
+		goalLiftMovement(-1);
+	}else if(vexRT[controller.mobileGoalLiftUp] == 1){
+		goalLiftMovement(1);
+	}else{
+		goalLiftMovement(0);
+	}
+}
+
+void coneLiftControls(){
+		//-1 move cone down //0 kills movement //and 1 sends it up
+	if(vexRT[controller.smallLiftDown] == 1){
+		coneLiftMovement(-1);
+	}else if(vexRT[controller.smallLiftUp] == 1){
+		coneLiftMovement(1);
+	}else{
+		coneLiftMovement(0);
+	}
+}
+
+void clawControls(){
+	if(vexRT[controller.clawClose] == 1){
+		controlClaw(-1);
+	}else if(vexRT[controller.clawOpen] == 1){
+		controlClaw(1);
+	}else{
+		controlClaw(0);
+	}
+}
+
 void controllerInputs(){
   joystickControls();
-
+	goalLiftControls();
+	coneLiftControls();
+	clawControls();
 }
