@@ -5,6 +5,7 @@
 
 struct AnalogSensor{
   tSensors liftPot; //this will have control of the goal lift
+  tSensors gyro;
 };
 
 AnalogSensor aSensors;
@@ -49,6 +50,7 @@ Robot robot;
 
 void setupAnalogSensor(){
   (aSensors).liftPot = LiftPotentiometer; //this will have control of the goal lift
+  (aSensors).gyro = Gyro;
 }
 
 void setupDigitalSensor(){
