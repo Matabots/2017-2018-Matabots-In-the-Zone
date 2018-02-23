@@ -2,10 +2,18 @@
   Commands list
 */
 #include "Variables.h"
-#include "AutonCommands.h"
-#include "CompetitionMain.c"
+#include "AutonRun.h"
 
-
+/*
+	 (rMotors).frontRight = REdgeMots;
+   (rMotors).rearRight = RInsideMots;
+   (rMotors).frontLeft = LEdgeMots;
+   (rMotors).rearLeft = LInsideMots;
+   (rMotors).lift1 = LiftMotor1;
+   (rMotors).lift2 = LiftMotor2;
+   (rMotors).smallLift1 = ConeLift;
+   (rMotors).ef = Claw;
+*/
 void tasksFinished()
 {
 	while(!atGyro)
@@ -13,89 +21,28 @@ void tasksFinished()
 	}
 }
 
-void MoveArm()// to targetDeg
+//moves the cone lift arm to a darget degree
+void MoveConeLift(int speed, int deg)// to targetDeg at speed
 {
 	minS = 20;
 	target = targetDeg;
-	error = target - pitch;	//error is the difference between the goal and current distance
-	float prevError = 0;
-	float kD = 200;
 
-	tolerance = 3;	//how accurate do I want the robot to be was at .25
-  if (cone) {
-    kp = 1.7; //was 1.8
-    minS = 30;
-    tolerance = 10;
-  } else  {
-	  kp = 1.2;		//Kp is a multiplier to calibrate the power //1.3 works
-  }
-  if (target == 0) {
-  	minS = 20;
-  	tolerance = 5;
-  	kp = 1.7;
-  }
-  if (targetDeg == firstCone) //was currentStack, but that caused issues
-  {
-    kp = 2.0;
-    kD = 400;
-    tolerance = 20; //was originally 8
-  }
-	totalError= 0;
-	ki = 0;
-	time1[T1] = 0;
-  time1[T2] = 0;
-	while(same )//&& time1[T1] < 5000)
-		{
-			enc = SensorValue[TopEncoder];
+			enc = SensorValue[robot.dSensors->coneLiftEnc];
 			pitch = enc + offSet;
 			error = target - pitch;
-			float motSpeed;
-			if (target == 0)
-		  {
-		    motSpeed = -((error * kp) + (totalError * ki) + ((error - prevError) * 0/*kD*/)) ;//constantly updates as I get closer to target
-		  } else {
-			  motSpeed = -((error * kp) + (totalError * ki) + ((error - prevError) * kD)) ;//constantly updates as I get closer to target
-		  }
+
 			if (abs(motSpeed) < minS)
 			{
 			  if (motSpeed < 0) {
-			    motor[ConeLift] = -minS;
+			    motor[robot.rMotors->smallLift] = -minS;
 			  } else {
-			    motor[ConeLift] = minS;
+			    motor[robot.rMotors->smallLift] = minS;
 			  }
 			}
 		  else
 		  {
-
-		  		motor[ConeLift] = motSpeed;
-
+		  		motor[robot.rMotors->smallLift] = motSpeed;
 		  }
-			if(abs(error) < tolerance*50)
-			{
-					//kD = 20;
-				//	ki = 1;
-			}
-			if(abs(error)>tolerance)
-			{
-		 		time1[T1] = 0;
-			}
-				//motor power limits itself to 127 if too large.
-				//check to make sure the robot is not stalling before it reaches the target point
-					//Note: stalling is either from Kp being too low and doesn't have enough power to push last bit of distance
-					//Note: You can eliminate stalling with a minimum speed limit i.e: if(error*kp < MIN){ motor[port[1]] = MIN};
-
-				//*****STEPS TO CALIBRATE Kp*****
-				//1. keep increasing Kp until the robot starts to oscillate about the target point physically
-				//2. once Kp oscillates, decrease Kp a little so it is stable
-		  totalError += error;
-		  prevError = error;
-	    if (targetDeg != target)
-	    {
-	    	same = false;
-	    }
-		}
-		lastPost = targetDeg;
-		same = true;
 
 }
 void AutoClaw(int IO) //0 is open, 1 is closed
@@ -106,10 +53,10 @@ void AutoClaw(int IO) //0 is open, 1 is closed
   case 0:
     //time1[T1] = 0;
     //{
-		  motor[claw] = -127;
+		  motor[robot.rMotors->ef ] = -127;
 	  //}
 		wait10Msec(90);
-    motor[claw] = -20;
+    motor[robot.rMotors->ef] = -20;
     //wait10Msec(80);
     cone = false;
   	break;
@@ -117,7 +64,7 @@ void AutoClaw(int IO) //0 is open, 1 is closed
   case 1:
 
     cone = true;
-    motor[claw] = 30;
+    motor[robot.rMotors->ef] = 30;
   	break;
   }
 }
@@ -347,7 +294,7 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 		{
 			//SensorValue[(tSensors) 10 ] = 1;
 			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
-			errorD = targetIn - degToInt(SensorValue[LEnc]);
+			errorD = targetIn - degToInt(SensorValue[robot.dSensors->leftEncoder]);
 		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
 
 		  if (abs(dSpeed) < minGo)
@@ -381,13 +328,13 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 //------------------Mobile Goal Lift --------------
 void oldtinyLiftDown(float time)
 {
-	  motor[liftMotor1] = 127;
-    motor[liftMotor2] = 127;
+	  motor[robot.rMotors->lift1] = 127;
+    motor[robot.rMotors->lift2] = 127;
 
 	  wait10Msec(time * 100);
 
-	  motor[liftMotor1] = 0;
-	  motor[liftMotor2] = 0;
+	  motor[robot.rMotors->lift1] = 0;
+	  motor[robot.rMotors->lift2] = 0;
 }
 
 void tinyLiftDown(float time)
@@ -403,13 +350,13 @@ void tinyLiftUp()
 }
 void tinyLiftUpTmp(float time)
 {
-	motor[liftMotor1] = 127;
-	motor[liftMotor2] = 127;
+	motor[robot.rMotors->lift1] = 127;
+	motor[robot.rMotors->lift2] = 127;
 
 	wait10Msec(time * 100);
 
-	motor[liftMotor1] = 0;
-	motor[liftMotor2] = 0;
+	motor[robot.rMotors->lift1] = 0;
+	motor[robot.rMotors->lift2] = 0;
 
 }
 
@@ -417,23 +364,23 @@ void checkMobile()
 {
   if (mobUp)
   {
-  	while(SensorValue[LimL1] == 0 && SensorValue[LimR1] == 0)
+  	while(SensorValue[robot.dSensors->coneLiftEnc] < 20)	//MEASURE ACTUAL VALUE
 	  {
-      motor[liftMotor1] = -127;
-      motor[liftMotor2] = -127;
+      motor[robot.rMotors->lift1] = -127;
+      motor[robot.rMotors->lift2] = -127;
     }
-    motor[liftMotor1] = 0;
-	  motor[liftMotor2] = 0;
+    motor[robot.rMotors->lift1] = 0;
+	  motor[robot.rMotors->lift2] = 0;
   }
   else if (mobDown)
   {
-    motor[liftMotor1] = 127;
-    motor[liftMotor2] = 127;
+    motor[robot.rMotors->lift1] = 127;
+    motor[robot.rMotors->lift2] = 127;
 
 	  wait10Msec(timeVal * 100);
 
-	  motor[liftMotor1] = 0;
-	  motor[liftMotor2] = 0;
+	  motor[robot.rMotors->lift1] = 0;
+	  motor[robot.rMotors->lift2] = 0;
   }
   mobUp = false;
   mobDown = false;
@@ -461,62 +408,9 @@ void driveBack(float leftP, float rightP, float sec)
 }
 void PreLoad()
 {
-  motor[claw] = 30;
+  motor[robot.rMotors->ef] = 30;
   //delay lift
   targetDeg = pitch;
   wait10Msec(50);
   targetDeg = 0;
 }
-//-----------------Temporary, for Line Sensors
-// void ToLine(float targetIn) //using drive to? not continuous
-// {
-// 	reSetDEnc();
-// 	minGo = 9;
-// 	encAvg = 0;
-// 	errorD = targetIn - encAvg;	//error is the difference between the goal and current distance
-//
-// 	toleranceD =3.7; //3.7;	//how accurate do I want the robot to be was at .25
-//   kp2 = 4.1;
-// 	totalErrorD = 0;
-// 	ki2 = 0;
-// 	kd2 = 0;
-// 	time1[T3] = 0;
-// 	float dSpeed =0;
-// 	SensorValue[REnc]=0;
-// 	float gyroOrig = gyroVal;
-// 	float gyroCorr = 3;//3.5
-// 	while(abs(errorD) > toleranceD || (time1[T3] < 1000))
-// 		{
-// 			//SensorValue[(tSensors) 10 ] = 1;
-// 			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
-// 			errorD = targetIn - degToInt(SensorValue[LEnc]);
-// 		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
-//
-// 		  if (abs(dSpeed) < minGo)
-// 			{
-// 				 dSpeed = dSpeed/abs(dSpeed);
-// 			   Right((minGo*dSpeed)+(gyroOrig-gyroVal)*gyroCorr);
-// 			   Left((minGo*dSpeed)-(gyroOrig-gyroVal)*gyroCorr);
-// 			}
-// 		  else
-// 		  {
-// 		  		Right(dSpeed+(gyroOrig-gyroVal)*gyroCorr);
-// 			    Left(dSpeed-(gyroOrig-gyroVal)*gyroCorr);
-// 		  }
-// 			//if(abs(errorD) < toleranceD*50)
-// 			//{
-// 			//		//kD = 20;
-// 			//	//	ki = 1;
-// 			//}
-// 			if(abs(errorD) > toleranceD)
-// 			{
-// 		 		time1[T3] = 0;
-// 			}
-// 			if(!lineFound && ((SensorValue[lineSens1] < 1500 )||(SensorValue[lineSens2] < 1500 )||(SensorValue[lineSens3] < 1500 )))
-// 			{
-// 				targetIn = encAvg;
-// 				lineFound = true;
-// 			}
-// 		}
-// 	Halt();
-// }

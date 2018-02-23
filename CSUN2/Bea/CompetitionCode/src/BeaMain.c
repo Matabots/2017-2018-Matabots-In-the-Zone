@@ -30,7 +30,8 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 #include "robotSetup.h"
-//#include "Variables.h"
+#include "Commands.h"
+#include "Variables.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */

@@ -6,11 +6,6 @@ bool red = true;
 bool autoLoad = false;
 bool preloading = true;
 
-void testTask() //temp
-{
-	PIDDrive(20);
-  //ToLine(100);//positive for forward, negative for backward
-}
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 void autonGo()
 {
