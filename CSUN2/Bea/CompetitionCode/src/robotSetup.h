@@ -2,7 +2,7 @@
 /////////////////////This will define a struct to control the ////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////sensors, motors, and controller for the robot/////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#include "Variables.h"
 struct AnalogSensor{
   tSensors liftPot; //this will have control of the goal lift
   tSensors gyroscope;
@@ -98,6 +98,10 @@ void left(int speed){
   motor[robot.rMotors->rearLeft] = speed;
 }
 
+void smallLift(int speed){
+  motor[robot.rMotors->smallLift] = speed;
+}
+
 void right(int speed){
   motor[robot.rMotors->frontRight] = -speed;
   motor[robot.rMotors->rearRight] = speed;
@@ -108,9 +112,22 @@ void resetChassisEnc()
 	SensorValue[robot.dSensors->rightEncoder] = 0;
 	SensorValue[robot.dSensors->leftEncoder] = 0;
 }
-void resetGyro() // probably not needed
+
+void resetGyro() //this function can be used to subtract a rate of change for the gyro to account for drift
 {
   SensorValue[robot.aSensors->gyroscope] = 0;
+  deltaGyro = 0;
+  float prevGyro = 0;
+	time1[T1] = 0;
+  while(time1[T1] < 2000)
+  {
+	  right(0);
+	  left(0);
+		prevGyro = gyroVal;
+		wait1Msec(10);
+		gyroVal = SensorValue[robot.aSensors->gyroscope];
+		deltaGyro = (gyroVal - prevGyro);
+	}
 }
 
 void goalLiftMovement(int moveUp){
@@ -136,13 +153,16 @@ void coneLiftMovement(int moveUp){
 	}
 }
 
-void controlClaw(int grasp){
+bool controlClaw(int grasp){
+	int clawDeadzone = 5;
 	if(grasp == 1){
-		motor[robot.rMotors->ef] = -127;
-		wait1Msec(10);
+		if(abs(nMotorEncoder[robot.rMotors->ef]) > clawDeadzone){
+			motor[robot.rMotors->ef] = -127;
+		}
 	}else if(grasp == -1){
-		motor[robot.rMotors->ef] = 127;
-		wait1Msec(10);
+		if(abs(nMotorEncoder[robot.rMotors->ef]) < 50){
+			motor[robot.rMotors->ef] = 127;
+			}
 	}else{
 		motor[robot.rMotors->ef] = 0;
 	}

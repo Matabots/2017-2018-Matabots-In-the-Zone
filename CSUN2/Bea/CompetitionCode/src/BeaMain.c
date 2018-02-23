@@ -31,8 +31,8 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 #include "robotSetup.h"
-//#include "Commands.h"
-//#include "Variables.h"
+#include "AutonRun.h"
+#include "Variables.h"
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -96,6 +96,7 @@ task usercontrol()
 	robotSetup();
 	setupController();
 	resetChassisEnc();
+	autonGo();
 	resetGyro();
 	intializeSensorValues();
   while (true)
