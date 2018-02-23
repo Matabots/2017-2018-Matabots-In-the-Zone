@@ -134,10 +134,8 @@ float degToInt(float deg)
 void setGyroInGame()
 {
 	gyroOn = false;
-	GyroCalibrate();
 	reSetGyro();
 	targetGyro = 0;
-	Halt();
 	gyroOn = true;
 }
 
