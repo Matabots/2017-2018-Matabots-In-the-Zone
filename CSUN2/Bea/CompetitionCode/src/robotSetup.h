@@ -108,6 +108,7 @@ void resetChassisEnc()
 void resetGyro() //this function can be used to subtract a rate of change for the gyro to account for drift
 {
   SensorValue[robot.aSensors->gyroscope] = 0;
+<<<<<<< HEAD
   deltaGyro = 0;
   float prevGyro = 0;
 	time1[T1] = 0;
@@ -120,6 +121,8 @@ void resetGyro() //this function can be used to subtract a rate of change for th
 		gyroVal = SensorValue[robot.aSensors->gyroscope];
 		deltaGyro = (gyroVal - prevGyro);
 	}
+=======
+>>>>>>> ed31edd84b20fe4dba74c96eee6bcd1a297462b4
 }
 
 void goalLiftMovement(int moveUp){
@@ -252,6 +255,16 @@ void controllerInputs(){
 	clawControls();
 }
 
-void readSensors(){
+void intializeSensorValues(){
+	SensorValue(robot.dSensors->rightEncoder) = 0;
+	SensorValue(robot.dSensors->leftEncoder) = 0;
+	SensorValue(robot.dSensors->coneLiftEnc) = 0;
+}
 
+void outputSensorData(){
+	writeDebugStream("%d\n", SensorValue(robot.aSensors->liftPot));
+	writeDebugStream("%d\n", SensorValue(robot.aSensors->gyroscope));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->rightEncoder));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->leftEncoder));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->coneLiftEnc));
 }
