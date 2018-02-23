@@ -109,11 +109,11 @@ void goalLiftMovement(int moveUp){
 
 void coneLiftMovement(int moveUp){
 	if(moveUp == 1){
-		motor[robot.rMotors->smallLift1] = -127;
+		motor[robot.rMotors->smallLift] = -127;
 	}else if(moveUp == -1){
-		motor[robot.rMotors->smallLift1] = 127;
+		motor[robot.rMotors->smallLift] = 127;
 	}else{
-		motor[robot.rMotors->smallLift1] = 0;
+		motor[robot.rMotors->smallLift] = 0;
 	}
 }
 
