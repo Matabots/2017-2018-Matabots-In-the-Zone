@@ -145,16 +145,14 @@ void coneLiftMovement(int moveUp){
 	}
 }
 
-bool controlClaw(int grasp){
+void controlClaw(int grasp){
 	int clawDeadzone = 5;
 	if(grasp == 1){
-		if(abs(nMotorEncoder[robot.rMotors->ef]) > clawDeadzone){
 			motor[robot.rMotors->ef] = -127;
-		}
+			wait1Msec(10);
 	}else if(grasp == -1){
-		if(abs(nMotorEncoder[robot.rMotors->ef]) < 50){
 			motor[robot.rMotors->ef] = 127;
-			}
+			wait1Msec(10);
 	}else{
 		motor[robot.rMotors->ef] = 0;
 	}
