@@ -43,6 +43,10 @@ struct Robot{
   struct DigitalSensor *dSensors;
   struct RobotMotor *rMotors;
   struct Communications *comms;
+  int smallLiftLimitDown;
+  int smallLiftLimitUp;
+  int goalLiftLimitDown;
+  int goalLiftLimitUp;
 };
 
 Robot robot;
@@ -83,6 +87,10 @@ void robotSetup(){
   robot.dSensors = &dSensors;
   robot.rMotors = &rMotors;
   robot.comms = &comms;
+ 	robot.smallLiftLimitDown = 0;
+  robot.smallLiftLimitUp = 0;
+  robot.goalLiftLimitDown = 0;
+  robot.goalLiftLimitUp = 0;
 }
 
 void left(int speed){
