@@ -130,11 +130,11 @@ void resetGyro() //this function can be used to subtract a rate of change for th
 	}
 }
 
-void goalLiftMovement(int moveUp){
-	if(moveUp == 1 && SensorValue[robot.dSensors->LiftEnc] > robot.goalLiftLimitUp){
+void goalLiftMovement(int moveUp){// -1 moves the arm down
+	if(moveUp == 1 && abs(SensorValue[robot.dSensors->LiftEnc]) > robot.goalLiftLimitUp){
 		motor[robot.rMotors->lift1] = 127;
 		motor[robot.rMotors->lift2] = -127;
-	}else if(moveUp == -1 && SensorValue[robot.dSensors->LiftEnc] < robot.goalLiftLimitDown){
+	}else if(moveUp == -1 && abs(SensorValue[robot.dSensors->LiftEnc]) < robot.goalLiftLimitDown){
 		motor[robot.rMotors->lift1] = -127;
 		motor[robot.rMotors->lift2] = 127;
 		robot.goalLiftLimitUp = 5;
@@ -159,13 +159,13 @@ void controlClaw(int grasp){
 	int clawDeadzone = 5;
 	if(grasp == 1){
 			motor[robot.rMotors->ef] = -127;
-			wait1Msec(10);
+			wait1Msec(100);
 	}else if(grasp == -1){
 			motor[robot.rMotors->ef] = 127;
-			wait1Msec(10);
-	}else{
-		motor[robot.rMotors->ef] = 0;
+			wait1Msec(100);
 	}
+		motor[robot.rMotors->ef] = 0;
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////This will define a struct to control the ////////////////////////////////////////////////////////////////////////////////////////

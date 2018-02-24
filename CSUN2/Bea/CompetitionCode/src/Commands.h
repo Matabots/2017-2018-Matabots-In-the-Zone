@@ -229,16 +229,32 @@ void DriveIn(int leftPower, int rightPower, int deg)
 {
 }
 //------------------Mobile Goal Lift --------------
-void oldtinyLiftDown(float time)
-{
-	  motor[robot.rMotors->lift1] = 127;
-    motor[robot.rMotors->lift2] = 127;
-
-	  wait10Msec(time * 100);
-
-	  motor[robot.rMotors->lift1] = 0;
-	  motor[robot.rMotors->lift2] = 0;
+void AutonGoalLiftMovement(int moveUp){// -1 moves the arm down
+	while(moveUp == 1 && abs(SensorValue[robot.dSensors->LiftEnc]) > robot.goalLiftLimitUp){
+		motor[robot.rMotors->lift1] = 127;
+		motor[robot.rMotors->lift2] = -127;
+	}while(moveUp == -1 && abs(SensorValue[robot.dSensors->LiftEnc]) < robot.goalLiftLimitDown){
+		motor[robot.rMotors->lift1] = -127;
+		motor[robot.rMotors->lift2] = 127;
+		robot.goalLiftLimitUp = 5;
+	}
+		motor[robot.rMotors->lift1] = 0;
+		motor[robot.rMotors->lift2] = 0;
 }
+
+void AutonControlClaw(int grasp){
+	int clawDeadzone = 5;
+	if(grasp == 1){
+			motor[robot.rMotors->ef] = -127;
+			wait1Msec(10);
+	}else if(grasp == -1){
+			motor[robot.rMotors->ef] = 127;
+			wait1Msec(10);
+	}
+		motor[robot.rMotors->ef] = 0;
+
+}
+
 
 void tinyLiftDown(float time)
 {

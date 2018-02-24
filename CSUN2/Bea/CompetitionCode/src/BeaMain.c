@@ -49,14 +49,7 @@ void pre_auton()
   // running between Autonomous and Driver controlled modes. You will need to
   // manage all user created tasks if set to false.
   bStopTasksBetweenModes = true;
- nMotorEncoder[ClawEnc] = 0;
-	resetChassisEnc();
-	robotSetup();
-	setupController();
-	resetChassisEnc();
-	autonGo();
-	resetGyro();
-	intializeSensorValues();
+
 	// Set bDisplayCompetitionStatusOnLcd to false if you don't want the LCD
 	// used by the competition include file, for example, you might want
 	// to display your team name on the LCD in this function.
@@ -83,7 +76,7 @@ task autonomous()
   // ..........................................................................
 
   // Remove this function call once you have "real" code.
-  autonGo();
+
 }
 
 /*---------------------------------------------------------------------------*/
@@ -99,7 +92,14 @@ task autonomous()
 task usercontrol()
 {
   // User control code here, inside the loop
-
+	nMotorEncoder[ClawEnc] = 0;
+	resetChassisEnc();
+	robotSetup();
+	setupController();
+	resetChassisEnc();
+	resetGyro();
+	intializeSensorValues();
+	autonGo();
   while (true)
   {
     controllerInputs();

@@ -11,7 +11,11 @@ void autonGo()
 {
 	if(red)
 	{
-		PIDDrive(35);
+		AutonGoalLiftMovement(-1);
+		left(0);
+		right(0);
+		wait1Msec(1000);
+		PIDDrive(40);
 		left(0);
 		right(0);
 	}
