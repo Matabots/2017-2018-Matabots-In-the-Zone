@@ -15,9 +15,17 @@ void autonGo()
 		left(0);
 		right(0);
 		wait1Msec(1000);
-		PIDDrive(40);
+		PIDDrive(45);
 		left(0);
 		right(0);
+		controlClaw(1);
+		AutonGoalLiftMovement(1);
+		left(0);
+		right(0);
+		PIDDrive(-35);
+		left(0);
+		right(0);
+		spin(50,-50,250);
 	}
 	else
 	{

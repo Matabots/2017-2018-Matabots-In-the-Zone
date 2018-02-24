@@ -107,32 +107,16 @@ float degToIn(float deg)
 }
 
 
-void setGyroInGame()
+void moveGyro(int targetGyro)
 {
-	gyroOn = false;
-	reSetGyro();
-	targetGyro = 0;
-	gyroOn = true;
-}
-
-void GyroUpdate()
-{
-	gyroVal = ((SensorValue[Gyro]) - deltaGyro)/10;
-}
-
-void moveGyro()
-{
-	atGyro = false;
   int tolerance = 8;//7
 	float KpT = 0.85;// was 0.8
-	GyroUpdate();
-	float difference = (targetGyro - gyroVal);
+	float difference = (targetGyro - SensorValue[robot.aSensors->gyroscope]);
 
 		time1[T1] =0;
 		while(abs(difference) > tolerance)// || time1[T1] > 500)
 		{
-				GyroUpdate();
-			  difference = (targetGyro - gyroVal);
+			  difference = (targetGyro - SensorValue[robot.aSensors->gyroscope]);
         //calculate to see if it is faster to turn left or right
         if(difference > 180)
         {
@@ -159,26 +143,22 @@ void moveGyro()
         	power = 25*KpT;
       	}
 
-        motor[LEdgeMots] = -power;
-        motor[REdgeMots] = -power;
+        motor[robot.rMotors->frontLeft] = -power;
+        motor[robot.rMotors->rearLeft] = -power;
 
 
-        motor[LInsideMots] = power;
-        motor[RInsideMots] = power;
+        motor[robot.rMotors->frontRight] = -power;
+        motor[robot.rMotors->rearRight] = power;
         delay(10);
 		}
 		atGyro = true;
-}
-void TurnTo(float input)
-{
-	targetGyro = input;
 }
 
 void PIDDrive(float targetIn) //using drive to? not continuous
 {
 	resetChassisEnc();
 	minGo = 9;
-	errorD = targetIn - abs(degToIn(SensorValue[robot.dSensors->leftEncoder]);	//error is the difference between the goal and current distance
+	errorD = targetIn + degToIn(SensorValue[robot.dSensors->leftEncoder];	//error is the difference between the goal and current distance
 
 	toleranceD =3.7; //3.7;	//how accurate do I want the robot to be was at .25
   kp2 = 4.1;
@@ -194,7 +174,7 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 		{
 			//SensorValue[(tSensors) 10 ] = 1;
 			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
-			errorD = targetIn - abs(degToIn(SensorValue[robot.dSensors->leftEncoder]));
+			errorD = targetIn + degToIn(SensorValue[robot.dSensors->leftEncoder]);
 		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
 
 		  if (abs(dSpeed) < minGo)
@@ -240,19 +220,6 @@ void AutonGoalLiftMovement(int moveUp){// -1 moves the arm down
 	}
 		motor[robot.rMotors->lift1] = 0;
 		motor[robot.rMotors->lift2] = 0;
-}
-
-void AutonControlClaw(int grasp){
-	int clawDeadzone = 5;
-	if(grasp == 1){
-			motor[robot.rMotors->ef] = -127;
-			wait1Msec(10);
-	}else if(grasp == -1){
-			motor[robot.rMotors->ef] = 127;
-			wait1Msec(10);
-	}
-		motor[robot.rMotors->ef] = 0;
-
 }
 
 
@@ -329,6 +296,22 @@ void driveBack(float leftP, float rightP, float sec)
 	left(0);
 	right(0);
 }
+
+void spin(int leftPower, int rightPower, int deg)
+{
+	resetChassisEnc();
+	wait1Msec(500);
+
+	while(abs(SensorValue[robot.dSensors->leftEncoder])<deg && abs(SensorValue[robot.dSensors->rightEncoder])<deg)
+	{
+			left(leftPower);
+      right(rightPower);
+  }
+     left(0);
+      right(0);
+
+}
+
 void PreLoad()
 {
   motor[robot.rMotors->ef] = 30;

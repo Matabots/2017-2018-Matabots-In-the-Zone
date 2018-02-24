@@ -22,7 +22,6 @@ float ki2;
 float targetDeg;
 float deltaGyro;
 float gyroVal;
-float targetGyro;
 float kd2;
 float minGo;
 float encAvg;
