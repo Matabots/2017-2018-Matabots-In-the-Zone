@@ -9,20 +9,30 @@ int nRcvIndex = 0;
 long nTotalRcvChars = 0;
 long nTotalRcvOutOfSequence = 0;
 int rcvChar;
+char arduinoData[100];
+int kounter = 0;
+bool firstValue = true;
+string temp[2];
+
+struct cone{
+	int x;
+	int sig;
+};
+
+cone redCone;
+cone blueCone;
+
+
 unsigned char rcvChars[23];
 
-task sendConeSelection(){
-	while(true){
-		sendChar(UART1, '1');
-	}
-}
  task UARTReceive()
 {
  while (true)
  {
  // Loop forever getting characters from the "receive" UART. Validate that they arrive in the expected
  // sequence.
-
+	temp[0] = "";
+	temp[1] = "";
  static int nLastRcvChar = 0;
 
  rcvChar = getChar(UART1);
@@ -34,18 +44,51 @@ task sendConeSelection(){
  wait1Msec(3); // Don't want to consume too much CPU time. Waiting eliminates CPU consumption for this task.
  continue;
  }
- if(rcvChar != '#' && rcvChar != 'ï¿½'){
- writeDebugStream("%c", rcvChar);
-}else{
-	writeDebugStreamLine("\n");
-}
+ if(rcvChar != '#' && rcvChar != 'ÿ')
+ {
+     arduinoData[nRcvIndex] = (char)rcvChar;
+ }
+ if(rcvChar == '#')
+ {
+	firstValue = true;
+ 	for(kounter=0;kounter<sizeof(arduinoData);kounter++){
+ 		writeDebugStreamLine("%c", arduinoData[kounter]);
+ 		if((arduinoData[kounter] != ',' || arduinoData[kounter] != '#') && firstValue == true ){
+ 			temp[0] = temp + arduinoData[kounter];
+ 		}else if((arduinoData[kounter] != ',' || arduinoData[kounter] != '#') && firstValue == false){
+ 			temp[1] = temp + arduinoData[kounter];
+ 		}else if(arduinoData[kounter] == '#'){
+ 			//arduinoData[kounter] = 0;
+ 		}
+ 		if(arduinoData[kounter] == ','){
+ 			firstValue = false;
+ 		}
+ 	}
+ 	blueCone.sig = atoi("2");
+ 	redCone.sig = atoi("3");
+ 	if(temp[0] == "2"){
+
+ 		blueCone.x = atoi(temp[1]);
+ 	}else if(temp[0] == "3"){
+
+ 		redCone.x = atoi(temp[1]);
+ 	}
+ 	writeDebugStream(temp[0]);
+ 	writeDebugStream(temp[1]);
+	//arduinoData = "";
+ }
+ //writeDebugStream("%d\n", redCone.sig);
+ //writeDebugStream("%d\n", redCone.x);
+ //writeDebugStream("------------------\n");
+ //writeDebugStream("%d\n", blueCone.sig);
+ //writeDebugStream("%d\n", blueCone.x);
  ++nLastRcvChar;
  nLastRcvChar %= 256;
  if (nLastRcvChar != rcvChar)
  ++nTotalRcvOutOfSequence;
 
  nLastRcvChar = rcvChar;
- rcvChars[nRcvIndex] = rcvChar;
+ //rcvChars[nRcvIndex] = rcvChar;
  ++nTotalRcvChars;
  ++nRcvIndex;
  if (nRcvIndex >= sizeof(rcvChars)){
@@ -58,7 +101,7 @@ task sendConeSelection(){
 
 task main(){
 	startTask(UARTReceive);
-	startTask(sendConeSelection);
+	//startTask(sendConeSelection);
 	while(true){
 
 	}
