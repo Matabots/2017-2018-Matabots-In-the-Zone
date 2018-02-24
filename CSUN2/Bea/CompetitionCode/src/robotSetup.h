@@ -1,7 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////This will define a struct to control the ////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////sensors, motors, and controller for the robot/////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+// This defines a struct to handle the sensors, motors, and   //
+// controller of the robot. It keeps track of the ports and   //
+// accepts input from the controller                          //
+////////////////////////////////////////////////////////////////
+
 #include "Variables.h"
 struct AnalogSensor{
   tSensors gyroscope;
@@ -113,6 +115,7 @@ void resetChassisEnc()
 	SensorValue[robot.dSensors->leftEncoder] = 0;
 }
 
+// resets gyroscope values
 void resetGyro() //this function can be used to subtract a rate of change for the gyro to account for drift
 {
   SensorValue[robot.aSensors->gyroscope] = 0;
@@ -130,6 +133,12 @@ void resetGyro() //this function can be used to subtract a rate of change for th
 	}
 }
 
+// moveUp == 1 (move goal up)
+// moveUp == -1 (move goal down)
+// moveUp == 0 (kills movement)
+
+// sends power to the motors that control the goal lift depending on the sensor value and
+// whether its corresponding button is pressed
 void goalLiftMovement(int moveUp){
 	if(moveUp == 1 && SensorValue[robot.dSensors->LiftEnc] > robot.goalLiftLimitUp){
 		motor[robot.rMotors->lift1] = 127;
@@ -144,6 +153,8 @@ void goalLiftMovement(int moveUp){
 	}
 }
 
+// sends power to the motor that controls the cone lift depending on the sensor value and
+// whether its corresponding button is pressed
 void coneLiftMovement(int moveUp){
 	if(moveUp == 1 && (SensorValue[robot.dSensors->ConeLiftEnc] > robot.smallLiftLimitUp)){
 		motor[robot.rMotors->smallLift] = -127;
@@ -155,6 +166,8 @@ void coneLiftMovement(int moveUp){
 	}
 }
 
+// sends power to the motor that controls the end-effector depending on
+// whether its corresponding button is pressed
 void controlClaw(int grasp){
 	int clawDeadzone = 5;
 	if(grasp == 1){
@@ -167,10 +180,16 @@ void controlClaw(int grasp){
 		motor[robot.rMotors->ef] = 0;
 	}
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////This will define a struct to control the ////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////controller/////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////
+//This defines a struct to handle controller input.              //
+//It maps the control buttons to their respective functions.     //
+//The modularity of the structure and functions makes it easier  //
+//to remap when needed.                                          //
+///////////////////////////////////////////////////////////////////
+
 struct Controller
 {
 	int deadzone;
@@ -263,6 +282,7 @@ void controllerInputs(){
 	clawControls();
 }
 
+// intializes sensor values
 void intializeSensorValues(){
 	SensorValue(robot.dSensors->rightEncoder) = 0;
 	SensorValue(robot.dSensors->leftEncoder) = 0;
@@ -270,10 +290,11 @@ void intializeSensorValues(){
 	SensorValue(robot.dSensors->LiftEnc) = 0;
 }
 
+// checks sensor values for debugging purposes
 void outputSensorData(){
-		writeDebugStream("%d\n", SensorValue(robot.dSensors->LiftEnc));
-//	//writeDebugStream("%d\n", SensorValue(robot.aSensors->gyroscope));
-//	writeDebugStream("%d\n", SensorValue(robot.dSensors->rightEncoder));
+	writeDebugStream("%d\n", SensorValue(robot.dSensors->LiftEnc));
+  //writeDebugStream("%d\n", SensorValue(robot.aSensors->gyroscope));
+  //writeDebugStream("%d\n", SensorValue(robot.dSensors->rightEncoder));
 	//writeDebugStream("%d\n", SensorValue(robot.dSensors->leftEncoder));
 	//writeDebugStream("%d\n", SensorValue(robot.dSensors->coneLiftEnc));
 }
