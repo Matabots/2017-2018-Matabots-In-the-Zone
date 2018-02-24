@@ -297,10 +297,9 @@ void driveBack(float leftP, float rightP, float sec)
 	right(0);
 }
 
-void spin(int leftPower, int rightPower, int deg)
+void moveDeg(int leftPower, int rightPower, int deg)
 {
 	resetChassisEnc();
-	wait1Msec(500);
 
 	while(abs(SensorValue[robot.dSensors->leftEncoder])<deg && abs(SensorValue[robot.dSensors->rightEncoder])<deg)
 	{

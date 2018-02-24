@@ -166,10 +166,10 @@ void controlClaw(int grasp){
 	int clawDeadzone = 5;
 	if(grasp == 1){
 			motor[robot.rMotors->ef] = -127;
-			wait1Msec(100);
+			wait1Msec(500);
 	}else if(grasp == -1){
 			motor[robot.rMotors->ef] = 127;
-			wait1Msec(100);
+			wait1Msec(10);
 	}
 		motor[robot.rMotors->ef] = 0;
 
