@@ -11,10 +11,75 @@ void autonGo()
 {
 	if(red)
 	{
-		//MoveConeLift(50,260);
+		AutonGoalLiftMovement(-1);
+		left(0);
+		right(0);
+		wait1Msec(1000);
+		PIDDrive(45);
+		left(0);
+		right(0);
+		controlClaw(1);
+		AutonGoalLiftMovement(1);
+		left(0);
+		right(0);
+		PIDDrive(-45);
+		left(0);
+		right(0);
+		moveDeg(50,-50,50);
+		PIDDrive(-25);
+		moveDeg(50,-50,270);
+		moveDeg(65,65,1000);
+		left(0);
+		right(0);
+		AutonGoalLiftMovement(-1);
+		left(-127);
+		right(-127);
+		AutonGoalLiftMovement(1);
+		left(0);
+		right(0);
+		PIDDrive(-20);
+		moveDeg(75,0,700);
+		AutonGoalLiftMovement(-1);
+		wait1Msec(1000);
+		left(127);
+		right(127);
+		wait1Msec(2000);
 	}
 	else
 	{
+		AutonGoalLiftMovement(-1);
+		left(0);
+		right(0);
+		wait1Msec(1000);
+		PIDDrive(45);
+		left(0);
+		right(0);
+		controlClaw(1);
+		AutonGoalLiftMovement(1);
+		left(0);
+		right(0);
+		PIDDrive(-45);
+		left(0);
+		right(0);
+		moveDeg(-50,50,70);
+		PIDDrive(-35);
+		moveDeg(-50,50,300);
+		moveDeg(65,65,1000);
+		left(0);
+		right(0);
+		AutonGoalLiftMovement(-1);
+		left(-127);
+		right(-127);
+		AutonGoalLiftMovement(1);
+		left(0);
+		right(0);
+		PIDDrive(-20);
+		moveDeg(0,75,750);
+		AutonGoalLiftMovement(-1);
+		wait1Msec(1000);
+		left(127);
+		right(127);
+		wait1Msec(2000);
 	}
 	/*if (red)
 	{	//needs to have fresh batteries and good rubber bands. starts at 7 inches from the wall
