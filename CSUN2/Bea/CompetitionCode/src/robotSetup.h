@@ -133,19 +133,8 @@ void resetGyro() //this function can be used to subtract a rate of change for th
 	}
 }
 
-<<<<<<< HEAD
 void goalLiftMovement(int moveUp){// -1 moves the arm down
-	if(moveUp == 1 && abs(SensorValue[robot.dSensors->LiftEnc]) > robot.goalLiftLimitUp){
-=======
-// moveUp == 1 (move goal up)
-// moveUp == -1 (move goal down)
-// moveUp == 0 (kills movement)
-
-// sends power to the motors that control the goal lift depending on the sensor value and
-// whether its corresponding button is pressed
-void goalLiftMovement(int moveUp){
 	if(moveUp == 1 && SensorValue[robot.dSensors->LiftEnc] > robot.goalLiftLimitUp){
->>>>>>> 1951a25bc06a95befc21685747c231193ffe23f2
 		motor[robot.rMotors->lift1] = 127;
 		motor[robot.rMotors->lift2] = -127;
 	}else if(moveUp == -1 && abs(SensorValue[robot.dSensors->LiftEnc]) < robot.goalLiftLimitDown){
