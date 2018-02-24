@@ -11,7 +11,9 @@ void autonGo()
 {
 	if(red)
 	{
-		//MoveConeLift(50,260);
+		PIDDrive(35);
+		left(0);
+		right(0);
 	}
 	else
 	{

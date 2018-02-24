@@ -101,9 +101,9 @@ void StackNeut()
 
 
 //-----------------------------------GyroScope
-float degToInt(float deg)
+float degToIn(float deg)
 {
-	return ((deg * (3.14 * 4))/107);
+	return ((deg * (3.14 * 4))/360);
 }
 
 
@@ -176,10 +176,9 @@ void TurnTo(float input)
 
 void PIDDrive(float targetIn) //using drive to? not continuous
 {
-	reSetDEnc();
+	resetChassisEnc();
 	minGo = 9;
-	encAvg = 0;
-	errorD = targetIn - encAvg;	//error is the difference between the goal and current distance
+	errorD = targetIn - abs(degToIn(SensorValue[robot.dSensors->leftEncoder]);	//error is the difference between the goal and current distance
 
 	toleranceD =3.7; //3.7;	//how accurate do I want the robot to be was at .25
   kp2 = 4.1;
@@ -195,7 +194,7 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 		{
 			//SensorValue[(tSensors) 10 ] = 1;
 			//encAvg = (((SensorValue[REnc]) + (SensorValue[LEnc]))/2);
-			errorD = targetIn - degToInt(SensorValue[robot.dSensors->leftEncoder]);
+			errorD = targetIn - abs(degToIn(SensorValue[robot.dSensors->leftEncoder]));
 		  dSpeed = errorD * kp2;// + (totalErrorD * ki2) + ((errorD - prevErrorD) * kd2)) ;//constantly updates as I get closer to target
 
 		  if (abs(dSpeed) < minGo)
@@ -219,13 +218,16 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 		 		time1[T3] = 0;
 			}
 		}
-	Halt();
+	left(0);
+	right(0);
 	  //}
 
 		//Things to know about P Controllers
 		//
 }
-
+void DriveIn(int leftPower, int rightPower, int deg)
+{
+}
 //------------------Mobile Goal Lift --------------
 void oldtinyLiftDown(float time)
 {
@@ -295,7 +297,9 @@ void score(float leftP, float rightP, float sec)
   	Right(rightP);
 	  Left(leftP);
 	}
-	Halt();
+
+	left(0);
+	right(0);
 }
 void driveBack(float leftP, float rightP, float sec)
 {
@@ -305,7 +309,9 @@ void driveBack(float leftP, float rightP, float sec)
   	Right(-leftP);
 	  Left(-rightP);
 	}
-	Halt();
+
+	left(0);
+	right(0);
 }
 void PreLoad()
 {
