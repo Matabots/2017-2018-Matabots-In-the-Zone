@@ -41,12 +41,12 @@ void AutoLift()
 		case 0:
 		  oldDeg = targetDeg;
 
-		  AutoClaw(1);
+		  controlClaw(1);
 
 	    targetDeg = firstCone;
 			wait10Msec(165);
 
-	    AutoClaw(0);
+	    controlClaw(0);
 	    wait10Msec(20);
 
 			targetDeg = oldDeg;
@@ -57,12 +57,12 @@ void AutoLift()
 		case 1:
 		  oldDeg = targetDeg;
 
-		  AutoClaw(1);
+		  controlClaw(1);
 
 	    targetDeg = secondCone;
 			wait10Msec(150);
 
-	    AutoClaw(0);
+	    controlClaw(0);
 	    wait10Msec(50);
 
 			targetDeg = oldDeg;
@@ -71,12 +71,12 @@ void AutoLift()
 		case 2:
 		  oldDeg = targetDeg;
 
-		  AutoClaw(1);
+		  controlClaw(1);
 
 	    targetDeg = thirdCone;
 			wait10Msec(130);
 
-	    AutoClaw(0);
+	    controlClaw(0);
 	    wait10Msec(50);
 
 			targetDeg = oldDeg;
