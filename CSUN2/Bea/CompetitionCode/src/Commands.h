@@ -208,6 +208,9 @@ void PIDDrive(float targetIn) //using drive to? not continuous
 void DriveIn(int leftPower, int rightPower, int deg)
 {
 }
+
+
+
 //------------------Mobile Goal Lift --------------
 void AutonGoalLiftMovement(int moveUp){// -1 moves the arm down
 	while(moveUp == 1 && abs(SensorValue[robot.dSensors->LiftEnc]) > robot.goalLiftLimitUp){

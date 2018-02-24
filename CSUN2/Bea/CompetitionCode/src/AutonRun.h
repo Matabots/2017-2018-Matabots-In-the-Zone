@@ -2,7 +2,7 @@
   AutonFunction
 */
 #include "Commands.h"
-bool red = true;
+bool red = false;
 bool autoLoad = false;
 bool preloading = true;
 
@@ -51,19 +51,19 @@ void autonGo()
 		left(0);
 		right(0);
 		wait1Msec(1000);
-		PIDDrive(45);
+		PIDDrive(47);
 		left(0);
 		right(0);
 		controlClaw(1);
 		AutonGoalLiftMovement(1);
 		left(0);
 		right(0);
-		PIDDrive(-45);
+		PIDDrive(-47);
 		left(0);
 		right(0);
-		moveDeg(-50,50,70);
-		PIDDrive(-35);
-		moveDeg(-50,50,300);
+		moveDeg(50,-50,110);// was 70
+		PIDDrive(-17);
+		moveDeg(50,-50,320);
 		moveDeg(65,65,1000);
 		left(0);
 		right(0);
@@ -74,7 +74,7 @@ void autonGo()
 		left(0);
 		right(0);
 		PIDDrive(-20);
-		moveDeg(0,75,750);
+		moveDeg(75,0,100);
 		AutonGoalLiftMovement(-1);
 		wait1Msec(1000);
 		left(127);
