@@ -1,0 +1,6 @@
+/home/cristian/catkin_ws/install/_setup_util.py
+/home/cristian/catkin_ws/install/env.sh
+/home/cristian/catkin_ws/install/setup.bash
+/home/cristian/catkin_ws/install/setup.sh
+/home/cristian/catkin_ws/install/setup.zsh
+/home/cristian/catkin_ws/install/.rosinstall

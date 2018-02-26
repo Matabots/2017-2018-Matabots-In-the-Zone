@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <name>talker</name>
+  <author>Me</author>
+  <version>1.0.0</version>
+  <description>testing</description>
+  <maintainer email="none@none.com">me</maintainer>
+  <license>none</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+</package>

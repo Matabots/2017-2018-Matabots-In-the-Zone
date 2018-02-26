@@ -1,0 +1,8 @@
+prefix=/home/cristian/catkin_ws/install
+
+Name: talker
+Description: Description of talker
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/cristian/catkin_ws/install/lib 
+Requires: 

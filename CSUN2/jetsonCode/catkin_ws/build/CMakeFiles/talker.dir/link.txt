@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11   CMakeFiles/talker.dir/vexRepo/talker.cpp.o  -o /home/cristian/catkin_ws/devel/lib/talker/talker -rdynamic 
