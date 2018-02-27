@@ -1,8 +1,0 @@
-prefix=/home/cristian/catkin_ws/devel
-
-Name: vexRepo
-Description: Description of vexRepo
-Version: 1.0.0
-Cflags: 
-Libs: -L/home/cristian/catkin_ws/devel/lib 
-Requires: 
