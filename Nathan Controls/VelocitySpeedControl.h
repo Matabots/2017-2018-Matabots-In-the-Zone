@@ -54,6 +54,31 @@ void ReadSpeed(MOTOR_PI* motorA, int time){
   (*motorA).lastEncoderRead = encoder;
 
 }
+float
+calculateVelocityBetter( tMotor port, float gear_ratio = 1.0 )
+{
+    static  long  nSysTime_last;
+    static  long  encoder_counts_last;
+    static  float ticks_per_rev = SMLIB_TPR_393Speed; // fixed, known motor
+    int     delta_ms;
+    int     delta_enc;
+    long    encoder_counts;
+    float   motor_velocity;
+    // Get current encoder value
+    encoder_counts = nMotorEncoder[ port ];
+    // This is just used so we don't need to know how often we are called
+    // how many mS since we were last here
+    delta_ms = nSysTime - nSysTime_last;
+    nSysTime_last = nSysTime;
+    // Change in encoder count
+    delta_enc = (encoder_counts - encoder_counts_last);
+    // save last position
+    encoder_counts_last = encoder_counts;
+    // Calculate velocity in rpm
+    motor_velocity = (1000.0 / delta_ms) * delta_enc * 60.0 / ticks_per_rev;
+    // multiply by any gear ratio's being used
+    return( motor_velocity * gear_ratio );
+}
 
 void PI_Control(MOTOR_PI* motorA){
     float errorK1speed;

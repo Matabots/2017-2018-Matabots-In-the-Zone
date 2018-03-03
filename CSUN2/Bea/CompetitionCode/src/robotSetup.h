@@ -165,11 +165,11 @@ void coneLiftMovement(int moveUp){
 void controlClaw(int grasp){
 	int clawDeadzone = 5;
 	if(grasp == 1){
-			motor[robot.rMotors->ef] = -127;
-			wait1Msec(500);
+			motor[robot.rMotors->ef] = -75;
+			wait1Msec(250);
 	}else if(grasp == -1){
-			motor[robot.rMotors->ef] = 127;
-			wait1Msec(10);
+			motor[robot.rMotors->ef] = 75;
+			wait1Msec(250);
 	}
 		motor[robot.rMotors->ef] = 0;
 
@@ -215,12 +215,12 @@ void setupController()
 	controller.smallLiftUp = Btn5U;	//close claw
 	controller.smallLiftGround = Btn7D; //activate stacker
 	controller.smallLiftHigh = Btn7L; //closes the claw
-	controller.mobileGoalLiftUp = Btn6U; //lift  the goal
-	controller.mobileGoalLiftDown = Btn6D; //lower the goal
+	controller.mobileGoalLiftUp = Btn6D; //lift  the goal
+	controller.mobileGoalLiftDown = Btn6U; //lower the goal
 	controller.mobileGoalLiftGround = Btn8R; //ground collector position
 	controller.mobileGoalLiftHigh = Btn8D; //autoload position
-	controller.clawOpen = Btn8U;
-	controller.clawClose = Btn8L;
+	controller.clawOpen = Btn8L;
+	controller.clawClose = Btn8D;
 	controller.resStackNeut = Btn7U; //reset smallLiftGround # and set lift to neut
 }
 

@@ -1,0 +1,6 @@
+/home/ubuntu/Desktop/2017-2018-Matabots-In-the-Zone/CSUN2/jetsonCode/catkin_ws/install/_setup_util.py
+/home/ubuntu/Desktop/2017-2018-Matabots-In-the-Zone/CSUN2/jetsonCode/catkin_ws/install/env.sh
+/home/ubuntu/Desktop/2017-2018-Matabots-In-the-Zone/CSUN2/jetsonCode/catkin_ws/install/setup.bash
+/home/ubuntu/Desktop/2017-2018-Matabots-In-the-Zone/CSUN2/jetsonCode/catkin_ws/install/setup.sh
+/home/ubuntu/Desktop/2017-2018-Matabots-In-the-Zone/CSUN2/jetsonCode/catkin_ws/install/setup.zsh
+/home/ubuntu/Desktop/2017-2018-Matabots-In-the-Zone/CSUN2/jetsonCode/catkin_ws/install/.rosinstall

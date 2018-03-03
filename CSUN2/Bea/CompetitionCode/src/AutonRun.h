@@ -38,12 +38,12 @@ void autonGo()
 		left(0);
 		right(0);
 		PIDDrive(-20);
-		moveDeg(75,0,700);
+		/*moveDeg(75,0,700);
 		AutonGoalLiftMovement(-1);
 		wait1Msec(1000);
 		left(127);
 		right(127);
-		wait1Msec(2000);
+		wait1Msec(2000);*/
 	}
 	else
 	{
@@ -61,9 +61,9 @@ void autonGo()
 		PIDDrive(-47);
 		left(0);
 		right(0);
-		moveDeg(50,-50,110);// was 70
+		moveDeg(-50,50,110);// was 70
 		PIDDrive(-17);
-		moveDeg(50,-50,320);
+		moveDeg(-50,50,320);
 		moveDeg(65,65,1000);
 		left(0);
 		right(0);
@@ -74,12 +74,12 @@ void autonGo()
 		left(0);
 		right(0);
 		PIDDrive(-20);
-		moveDeg(75,0,100);
+	/*	moveDeg(75,0,100);
 		AutonGoalLiftMovement(-1);
 		wait1Msec(1000);
 		left(127);
 		right(127);
-		wait1Msec(2000);
+		wait1Msec(2000);*/
 	}
 	/*if (red)
 	{	//needs to have fresh batteries and good rubber bands. starts at 7 inches from the wall
