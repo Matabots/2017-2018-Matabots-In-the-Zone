@@ -1,16 +1,13 @@
 #include "digitalSensors.h"
 #include "analogSensors.h"
-#include "motors.h"
+#include "robotChasis.h"
 class robot{
   public:
-    int first;
     analogSensors analog = analogSensors();
     digitalSensors digital = digitalSensors();
-    driveMotors motors = driveMotors();
+    robotChasis drive = robotChasis();
     robot(){
-      first = 9;
+      
     };
-    void printFirst(){
-      printf("%d\n", first);
-    };
+
 };

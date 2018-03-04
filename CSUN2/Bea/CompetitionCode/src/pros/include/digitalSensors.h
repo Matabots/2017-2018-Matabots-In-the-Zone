@@ -1,7 +1,8 @@
 #include "ports.h"
 const bool not_reversed = false;
 const bool is_reversed = true;
-
+//unsure how to modularize this class due to encoders being
+//too specific
 class digitalSensors{
   public:
     Encoder leftEncoder;
