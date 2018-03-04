@@ -1,6 +1,7 @@
 #include "main.h"
 #include "robot.h"
 #include "ports.h"
+#include "i2c.h"
 void initializeIO() {
 }
 
