@@ -44,7 +44,6 @@
 
 // This prevents multiple inclusion, which isn't bad for this file but is good practice
 #define MAIN_H_
-
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {

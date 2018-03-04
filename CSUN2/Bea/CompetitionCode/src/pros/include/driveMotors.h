@@ -1,9 +1,12 @@
-#include "ports.h"
 class driveMotors{
 public:
   int port;
   int power;
   bool reversed;
+  driveMotors(){
+    power = 0;
+    reversed = false;
+  }
   driveMotors(int motorPort){
     port = motorPort;
     power = 0;
@@ -23,9 +26,6 @@ public:
       motorSet(port, (power * -1));
     }
   };
-  int getPower(){
-      return power;
-  };
   void setDirection(bool motorReversed){
     reversed = motorReversed;
   };
@@ -35,5 +35,7 @@ public:
   int getSpeed(){
     return motorGet(port);
   };
-
+  int getPower(){
+      return power;
+  };
 };

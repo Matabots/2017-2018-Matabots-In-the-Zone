@@ -1,20 +1,18 @@
 #include "main.h"
 #include "robot.h"
-#include "ports.h"
-#include "i2c.h"
+void setupBot(robot& bot);
+
 void initializeIO() {
 }
 
 void initialize() {
-  printf("Initalize()");
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////basic bot setup////////////////////////////////////////////////////////////
   robot bot = robot();
-  bot.digital.resetEncoders();
-  bot.drive.addLeftMotor(motor2, not_reversed);
-  bot.drive.addLeftMotor(motor8, is_reversed);
-  bot.drive.addRightMotor(motor3, not_reversed);
-  bot.drive.addRightMotor(motor9, is_reversed);
+  setupBot(bot);
+  bot.digital.resetDriveEncoders();
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  //THIS NEEDS TO BE RESET
-  setTeamName("3796B");
+  setTeamName("CSUN2");
   imeInitializeAll();
 }

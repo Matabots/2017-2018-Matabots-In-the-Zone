@@ -30,12 +30,16 @@ public:
                       (((uint32_t) data_in[2]) <<  8) |
                       (((uint32_t) data_in[3]));
 
-            printf("Read in a value of %ld from slave.\n", reading);
+            // printf("Read in a value of %ld from slave.\n", reading);
         }
         else {
             reading = -1;
-            printf("ERROR: Failed to read sensor data from slave!\n");
+            // printf("ERROR: Failed to read sensor data from slave!\n");
         }
   }
 
+  uint8_t* getData(){
+    return data_in;
+
+  };
 };

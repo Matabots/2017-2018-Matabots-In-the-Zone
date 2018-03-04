@@ -7,12 +7,20 @@ class digitalSensors{
   public:
     Encoder leftEncoder;
     Encoder rightEncoder;
+    Encoder liftEncoder;
     digitalSensors(){
-      leftEncoder = encoderInit(digital1, digital2, not_reversed);
-      rightEncoder = encoderInit(digital3, digital4, not_reversed);
-    };
 
-    void resetEncoders(){
+    };
+    void setLiftEncoder(int port1, int port2, bool direction){
+      liftEncoder = encoderInit(port1, port2, direction);
+    }
+    void setLeftEncoder(int port1, int port2, bool direction){
+      leftEncoder = encoderInit(port1, port2, direction);
+    }
+    void setRightEncoder(int port1, int port2, bool direction){
+      rightEncoder = encoderInit(port1, port2, direction);
+    }
+    void resetDriveEncoders(){
       encoderReset(leftEncoder);
       encoderReset(rightEncoder);
     };
