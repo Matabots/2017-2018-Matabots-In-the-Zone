@@ -21,8 +21,8 @@
 
 
 typedef struct {
-  tMotor name1, name2;
-  tSensors sensorname;
+  tMotor name1;
+  tSensors encoderName;
   int speedSet; 						//speed desired to the motor
   float errorK0speed;			 	//last error calculated for that motor
   float errorK0output;
@@ -54,8 +54,7 @@ void ReadSpeed(MOTOR_PI* motorA, int time){
   (*motorA).lastEncoderRead = encoder;
 
 }
-float
-calculateVelocityBetter( tMotor port, float gear_ratio = 1.0 )
+float ReadSpeed(MOTOR_PI* motorA, float gear_ratio = 1.0 )
 {
     static  long  nSysTime_last;
     static  long  encoder_counts_last;

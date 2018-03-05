@@ -19,6 +19,20 @@ struct DigitalSensor{
 };
 DigitalSensor dSensors;
 
+struct {
+  tMotor name1;
+  tSensors encoderName;
+  int lastEncoderRead;			//last encoder read. Necessary to calulate the speed
+  int speedSet; 						//speed desired to the motor
+  float errorK0speed;			 	//last error calculated for that motor
+  float errorK0output;
+  float controller_output; 	//controller output to the motor
+  float speedRead; 					//speed calculated from the encoder values in RPM
+  bool enableP;
+  bool enableI;
+  bool enableD;
+} MotorProperties;
+
 struct RobotMotor{
   tMotor frontLeft;
   tMotor rearLeft;
