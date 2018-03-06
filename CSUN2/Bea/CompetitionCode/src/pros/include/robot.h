@@ -26,10 +26,13 @@ class robot{
     };
     void set_digital(){
       digital = digitalSensors();
-    }
+    };
     void set_drive(){
       drive = robotChasis();
-    }
+    };
+    robotChasis get_drive(){
+      return drive;
+    };
     void set_lift(){
       lift = liftMotors();
     };
