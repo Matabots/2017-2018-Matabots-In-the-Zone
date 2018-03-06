@@ -1,7 +1,10 @@
 class robotClaw{
-public:
-  driveMotors clawMotor = driveMotors();
+private:
+  driveMotors clawMotor;
   bool reversed;
+
+public:
+
   robotClaw(){
 
   }
@@ -23,5 +26,10 @@ public:
   int getSpeed(){
     return clawMotor.getSpeed();
   };
-
+  void set_clawMotor(){
+     clawMotor = driveMotors();
+  };
+  void set_direction(){
+     clawMotor = driveMotors();
+  };
 };

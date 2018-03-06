@@ -5,16 +5,16 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setupBot(robot& bot){
   bot.drive.addLeftMotor(motor2, not_reversed);
-  bot.drive.addLeftMotor(motor8, is_reversed);
-  bot.drive.addRightMotor(motor3, not_reversed);
-  bot.drive.addRightMotor(motor9, is_reversed);
-  bot.lift.addGroupOneMotor(motor6, is_reversed);
-  bot.lift.addGroupOneMotor(motor7, not_reversed);
-  bot.lift.addGroupTwoMotor(motor5, not_reversed);
-  bot.claw.setPort(motor4);
-  bot.claw.setDirection(not_reversed);
-  bot.digital.setRightEncoder(digital3, digital4, not_reversed);
-  bot.digital.setLeftEncoder(digital1, digital2, not_reversed);
+  // bot.drive.addLeftMotor(motor8, is_reversed);
+  // bot.drive.addRightMotor(motor3, not_reversed);
+  // bot.drive.addRightMotor(motor9, is_reversed);
+  // bot.lift.addGroupOneMotor(motor6, is_reversed);
+  // bot.lift.addGroupOneMotor(motor7, not_reversed);
+  // bot.lift.addGroupTwoMotor(motor5, not_reversed);
+  // bot.claw.setPort(motor4);
+  // bot.claw.setDirection(not_reversed);
+  // bot.digital.setRightEncoder(digital3, digital4, not_reversed);
+  // bot.digital.setLeftEncoder(digital1, digital2, not_reversed);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

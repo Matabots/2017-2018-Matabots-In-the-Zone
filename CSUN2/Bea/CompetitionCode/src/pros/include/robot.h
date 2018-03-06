@@ -8,18 +8,41 @@
 #include "ports.h"
 
 class robot{
-  analogSensors analog =  analogSensors();
-  digitalSensors digital = digitalSensors();
-  robotChasis drive = robotChasis();
-  liftMotors lift = liftMotors();
-  i2c communications = i2c();
-  controller remote = controller();
-  robotClaw claw = robotClaw();
+  private:
+    analogSensors analog;
+    digitalSensors digital;
+    robotChasis drive;
+    liftMotors lift;
+    i2c communications;
+    controller remote;
+    robotClaw claw;
 
   public:
     robot(){
 
     };
+    void set_analog(){
+       analog =  analogSensors();
+    };
+    void set_digital(){
+      digital = digitalSensors();
+    }
+    void set_drive(){
+      drive = robotChasis();
+    }
+    void set_lift(){
+      lift = liftMotors();
+    };
+    void set_communications(){
+      communications = i2c();
+    };
+    void set_remote(){
+      remote = controller();
+    };
+    void set_claw(){
+      claw = robotClaw();
+    };
+
     void joystickInputs(){
       rightJoystick();
       leftJoystick();
