@@ -1,67 +1,95 @@
-#include "digitalSensors.h"
-#include "analogSensors.h"
-#include "robotChasis.h"
-#include "i2c.h"
-#include "controller.h"
-#include "liftMotors.h"
-#include "robotClaw.h"
-#include "ports.h"
 
+#ifndef ROBOT_H
+#define ROBOT_H
+#include "analogSensors.h"
+#include "digitalSensors.h"
+#include "chassis.h"
+#include "lift.h"
+#include "control.h"
+#include "claw.h"
+#include "i2c.h"
+#include <vector>
+#include "motor.h"
+#include "ports.h"
+#include "potentiometer.h"
 class robot{
   private:
     analogSensors analog;
     digitalSensors digital;
-    robotChasis drive;
-    liftMotors lift;
+    chassis drive;
+    lift arm;
+    control remote;
+    claw ef;
     i2c communications;
-    controller remote;
-    robotClaw claw;
-
   public:
     robot(){
-
+      this->drive = chassis();
+      this->analog = analogSensors();
+      this->digital = digitalSensors();
+      this->arm = lift();
+      this->ef = claw();
+      this->remote = control();
+      this->communications = i2c();
     };
-    void set_analog(){
-       analog =  analogSensors();
+    void set_communications(i2c communications){
+      this->communications = communications;
     };
-    void set_digital(){
-      digital = digitalSensors();
+    i2c get_communications(){
+      return this->communications;
     };
-    void set_drive(){
-      drive = robotChasis();
+    void set_remote(control remote){
+      this->remote = remote;
     };
-    robotChasis get_drive(){
-      return drive;
+    control get_remote(){
+      return this->remote;
     };
-    void set_lift(){
-      lift = liftMotors();
+    void set_drive(chassis drive){
+      this->drive = drive;
     };
-    void set_communications(){
-      communications = i2c();
+    chassis get_drive(){
+      return this->drive;
     };
-    void set_remote(){
-      remote = controller();
+    void set_analog(analogSensors analog){
+      this->analog = analog;
     };
-    void set_claw(){
-      claw = robotClaw();
+    analogSensors get_analog(){
+      return this->analog;
     };
-
+    void set_digital(digitalSensors digital){
+      this->digital = digital;
+    };
+    digitalSensors get_digital(){
+      return this->digital;
+    };
+    void set_arm(lift arm){
+      this->arm = arm;
+    };
+    lift get_arm(){
+      return this->arm;
+    };
+    void set_ef(claw ef){
+      this->ef = ef;
+    };
+    claw get_ef(){
+      return this->ef;
+    };
     void joystickInputs(){
       rightJoystick();
       leftJoystick();
     };
     void leftJoystick(){
-      if(remote.absRightJoystickVal()>0){
-  			drive.rightPower(remote.rightJoystickVal());
+      if(this->remote.absRightJoystickVal()>0){
+  			this->drive.rightPower(this->remote.rightJoystickVal());
   		}else{
-  			drive.haltRight();
+  			this->drive.haltRight();
   		}
     };
     void rightJoystick(){
-      if(remote.absRightJoystickVal()>0){
-  			drive.rightPower(remote.rightJoystickVal());
+      if(this->remote.absRightJoystickVal()>0){
+  			this->drive.rightPower(this->remote.rightJoystickVal());
   		}else{
-  			drive.haltRight();
+  			this->drive.haltRight();
   		}
     };
 };
+#endif

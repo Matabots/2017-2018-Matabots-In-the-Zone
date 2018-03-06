@@ -1,18 +1,26 @@
+#ifndef POTENTIOMETER_H
+#define POTENTIOMETER_H
+
 class potentiometer{
-public:
+private:
   int value;
   int potentiometerPort;
-
+public:
   potentiometer(){
 
   }
-  void setPotentiometer(int port){
-    potentiometerPort = port;
+
+  void set_Potentiometer(int port){
+    this->potentiometerPort = port;
   }
+  int get_Potentiometer(){
+    return this->potentiometerPort;
+  };
   void updateValues(){
-    value = analogRead(potentiometerPort);
+    this->value = analogRead(this->potentiometerPort);
   }
   int getValue(){
-    return analogRead(potentiometerPort);
+    return analogRead(this->potentiometerPort);
   }
 };
+#endif

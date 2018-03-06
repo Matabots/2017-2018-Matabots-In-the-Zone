@@ -21,7 +21,8 @@ COBJ:=$(patsubst %.o,$(BINDIR)/%.o,$(CSRC:.$(CEXT)=.o))
 CPPSRC:=$(wildcard *.$(CPPEXT))
 CPPOBJ:=$(patsubst %.o,$(BINDIR)/%.o,$(CPPSRC:.$(CPPEXT)=.o))
 OUT:=$(BINDIR)/$(OUTNAME)
-
+CFLAGS:= -lstdc++ -std=c++11
+# LDFLAGS = -std=c++11
 .PHONY: all
 
 # By default, compile program

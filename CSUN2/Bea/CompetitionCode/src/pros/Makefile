@@ -18,9 +18,11 @@ HEADERS:=$(wildcard *.$(HEXT))
 CSRC=$(wildcard *.$(CEXT))
 COBJ:=$(patsubst %.o,$(BINDIR)/%.o,$(CSRC:.$(CEXT)=.o))
 CPPSRC:=$(wildcard *.$(CPPEXT))
+CFLAGS:= -lstdc++ -std=c++11
+
+	# LDFLAGS = -std=c++11
 CPPOBJ:=$(patsubst %.o,$(BINDIR)/%.o,$(CPPSRC:.$(CPPEXT)=.o))
 OUT:=$(BINDIR)/$(OUTNAME)
-
 .PHONY: all clean upload _force_look
 
 # By default, compile program
