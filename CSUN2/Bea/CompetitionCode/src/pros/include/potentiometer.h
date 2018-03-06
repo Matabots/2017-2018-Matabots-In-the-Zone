@@ -2,6 +2,7 @@ class potentiometer{
 public:
   int value;
   int potentiometerPort;
+
   potentiometer(){
 
   }

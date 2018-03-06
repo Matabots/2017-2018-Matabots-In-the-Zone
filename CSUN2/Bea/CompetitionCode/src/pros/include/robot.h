@@ -8,14 +8,15 @@
 #include "ports.h"
 
 class robot{
+  analogSensors analog =  analogSensors();
+  digitalSensors digital = digitalSensors();
+  robotChasis drive = robotChasis();
+  liftMotors lift = liftMotors();
+  i2c communications = i2c();
+  controller remote = controller();
+  robotClaw claw = robotClaw();
+
   public:
-    analogSensors analog = analogSensors();
-    digitalSensors digital = digitalSensors();
-    robotChasis drive = robotChasis();
-    liftMotors lift = liftMotors();
-    i2c communications = i2c();
-    controller remote = controller();
-    robotClaw claw = robotClaw();
     robot(){
 
     };

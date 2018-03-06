@@ -4,7 +4,6 @@ class liftMotors{
 public:
   std::vector<driveMotors> groupOne;
   std::vector<driveMotors> groupTwo;
-
   liftMotors(){
 
   };

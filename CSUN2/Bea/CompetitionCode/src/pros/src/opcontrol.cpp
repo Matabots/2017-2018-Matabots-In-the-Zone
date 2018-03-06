@@ -1,7 +1,7 @@
 #include "main.h"
 #include "robot.h"
 
-void setupBot(robot& bot);
+void setupBot(robot& bots);
 
 void operatorControl() {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9,9 +9,10 @@ void operatorControl() {
 	robot bot = robot();
 	setupBot(bot);
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	while (1) {
-		bot.joystickInputs(); //this enables the controls for joystick inputs
-
-    delay(25);
+	while (true) {
+		//bot.joystickInputs(); //this enables the controls for joystick inputs
+		// printf("l/\n", );
+		printf("%d\n",  joystickGetAnalog ( 3, 1));
+		delay(25);
 	}
 }
