@@ -108,10 +108,10 @@ void setup(){
       leftJoystick();
     };
     void leftJoystick(){
-      if(this->remote->absRightJoystickVal()>0){
-  			this->drive->rightPower(this->remote->rightJoystickVal());
+      if(this->remote->absLeftJoystickVal()>0){
+  			this->drive->leftPower(this->remote->leftJoystickVal());
   		}else{
-  			this->drive->haltRight();
+  			this->drive->haltLeft();
   		}
     };
     void rightJoystick(){
