@@ -3,11 +3,10 @@
 
 class control{
 private:
-  int num;
+
 public:
   control(){
       //setup all controller bindings here
-      num = 0;
     };
   //return functions here
 

@@ -52,12 +52,17 @@
  */
 
 void autonomous() {
-    chassis drive = chassis();
-    drive.addLeftMotor(motor2, false);
+    //declare a robot and setup the ports 
     robot bot = robot();
-    bot.get_drive()->addLeftMotor(motor2, false);
-    robot bot2 = robot();
-    bot2.get_drive()->addRightMotor(motor3, true);
-    delay(400);
+    bot.setup();
+
+    //some testing of classes
+    // chassis drive = chassis();
+    // drive.addLeftMotor(motor2, false);
+    // bot.get_drive()->addLeftMotor(motor2, false);
+    // robot bot2 = robot();
+    // bot2.get_drive()->addRightMotor(motor3, true);
+    // delay(400);
+
 
 }

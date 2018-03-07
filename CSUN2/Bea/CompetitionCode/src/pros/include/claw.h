@@ -11,6 +11,7 @@ public:
   claw(){
     this->clawMotor = motor();
   }
+
   void set_Direction(bool reverse){
     this->clawMotor.set_Direction(reverse);
   };
