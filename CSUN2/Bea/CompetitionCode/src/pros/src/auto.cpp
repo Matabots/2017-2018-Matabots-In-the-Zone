@@ -52,8 +52,12 @@
  */
 
 void autonomous() {
-    // chassis drive = chassis();
+    chassis drive = chassis();
+    drive.addLeftMotor(motor2, false);
     robot bot = robot();
+    bot.get_drive()->addLeftMotor(motor2, false);
+    robot bot2 = robot();
+    bot2.get_drive()->addRightMotor(motor3, true);
     delay(400);
 
 }
