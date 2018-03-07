@@ -46,8 +46,8 @@ void setup(){
       this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, false);
       this->drive->addLeftMotor(motor8, true);
-      this->drive->addRightMotor(motor3, false);
-      this->drive->addRightMotor(motor9, true);
+      // this->drive->addRightMotor(motor3, false);
+      // this->drive->addRightMotor(motor9, true);
       this->arm->addGroupOne(motor7, false);
       this->arm->addGroupOne(motor6, false);
       this->arm->addGroupTwo(motor5, false);
@@ -108,18 +108,18 @@ void setup(){
       leftJoystick();
     };
     void leftJoystick(){
-      if(this->remote->absLeftJoystickVal()>0){
+      // if(this->remote->absLeftJoystickVal()>15){
   			this->drive->leftPower(this->remote->leftJoystickVal());
-  		}else{
-  			this->drive->haltLeft();
-  		}
+  		// }else{
+  		// 	this->drive->haltLeft();
+  		// }
     };
     void rightJoystick(){
-      if(this->remote->absRightJoystickVal()>0){
+      // if(this->remote->absRightJoystickVal()>15){
   			this->drive->rightPower(this->remote->rightJoystickVal());
-  		}else{
-  			this->drive->haltRight();
-  		}
+  		// }else{
+  			// this->drive->haltRight();
+  		// }
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////Routines related to sensors will belong here////////////////////////////////////////

@@ -17,7 +17,7 @@
 #include "main.h"
 #include "utility.h"
 #include "utility/motors.h"
-
+#include "robot.h"
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via he Field Management System
@@ -35,88 +35,24 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-// @HACK: Moving these definitions into driver control for now
- void DriveDirect(int X, int Y, int R) {
-
-   motorSet(DriveFrontLeft,  +Y + X + R);
-   motorSet(DriveBackLeft,   +Y - X + R);
-   motorSet(DriveFrontRight, -Y + X + R);
-   motorSet(DriveBackRight,  -Y - X + R);
-
- };
-
- int armSpeedMoveUp = 110;
- int armSpeedMoveDown = 70;
-
- int armSpeedFling = 100;
-
- void moveArm(int direction, bool fling) {
-   if (direction == -1) {
-     direction *= armSpeedMoveDown;
-   } else {
-     if (fling) {
-       direction *= armSpeedFling;
-     } else {
-       direction *= armSpeedMoveUp;
-     }
-   }
-
-   motorSet(ArmInnerLeft, direction);
-   motorSet(ArmInnerRight, -direction);
-   motorSet(ArmOuter, -direction);
-
- }
-
- void moveClaw(int power) {
-     motorSet(Claw, power);
- }
-
 
 void operatorControl() {
+  robot bot = robot();
+  bot.setup();
 
   print("Begin operatorControl()");
+    while(1){
+      // if(joystickGetAnalog(1, 4) > 15){
+        motorSet(motor8, joystickGetAnalog(1, 3));
+        motorSet(motor2, (joystickGetAnalog(1, 3)));
+      // }
+      // if(joystickGetAnalog(1, 2) > 15){
+        motorSet(motor3, joystickGetAnalog(1, 2) * -1);
+        motorSet(motor9, (joystickGetAnalog(1, 2)));
+      // }
+      // motorSet(8, 100);
+      // printf("%d\n", joystickGetAnalog(1, 1));
+    delay(25);
+  }
 
-	int X, Y, R;
-	int armDirection, clawDirection;
-	bool fling = false;
-	while (1) {
-
-		X = clamp(
-			joystickGetAnalog(1, 4),
-			40,
-			127,
-			0,
-			127
-		);
-		Y = clamp(
-			joystickGetAnalog(1, 3),
-			40,
-			127,
-			0,
-			127
-		);
-		R = clamp(
-			joystickGetAnalog(1, 1),
-			40,
-			127,
-			0,
-			127
-		);
-
-		// Make rotation slower, we were losing our GOs
-		DriveDirect(X, Y, R * 0.9);
-
-		armDirection = joystickGetDigital(1, 6, JOY_UP) ? 1 : joystickGetDigital(1, 6, JOY_DOWN) ? -1 : 0;
-
-		moveArm(armDirection, fling);
-
-    // Claw instructions
-    clawDirection = joystickGetDigital(1, 5, JOY_UP) ? 90 : joystickGetDigital(1, 5, JOY_DOWN) ? -90 : 0;
-
-    moveClaw(clawDirection);
-
-
-
-  delay(25);
-	}
 }
