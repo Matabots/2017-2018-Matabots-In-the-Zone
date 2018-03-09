@@ -40,22 +40,29 @@ void operatorControl() {
   robot bot = robot();
   bot.setup();
 
+
   // motor newMotor = motor(motor2);
-  chassis newChassis = chassis();
-  newChassis.addLeftMotor(2, false);
-  newChassis.addRightMotor(3, false);
+  // chassis newChassis = chassis();
+  // control* remote = new control();
+  // newChassis.addLeftMotor(2, false);
+  // newChassis.addRightMotor(3, false);
+
+
   print("Begin operatorControl()");
     while(1){
-      if(joystickGetAnalog(1, 3) > 15 || joystickGetAnalog(1, 3) < -15){
-        newChassis.leftPower(joystickGetAnalog(1, 3));
-      }else{
-        newChassis.haltLeft();
-      };
-      if(joystickGetAnalog(1, 2) > 15 || joystickGetAnalog(1, 2) < -15){
-        newChassis.rightPower(joystickGetAnalog(1, 2));
-      }else{
-        newChassis.haltRight();
-      };
+      bot.remoteListen();
+      // bot.smallLift();
+      // if(remote->absLeftJoystickVal() > 15){
+      //   newChassis.leftPower(remote->leftJoystickVal());
+      // }else{
+      //   newChassis.haltLeft();
+      // };
+      //
+      // if(joystickGetAnalog(1, 2) > 15 || joystickGetAnalog(1, 2) < -15){
+      //   newChassis.rightPower(joystickGetAnalog(1, 2));
+      // }else{
+      //   newChassis.haltRight();
+      // };
 
       // newMotor.set_Power(100);
       // if(joystickGetAnalog(1, 4) > 15){

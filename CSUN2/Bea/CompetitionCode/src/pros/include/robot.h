@@ -30,7 +30,7 @@ class robot{
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new claw();
-      this->remote = new control();
+      this->remote = new control(6, 5, 8);
       this->communications = new i2c();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,12 +45,12 @@ void setup(){
       this->digital->set_LeftEncoder(digital7, digital8, false);
       this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, false);
-      this->drive->addLeftMotor(motor8, true);
-      // this->drive->addRightMotor(motor3, false);
-      // this->drive->addRightMotor(motor9, true);
+      this->drive->addLeftMotor(motor8, false);
+      this->drive->addRightMotor(motor3, true);
+      this->drive->addRightMotor(motor9, false);
       this->arm->addGroupOne(motor7, false);
-      this->arm->addGroupOne(motor6, false);
-      this->arm->addGroupTwo(motor5, false);
+      this->arm->addGroupOne(motor6, true);
+      this->arm->addGroupTwo(5, false);
       this->ef->set_Port(motor4);
       this->ef->set_Direction(false);
 };
@@ -103,23 +103,62 @@ void setup(){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////These are the operator control functions////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void remoteListen(){
+      joystickInputs();
+      clawButtons();
+      bigLift();
+      // smallLift();
+    };
     void joystickInputs(){
       rightJoystick();
       leftJoystick();
     };
     void leftJoystick(){
-      // if(this->remote->absLeftJoystickVal()>15){
+      if(this->remote->absLeftJoystickVal()>15){
   			this->drive->leftPower(this->remote->leftJoystickVal());
-  		// }else{
-  		// 	this->drive->haltLeft();
-  		// }
+  		}else{
+  			this->drive->haltLeft();
+  		}
     };
     void rightJoystick(){
-      // if(this->remote->absRightJoystickVal()>15){
+      if(this->remote->absRightJoystickVal()>15){
   			this->drive->rightPower(this->remote->rightJoystickVal());
-  		// }else{
-  			// this->drive->haltRight();
-  		// }
+  		}else{
+  			this->drive->haltRight();
+  		}
+    };
+    void clawButtons(){
+      if(this->remote->clawOpen()){
+        this->ef->set_Power(100);
+        delay(50);
+      }else if(this->remote->clawClose()){
+        this->ef->set_Power(-100);
+        delay(50);
+      }else{
+        this->ef->halt();
+      }
+    };
+    void bigLift(){
+      if(this->remote->bigLiftUp()){
+        this->arm->groupOnePower(100);
+        delay(50);
+      }else if(this->remote->bigLiftDown()){
+        this->arm->groupOnePower(-100);
+        delay(50);
+      }else{
+        this->arm->haltGroupOne();
+      }
+    };
+  void smallLift(){
+      if(this->remote->smallLiftUp()){
+        this->arm->groupTwoPower(100);
+        delay(50);
+      }else if(this->remote->smallLiftDown()){
+        this->arm->groupTwoPower(-100);
+        delay(50);
+      }else{
+        this->arm->haltGroupTwo();
+      }
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////Routines related to sensors will belong here////////////////////////////////////////
