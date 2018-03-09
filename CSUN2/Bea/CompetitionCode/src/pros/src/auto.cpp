@@ -55,7 +55,7 @@ void autonomous() {
     //declare a robot and setup the ports
     robot bot = robot();
     bot.setup();
-    bot.joystickInputs();
+    // bot.joystickInputs();
     //some testing of classes
     // chassis drive = chassis();
     // drive.addLeftMotor(motor2, false);
