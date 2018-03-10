@@ -12,12 +12,15 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
-#include "utility/drive.h"
-#include "utility/arm.h"
+//optional or test includes
+#include "../include/utility/drive.h"
+#include "../include/utility/arm.h"
+#include "../include/utility/motors.h"
+
+//required includes
 #include "main.h"
-#include "utility.h"
-#include "utility/motors.h"
 #include "robot.h"
+
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via he Field Management System
@@ -37,9 +40,9 @@
  */
 
 void operatorControl() {
+
   robot bot = robot();
   bot.setup();
-
 
   // motor newMotor = motor(motor2);
   // chassis newChassis = chassis();

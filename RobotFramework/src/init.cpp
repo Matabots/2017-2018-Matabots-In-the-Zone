@@ -19,6 +19,9 @@
  * states (digitalWrite()) of limit switches, push buttons, and solenoids. It can also safely
  * configure a UART port (usartOpen()) but cannot set up an LCD (lcdInit()).
  */
+
+
+
 void initializeIO() {
 }
 
@@ -41,7 +44,7 @@ void initialize() {
 
   printf("Begin initalize()");
 
-  setTeamName("3796B");
+  setTeamName("CSUN Vex Robotics");
 
   imeInitializeAll();
 
