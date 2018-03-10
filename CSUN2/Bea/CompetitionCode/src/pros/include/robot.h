@@ -50,7 +50,7 @@ void setup(){
       this->drive->addRightMotor(motor9, false);
       this->arm->addGroupOne(motor7, false);
       this->arm->addGroupOne(motor6, true);
-      this->arm->addGroupTwo(5, false);
+      this->arm->addGroupTwo(motor5, false);
       this->ef->set_Port(motor4);
       this->ef->set_Direction(false);
 };
@@ -149,17 +149,29 @@ void setup(){
         this->arm->haltGroupOne();
       }
     };
-  void smallLift(){
-      if(this->remote->smallLiftUp()){
-        this->arm->groupTwoPower(100);
-        delay(50);
-      }else if(this->remote->smallLiftDown()){
-        this->arm->groupTwoPower(-100);
-        delay(50);
-      }else{
-        this->arm->haltGroupTwo();
-      }
+    void smallLift(int speed){
+      motorSet(5, speed);
+      // if(this->remote->smallLiftUp()){
+      //   this->arm->groupTwoPower(-100);
+      //   delay(50);
+      // }else if(this->remote->smallLiftDown()){
+      //   this->arm->groupTwoPower(100);
+      //   delay(50);
+      // }else{
+      //   this->arm->haltGroupTwo();
+      // }
     };
+  // void smallLift(){
+  //     if(this->remote->smallLiftUp()){
+  //       this->arm->groupTwoPower(100);
+  //       delay(50);
+  //     }else if(this->remote->smallLiftDown()){
+  //       this->arm->groupTwoPower(-100);
+  //       delay(50);
+  //     }else{
+  //       this->arm->haltGroupTwo();
+  //     }
+  //   };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////Routines related to sensors will belong here////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
