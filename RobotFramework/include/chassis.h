@@ -52,6 +52,8 @@ public:
   void rightPower(int power){
     for(int x=0;x<(int)(this->rightMotors.size());x++) {
       this->rightMotors[x]->set_Power(power);
+      printf("%d\n",this->rightMotors[x]->get_Port());
+      printf("%d\n",this->rightMotors[x]->get_Power());
     }
   };
 

@@ -47,15 +47,21 @@ void operatorControl() {
   // newChassis.addLeftMotor(2, false);
   // newChassis.addRightMotor(3, false);
 
-  bot.smallLift(100);
-  delay(100);
-  bot.smallLift(-100);
-  delay(100);
-  bot.smallLift(0);
+  //bot.smallLift(100);
+  //delay(100);
+  //bot.smallLift(-100);
+  //delay(100);
+  //bot.smallLift(0);
+  //use millis() for integrated timing
+  printf("Begin operatorControl\n");
+  bot.get_drive()->rightPower(100);
+  delay(1000);
 
-  print("Begin operatorControl()");
-    while(1){
+
+    while(true)//operatingTime.GetTicks() < 10000)
+    {
       bot.remoteListen();
+printf("Begin operatorControl\n");
       // bot.smallLift();
       // if(remote->absLeftJoystickVal() > 15){
       //   newChassis.leftPower(remote->leftJoystickVal());
@@ -82,5 +88,6 @@ void operatorControl() {
       // printf("%d\n", joystickGetAnalog(1, 1));
     delay(50);
   }
+  printf("The Program has Ended\n");
 
 }
