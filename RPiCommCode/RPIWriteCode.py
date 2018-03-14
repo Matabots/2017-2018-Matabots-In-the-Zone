@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import time
 import serial
-
+#FUN
 ser = serial.Serial(
         port='/dev/ttyS0', #Replace ttyS0 with ttyAMA0 for Pi1,Pi2,Pi0
         baudrate = 9600,
