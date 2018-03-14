@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import time
 import serial
-#FUN
+
 ser = serial.Serial(
         port='/dev/ttyS0', #Replace ttyS0 with ttyAMA0 for Pi1,Pi2,Pi0
         baudrate = 9600,
@@ -12,12 +12,12 @@ ser = serial.Serial(
 )
 
 counter=0
-##print("reached before loop")
+print("reached before loop")
 while True:
-        ##print("In loop..")
-        ##data = 'abc'.encode()
-        ##print("Encoded")
-        ## ser.write(data)
+        print("In loop..")
+        data = 'Hello World'.encode()
+        print("Encoded")
+        ser.write(data)
 ##        ser.close();
         print("Write counter: %d "%(counter))
         time.sleep(1)
