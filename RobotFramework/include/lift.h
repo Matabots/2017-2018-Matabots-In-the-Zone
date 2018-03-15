@@ -2,64 +2,65 @@
 #define LIFT_H
 #include "ports.h"
 #include "motor.h"
+#include "API.h"
 #include <vector>
 class lift{
 private:
-  std::vector<motor*> groupOne;
-  std::vector<motor*> groupTwo;
+  std::vector<motor*> primaryLift;
+  std::vector<motor*> secondaryLift;
 
 public:
 
   lift(){
 
   };
-  std::vector<motor*> get_groupOne(){
-    return this->groupOne;
+  std::vector<motor*> get_primaryLift(){
+    return this->primaryLift;
   };
-  void set_groupOne(std::vector<motor*> motors){
-    this->groupOne = motors;
+  void set_primaryLift(std::vector<motor*> motors){
+    this->primaryLift = motors;
   };
-  std::vector<motor*> get_groupTwo(){
-    return this->groupTwo;
+  std::vector<motor*> get_secondaryLift(){
+    return this->secondaryLift;
   };
-  void set_groupTwo(std::vector<motor*> motors){
-    this->groupTwo = motors;
+  void set_secondaryLift(std::vector<motor*> motors){
+    this->secondaryLift = motors;
   };
-  void addGroupOne(int port, bool reverse){
+  void addPrimaryLift(int port, bool reverse){
     motor* liftMotor = new motor(port);
     liftMotor->set_Direction(reverse);
-    // this->groupOne.resize(this->groupOne.size() + 1);
-    this->groupOne.push_back(liftMotor);
+    // this->primaryLift.resize(this->primaryLift.size() + 1);
+    this->primaryLift.push_back(liftMotor);
   };
 
-  void addGroupTwo(int port, bool reverse){
+  void addSecondaryLift(int port, bool reverse){
     motor* liftMotor = new motor(port);
     liftMotor->set_Direction(reverse);
-    // this->groupTwo.resize(this->groupTwo.size() + 1);
-    this->groupTwo.push_back(liftMotor);
+    // this->secondaryLift.resize(this->secondaryLift.size() + 1);
+    this->secondaryLift.push_back(liftMotor);
   }
 
-  void groupOnePower(int power){
-    for(std::vector<motor*>::size_type i = 0; i != this->groupOne.size(); i++) {
-      this->groupOne[i]->set_Power(power);
+  void primaryLiftPower(int power){
+    for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
+      this->primaryLift[i]->set_Power(power);
     }
   };
 
-  void groupTwoPower(int power){
-    for(std::vector<motor*>::size_type i = 0; i != this->groupTwo.size(); i++) {
-      this->groupTwo[i]->set_Power(power);
+  void secondaryLiftPower(int power){
+    for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
+      this->secondaryLift[i]->set_Power(power);
     }
   };
 
   void haltGroupOne(){
-    for(std::vector<motor*>::size_type i = 0; i != this->groupOne.size(); i++) {
-      this->groupOne[i]->set_Power(0);
+    for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
+      this->primaryLift[i]->set_Power(0);
     }
   };
 
   void haltGroupTwo(){
-    for(std::vector<motor*>::size_type i = 0; i != this->groupTwo.size(); i++) {
-      this->groupTwo[i]->set_Power(0);
+    for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
+      this->secondaryLift[i]->set_Power(0);
     }
   };
 };

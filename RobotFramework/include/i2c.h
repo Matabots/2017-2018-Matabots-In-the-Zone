@@ -1,6 +1,6 @@
 #ifndef I2C_H
 #define I2C_H
-
+#include "API.h"
 // 7-bit address of the slave I2C device, right aligned
 #define I2C_SLAVE_ADDR         0x4A
 // Ficitonal "enable" register for the device

@@ -60,7 +60,6 @@ void operatorControl() {
   bot.get_drive()->rightPower(100);
   delay(1000);
 
-
     while(true)//operatingTime.GetTicks() < 10000)
     {
       bot.remoteListen();

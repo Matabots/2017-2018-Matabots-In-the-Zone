@@ -1,6 +1,7 @@
 #ifndef POTENTIOMETER_H
 #define POTENTIOMETER_H
 
+#include "API.h"
 class potentiometer{
 private:
   int value;

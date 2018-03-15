@@ -2,14 +2,15 @@
 #define DIGITALSENSORS_H
 
 #include "ports.h"
+#include "API.h"
 //unsure how to modularize this class due to encoders being
 //too specific
 class digitalSensors{
-private:
-  Encoder leftEncoder;
-  Encoder rightEncoder;
-  Encoder liftEncoder;
-  Encoder coneLiftEncoder;
+  private:
+    Encoder leftEncoder;
+    Encoder rightEncoder;
+    Encoder liftEncoder;
+    Encoder coneLiftEncoder;
   public:
     digitalSensors(){
 

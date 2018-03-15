@@ -48,9 +48,9 @@ void setup(){
       this->drive->addLeftMotor(motor8, false);
       this->drive->addRightMotor(motor3, true);
       this->drive->addRightMotor(motor9, false);
-      this->arm->addGroupOne(motor7, false);
-      this->arm->addGroupOne(motor6, true);
-      this->arm->addGroupTwo(motor5, false);
+      this->arm->addPrimaryLift(motor7, false);
+      this->arm->addPrimaryLift(motor6, true);
+      this->arm->addSecondaryLift(motor5, false);
       this->ef->set_Port(motor4);
       this->ef->set_Direction(false);
 };
@@ -140,10 +140,10 @@ void setup(){
     };
     void bigLift(){
       if(this->remote->bigLiftUp()){
-        this->arm->groupOnePower(100);
+        this->arm->primaryLiftPower(100);
         delay(50);
       }else if(this->remote->bigLiftDown()){
-        this->arm->groupOnePower(-100);
+        this->arm->primaryLiftPower(-100);
         delay(50);
       }else{
         this->arm->haltGroupOne();
