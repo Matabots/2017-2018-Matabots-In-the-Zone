@@ -1,6 +1,7 @@
 #ifndef MOTOR_H
 #define MOTOR_H
-// #include <API.h>
+#include <API.h>
+
 class motor{
 private:
   int port;
@@ -26,6 +27,9 @@ public:
     this->power = 0;
     this->reversed = false;
   };
+  void set_count(int inputCount){
+    *(this->count) = inputCount;
+  }
   int get_count(){
     if(imeGet(this->address, this->count)){
       return *(this->count);
@@ -34,6 +38,9 @@ public:
       return -1;
     };
   };
+  void set_velocity(int velocity){
+    //unifinished. This will increase power until it reaches the target velocity based on velocity input
+  }
   int get_velocity(){
     if(imeGetVelocity(this->address, this->velocity)){
       return *(this->velocity);
@@ -71,10 +78,10 @@ public:
     return this->power;
   };
   void set_Direction(bool motorReversed){
-    reversed = motorReversed;
+    this->reversed = motorReversed;
   };
   bool get_Direction(){
-    return reversed;
+    return this->reversed;
   };
   int get_Speed(){
     return motorGet(this->port);
