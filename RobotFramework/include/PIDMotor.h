@@ -7,14 +7,22 @@ class PIDMotor : public motor
     float kI;
     float kD;
     int sampleTime; //time it takes between reading values in milliseconds
-    int target;
+    int target; //target value
 
   public:
-    PIDMotor(){
-
+    PIDMotor():motor(){
+      this->kP = 0;
+      this->kI = 0;
+      this->kD = 0;
+      this->sampleTime = 10;
+      this->target = 0;
     }
-    PIDMotor(int input){
-
+    PIDMotor(int motorPort, float kPInput, float kIInput, float kDInput, int inputSampleTime, int inputTarget):motor(motorPort){
+      this->kP = kPInput;
+      this->kI = kIInput;
+      this->kD = kDInput;
+      this->sampleTime = inputSampleTime;
+      this->target = inputTarget;
     }
     void set_kP(float kPInput){
       this->kP = kPInput;
