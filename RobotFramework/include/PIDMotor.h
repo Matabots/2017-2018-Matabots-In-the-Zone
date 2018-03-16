@@ -17,12 +17,12 @@ class PIDMotor : public motor
       this->sampleTime = 10;
       this->target = 0;
     }
-    PIDMotor(int motorPort, float kPInput, float kIInput, float kDInput, int inputSampleTime, int inputTarget):motor(motorPort){
+    PIDMotor(int motorPort, unsigned char encoderAddress, float kPInput, float kIInput, float kDInput, int inputSampleTime):motor(motorPort,encoderAddress){
       this->kP = kPInput;
       this->kI = kIInput;
       this->kD = kDInput;
       this->sampleTime = inputSampleTime;
-      this->target = inputTarget;
+      this->target = 0;
     }
     void set_kP(float kPInput){
       this->kP = kPInput;
@@ -51,5 +51,12 @@ class PIDMotor : public motor
     void set_target(int inputTarget){
       this->target = inputTarget;
     }
-
+    int get_target(){
+      return this->target;
+    }
+    void getSample(){
+      if(millis()<this->sampleTime){
+        this->set_count(imeGet(address,*count));
+      }
+    }
 };
