@@ -56,6 +56,7 @@ void operatorControl() {
   print("Begin operatorControl()");
     while(1){
       bot.remoteListen();
+      printf("%d\n", bot.get_digital()->liftEncoderVal());
       // bot.smallLift();
       // if(remote->absLeftJoystickVal() > 15){
       //   newChassis.leftPower(remote->leftJoystickVal());
