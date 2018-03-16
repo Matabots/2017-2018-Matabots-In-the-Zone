@@ -107,7 +107,7 @@ void setup(){
       joystickInputs();
       clawButtons();
       bigLift();
-      // smallLift();
+      smallLift();
     };
     void joystickInputs(){
       rightJoystick();
@@ -149,17 +149,17 @@ void setup(){
         this->arm->haltGroupOne();
       }
     };
-    void smallLift(int speed){
-      motorSet(5, speed);
-      // if(this->remote->smallLiftUp()){
-      //   this->arm->groupTwoPower(-100);
-      //   delay(50);
-      // }else if(this->remote->smallLiftDown()){
-      //   this->arm->groupTwoPower(100);
-      //   delay(50);
-      // }else{
-      //   this->arm->haltGroupTwo();
-      // }
+    void smallLift(){
+      // motorSet(5, speed);
+      if(this->remote->smallLiftUp()){
+        this->arm->secondaryLiftPower(-100);
+        delay(50);
+      }else if(this->remote->smallLiftDown()){
+        this->arm->secondaryLiftPower(100);
+        delay(50);
+      }else{
+        this->arm->haltGroupTwo();
+      }
     };
   // void smallLift(){
   //     if(this->remote->smallLiftUp()){
