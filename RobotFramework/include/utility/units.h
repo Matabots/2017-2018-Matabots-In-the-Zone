@@ -9,11 +9,11 @@
  #ifndef INCLUDE_UNITS_H_
  #define INCLUDE_UNITS_H_
 
-typedef enum motorType {
-  TORQUE,
-  HIGHSPEED,
-  TURBO
-} motorType;
+ typedef enum motorType {
+   TORQUE,
+   HIGHSPEED,
+   TURBO
+ } motorType;
 
 #define PI 3.141492653
 
@@ -24,7 +24,7 @@ typedef enum motorType {
  * @param  motor           The motor type
  * @return                 Rotations
  */
-double ticksToRotations(int ticks, motorType motor);
+ double ticksToRotations(int ticks, motorType motor);
 
 /**
  * Converts rotations to ticks
@@ -33,7 +33,7 @@ double ticksToRotations(int ticks, motorType motor);
  * @param  motor            Motor Type
  * @return                  Ticks
  */
-int rotationsToTicks(double rotations, motorType motor);
+ int rotationsToTicks(double rotations, motorType motor);
 
 /**
  * Convert ticks to inches
@@ -44,7 +44,7 @@ int rotationsToTicks(double rotations, motorType motor);
  *
  * @return               Inches
  */
-double ticksToInches(int ticks, double wheelDiameter, motorType motor);
+ double ticksToInches(int ticks, double wheelDiameter, motorType motor);
 
 /**
  * Convert inches to ticks
@@ -55,6 +55,6 @@ double ticksToInches(int ticks, double wheelDiameter, motorType motor);
  *
  * @return               Ticks
  */
-int inchesToTicks(double inches, double wheelDiameter, motorType motor);
+ int inchesToTicks(double inches, double wheelDiameter, motorType motor);
 
 #endif /* INCLUDE_XDRIVE_H_ */

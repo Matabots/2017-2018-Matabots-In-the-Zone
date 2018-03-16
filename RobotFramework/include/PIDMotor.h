@@ -1,5 +1,7 @@
 #include "motor.h"
 
+#define TOLERANCE 0.5
+
 class PIDMotor : public motor
 {
   private:
@@ -56,7 +58,19 @@ class PIDMotor : public motor
     }
     void getSample(){
       if((int)millis()<this->sampleTime){
-        this->set_count(imeGet(get_address() ,get_pCount()));
+        this->set_count(imeGet(get_address(), get_pCount()));
       }
+      if((int)millis()<(this->sampleTime)/2){
+        this->set_count(imeGet(get_address(),get_pCount()));
+      }
+    }
+    void velocityControl(){
+      float vError = (this->target)-get_velocity();
+      if(abs(vError) < TOLERANCE){
+        //reached target velocity
+      }
+    }
+    void positionControl(){
+      //float pError = this->
     }
 };

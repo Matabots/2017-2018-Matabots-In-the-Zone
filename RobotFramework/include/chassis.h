@@ -9,11 +9,11 @@ class chassis{
 private:
   std::vector<motor*> leftMotors;
   std::vector<motor*> rightMotors;
-
+  int wheelDiameter;
 public:
 
   chassis(){
-
+    this->wheelDiameter = 4; //inches
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -69,6 +69,17 @@ public:
     for(std::vector<motor>::size_type i = 0; i != this->rightMotors.size(); i++) {
       this->rightMotors[i]->set_Power(0);
     }
+  };
+  int convertCountToInch(Encoder enc){
+    int ticksPerRev = 360;
+    return ((3.14*(this->wheelDiameter)*encoderGet(enc))/ticksPerRev);
+  };
+  int convertCountToInch(motor inputMotor){
+    int ticksPerRev = 627;
+    if(inputMotor.get_motorType() == TURBO){
+
+    }
+    return ((3.14*(this->wheelDiameter)*(inputMotor.get_count()))/ticksPerRev);
   };
 };
 #endif

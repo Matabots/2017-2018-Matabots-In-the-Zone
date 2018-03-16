@@ -1,3 +1,6 @@
+#ifndef PORTS_H
+#define PORTS_H
+
 #define analog1 1
 #define analog2 2
 #define analog3 3
@@ -30,3 +33,7 @@
 #define motor8 8
 #define motor9 9
 #define motor10 10
+
+
+
+#endif
