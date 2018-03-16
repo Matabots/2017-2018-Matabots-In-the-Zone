@@ -37,30 +37,30 @@ public:
     liftMotor->set_Direction(reverse);
     // this->groupTwo.resize(this->groupTwo.size() + 1);
     this->groupTwo.push_back(liftMotor);
-  }
+  };
 
   void groupOnePower(int power){
     for(std::vector<motor*>::size_type i = 0; i != this->groupOne.size(); i++) {
       this->groupOne[i]->set_Power(power);
-    }
+    };
   };
 
   void groupTwoPower(int power){
     for(std::vector<motor*>::size_type i = 0; i != this->groupTwo.size(); i++) {
       this->groupTwo[i]->set_Power(power);
-    }
+    };
   };
 
   void haltGroupOne(){
     for(std::vector<motor*>::size_type i = 0; i != this->groupOne.size(); i++) {
       this->groupOne[i]->set_Power(0);
-    }
+    };
   };
 
   void haltGroupTwo(){
     for(std::vector<motor*>::size_type i = 0; i != this->groupTwo.size(); i++) {
       this->groupTwo[i]->set_Power(0);
-    }
+    };
   };
 };
 #endif

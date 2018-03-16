@@ -39,7 +39,7 @@ public:
     rightMotor->set_Direction(reverse);
     // this->rightMotors.resize(this->rightMotors.size() + 1);
     this->rightMotors.push_back(rightMotor);
-  }
+  };
 
   void leftPower(int power){
     if(leftMotors[0]->get_Power() != power){
@@ -50,13 +50,14 @@ public:
   };
 
   void rightPower(int power){
+  if(rightMotors[0]->get_Power() != power){
     for(int x=0;x<(int)(this->rightMotors.size());x++) {
       this->rightMotors[x]->set_Power(power);
     }
+  }
   };
 
   void haltLeft(){
-
     for(std::vector<motor>::size_type i = 0; i != this->leftMotors.size(); i++) {
       this->leftMotors[i]->set_Power(0);
     }

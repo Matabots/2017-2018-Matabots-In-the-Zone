@@ -47,11 +47,11 @@ void operatorControl() {
   // newChassis.addLeftMotor(2, false);
   // newChassis.addRightMotor(3, false);
 
-  bot.smallLift(100);
-  delay(100);
-  bot.smallLift(-100);
-  delay(100);
-  bot.smallLift(0);
+  // bot.smallLift(100);
+  // delay(100);
+  // bot.smallLift(-100);
+  // delay(100);
+  // bot.smallLift(0);
 
   print("Begin operatorControl()");
     while(1){
