@@ -27,6 +27,15 @@ public:
     this->power = 0;
     this->reversed = false;
   };
+  unsigned char get_address(){
+    return this->address;
+  };
+  int* get_pVelocity(){
+    return this->velocity;
+  };
+  int* get_pCount(){
+    return this->count;
+  };
   void set_count(int inputCount){
     *(this->count) = inputCount;
   }
