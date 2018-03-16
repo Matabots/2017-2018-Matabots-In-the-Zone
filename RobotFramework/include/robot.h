@@ -12,6 +12,7 @@
 #include "motor.h"
 #include "ports.h"
 #include "potentiometer.h"
+#include "PIDMotor.h"
 class robot{
   private:
     //private variables (raw pointers)
@@ -22,6 +23,7 @@ class robot{
     control* remote;
     claw* ef;
     i2c* communications;
+    PIDMotor* aMotor;
   public:
     //default constructor to allocate memory
     robot(){
@@ -32,6 +34,7 @@ class robot{
       this->ef = new claw();
       this->remote = new control(6, 5, 8);
       this->communications = new i2c();
+      this->aMotor = new PIDMotor();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -107,7 +110,7 @@ void setup(){
       joystickInputs();
       clawButtons();
       bigLift();
-      // smallLift();
+      smallLift();
     };
     void joystickInputs(){
       rightJoystick();
@@ -149,17 +152,17 @@ void setup(){
         this->arm->haltGroupOne();
       }
     };
-    void smallLift(int speed){
-      motorSet(5, speed);
-      // if(this->remote->smallLiftUp()){
-      //   this->arm->groupTwoPower(-100);
-      //   delay(50);
-      // }else if(this->remote->smallLiftDown()){
-      //   this->arm->groupTwoPower(100);
-      //   delay(50);
-      // }else{
-      //   this->arm->haltGroupTwo();
-      // }
+    void smallLift(){
+      // motorSet(5, speed);
+      if(this->remote->smallLiftUp()){
+        this->arm->secondaryLiftPower(-100);
+        delay(50);
+      }else if(this->remote->smallLiftDown()){
+        this->arm->secondaryLiftPower(100);
+        delay(50);
+      }else{
+        this->arm->haltGroupTwo();
+      }
     };
   // void smallLift(){
   //     if(this->remote->smallLiftUp()){

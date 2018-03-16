@@ -63,6 +63,8 @@ void operatorControl() {
     while(true)//operatingTime.GetTicks() < 10000)
     {
       bot.remoteListen();
+      // printf("%d\n", bot.get_digital()->liftEncoderVal());
+      
 printf("Begin operatorControl\n");
       // bot.smallLift();
       // if(remote->absLeftJoystickVal() > 15){

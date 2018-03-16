@@ -55,8 +55,8 @@ class PIDMotor : public motor
       return this->target;
     }
     void getSample(){
-      if(millis()<this->sampleTime){
-        this->set_count(imeGet(address,*count));
+      if((int)millis()<this->sampleTime){
+        this->set_count(imeGet(get_address() ,get_pCount()));
       }
     }
 };
