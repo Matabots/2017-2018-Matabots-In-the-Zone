@@ -11,30 +11,9 @@
  */
 
 #include "main.h"
-#include "utility/drive.h"
-#include "utility/motors.h"
-#include "utility/vector.h"
-#include "utility/arm.h"
-#include "utility/units.h"
 #include <API.h>
-// #include "robot.h"
-// #include "chassis.h"
-#include "robot.h"
-#include "analogSensors.h"
-#include "digitalSensors.h"
-#include "chassis.h"
-#include "lift.h"
-#include "control.h"
-#include "claw.h"
-#include "i2c.h"
-#include <vector>
-#include "motor.h"
-#include "ports.h"
-#include "potentiometer.h"
-
-// #include "motor.h"
-#define degreesToRadians(angleDegrees) (angleDegrees * PI / 180.0)
-#define radiansToDegrees(angleRadians) (angleRadians * 180.0 / PI)
+// #define degreesToRadians(angleDegrees) (angleDegrees * PI / 180.0)
+// #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / PI)
 
 /*
  * Runs the user autonomous code. This function will be started in its own task with the default
@@ -53,8 +32,8 @@
 
 void autonomous() {
     //declare a robot and setup the ports
-    robot bot = robot();
-    bot.setup();
+    // robot bot = robot();
+    // bot.setup();
     // bot.joystickInputs();
     //some testing of classes
     // chassis drive = chassis();
