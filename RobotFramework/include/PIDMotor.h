@@ -40,11 +40,12 @@ class PIDMotor : public motor
       this->sampleTime = 10*(10^-3); //seconds
       this->continuous = true;
     }
-    PIDMotor(int motorPort, unsigned char encoderAddress, double kPInput, double kIInput, double kDInput, int inputSampleTime):motor(motorPort,encoderAddress){
+    PIDMotor(int motorPort, unsigned char encoderAddress, double kPInput, double kIInput, double kDInput, double kFInput):motor(motorPort,encoderAddress){
       this->kP = kPInput;
       this->kI = kIInput;
       this->kD = kDInput;
-      this->sampleTime = inputSampleTime;
+      this->kF = kFInput;
+      this->sampleTime = 10;
       this->setPoint = 0;
       this->maxInput = 1.0;
       this->minInput = -1.0;
@@ -102,13 +103,16 @@ class PIDMotor : public motor
       return this->output;
     }
 
-    void velocityControl(){
+    //control the motor to spin at a certain veloctiy
+    void velocityControl(int velocity){
+      this->setPoint = velocity;
       float vError = (this->setPoint)-get_velocity();
       if(abs(vError) < TOLERANCE){
         //reached setPoint velocity
       }
     }
 
+    //control the motor to spin to a position
     void positionControl(){
       //float pError = this->
     }

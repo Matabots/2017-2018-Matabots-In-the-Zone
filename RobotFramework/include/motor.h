@@ -48,7 +48,7 @@ public:
     return this->address;
   };
   void set_velocity(int velocity){
-    int max_vel = 100; //free spin [rpm]
+    int max_vel = 100; //Torque: free spin [rpm]
     if(this->type == HIGHSPEED){
       max_vel = 160;
     }
@@ -56,9 +56,11 @@ public:
       max_vel = 240;
     }
     if(this->get_velocity() > max_vel){
-      this->set_velocity(max_vel);
+      *(this->velocity) = max_vel;
     }
-    //unifinished. This will increase power until it reaches the target velocity based on velocity input
+    else{
+      *(this->velocity) = velocity;
+    }
   }
   int get_velocity(){
     if(imeGetVelocity(this->address, this->velocity)){
@@ -67,6 +69,28 @@ public:
       printf("Unable to retrive velocity of encoder");
       return -1;
     };
+  };
+  int get_velocity(Encoder enc){
+      int delta_ms;
+      int delta_enc;
+      long encoder_counts;
+      float motor_velocity;
+      // Get current encoder value
+      encoder_counts = encoderGet(enc);
+      // This is just used so we don't need to know how often we are called
+      // how many mS since we were last here
+      delta_ms = millis()-prevTime;
+      prevTime = millis();
+      // Change in encoder count
+      delta_enc = (encoder_counts - encoder_counts_last);
+      // save last position
+      encoder_counts_last = encoder_counts;
+      // Calculate velocity in rpm
+      motor_velocity = (1000.0 / delta_ms) * delta_enc * 60.0 / ticks_per_rev;
+      // multiply by any gear ratio's being used
+      *(this->velocity) = ( motor_velocity * gear_ratio );
+      return *(this->velocity);
+
   };
   int* get_pVelocity(){
     return this->velocity;
