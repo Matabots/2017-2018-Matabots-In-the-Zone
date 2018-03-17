@@ -52,8 +52,6 @@ public:
   void rightPower(int power){
     for(int x=0;x<(int)(this->rightMotors.size());x++) {
       this->rightMotors[x]->set_Power(power);
-      printf("%d\n",this->rightMotors[x]->get_Port());
-      printf("%d\n",this->rightMotors[x]->get_Power());
     }
   };
 
@@ -70,16 +68,13 @@ public:
       this->rightMotors[i]->set_Power(0);
     }
   };
-  int convertCountToInch(Encoder enc){
-    int ticksPerRev = 360;
-    return ((3.14*(this->wheelDiameter)*encoderGet(enc))/ticksPerRev);
-  };
-  int convertCountToInch(motor inputMotor){
-    int ticksPerRev = 627;
-    if(inputMotor.get_motorType() == TURBO){
 
-    }
-    return ((3.14*(this->wheelDiameter)*(inputMotor.get_count()))/ticksPerRev);
+  int get_wheelDiameter(){
+    return this->wheelDiameter;
+  };
+
+  void set_wheelDiameter(int dia){
+    this->wheelDiameter = dia;
   };
 };
 #endif

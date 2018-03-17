@@ -9,6 +9,8 @@
  #ifndef INCLUDE_UNITS_H_
  #define INCLUDE_UNITS_H_
 
+ #include <API.h>
+
  typedef enum motorType {
    TORQUE,
    HIGHSPEED,
@@ -17,6 +19,10 @@
 
 #define PI 3.141492653
 
+double ticksToRotations(Encoder enc){
+    return encoderGet(enc)/360;
+};
+
 /**
  * Convert ticks to rotations
  * @method ticksToRotations
@@ -24,7 +30,20 @@
  * @param  motor           The motor type
  * @return                 Rotations
  */
- double ticksToRotations(int ticks, motorType motor);
+ double ticksToRotations(int ticks, motorType motor){
+   if(motor == TORQUE){
+     return ticks/627.2;
+   }
+   if(motor == HIGHSPEED){
+     return ticks/392;
+   }
+   if(motor == TURBO){
+     return ticks/261.333;
+   }
+   else{
+     return 10;
+   }
+ };
 
 /**
  * Converts rotations to ticks
@@ -33,7 +52,20 @@
  * @param  motor            Motor Type
  * @return                  Ticks
  */
- int rotationsToTicks(double rotations, motorType motor);
+ int rotationsToTicks(double rotations, motorType motor){
+   if(motor == TORQUE){//
+     return rotations*627.2;
+   }
+   if(motor == HIGHSPEED){
+     return rotations*392;
+   }
+   if(motor == TURBO){
+     return rotations*261.333;
+   }
+   else{
+     return 10;
+   }
+ };
 
 /**
  * Convert ticks to inches
@@ -44,7 +76,12 @@
  *
  * @return               Inches
  */
- double ticksToInches(int ticks, double wheelDiameter, motorType motor);
+ double ticksToInches(int ticks, double wheelDiameter, motorType motor) {
+     return (ticksToRotations(ticks, motor) * wheelDiameter*PI);
+ };
+ double ticksToInches(Encoder enc, double wheelDiameter) {
+     return (ticksToRotations(enc) * wheelDiameter*PI);
+ };
 
 /**
  * Convert inches to ticks
@@ -55,6 +92,9 @@
  *
  * @return               Ticks
  */
- int inchesToTicks(double inches, double wheelDiameter, motorType motor);
+
+  int inchesToTicks(double ticks, double wheelDiameter, motorType motor) {
+      return rotationsToTicks(ticks, motor) * wheelDiameter * PI;
+  };
 
 #endif /* INCLUDE_XDRIVE_H_ */

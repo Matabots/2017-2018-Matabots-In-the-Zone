@@ -9,8 +9,8 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
-#include "main.h"
-#include "robot.h"
+// #include "main.h"
+// #include "robot.h"
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
  * VEX Cortex is starting up. As the scheduler is still paused, most API functions will fail.
@@ -42,10 +42,10 @@ void initializeIO() {
  */
 void initialize() {
 
-  printf("Begin initalize()");
+  // printf("Begin initalize()");
 
-  setTeamName("CSUN Vex Robotics");
+  // setTeamName("CSUN Vex Robotics");
 
-  imeInitializeAll();
+  // imeInitializeAll();
 
 }

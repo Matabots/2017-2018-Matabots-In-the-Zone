@@ -56,40 +56,53 @@ void operatorControl() {
   //delay(100);
   //bot.smallLift(0);
   //use millis() for integrated timing
+
   printf("Begin operatorControl\n");
-  bot.get_drive()->rightPower(100);
-  delay(1000);
 
-    while(true)//operatingTime.GetTicks() < 10000)
-    {
-      bot.remoteListen();
-      // printf("%d\n", bot.get_digital()->liftEncoderVal());
-      
-printf("Begin operatorControl\n");
-      // bot.smallLift();
-      // if(remote->absLeftJoystickVal() > 15){
-      //   newChassis.leftPower(remote->leftJoystickVal());
-      // }else{
-      //   newChassis.haltLeft();
-      // };
-      //
-      // if(joystickGetAnalog(1, 2) > 15 || joystickGetAnalog(1, 2) < -15){
-      //   newChassis.rightPower(joystickGetAnalog(1, 2));
-      // }else{
-      //   newChassis.haltRight();
-      // };
+  bot.get_drive()->leftPower(30);
+  bot.get_drive()->rightPower(30);
 
-      // newMotor.set_Power(100);
-      // if(joystickGetAnalog(1, 4) > 15){
-        // motorSet(motor8, joystickGetAnalog(1, 3));
-        // motorSet(motor2, (joystickGetAnalog(1, 3)));
-      // }
-      // if(joystickGetAnalog(1, 2) > 15){
-        // motorSet(motor3, joystickGetAnalog(1, 2) * -1);
-        // motorSet(motor9, (joystickGetAnalog(1, 2)));
-      // }
-      // motorSet(8, 100);
-      // printf("%d\n", joystickGetAnalog(1, 1));
+
+   bot.get_digital()->resetDriveEncoders();
+
+  while(true)//operatingTime.GetTicks() < 10000)
+  {
+    //if(abs(ticksToInches(bot.get_digital()->get_LeftEncoder(),bot.get_drive()->get_wheelDiameter())) > 30){
+    if(abs(bot.get_digital()->rightEncoderVal()) > 360){// 12 inches
+      bot.get_drive()->leftPower(0);
+      bot.get_drive()->rightPower(0);
+
+      // delay(10);
+    }
+    //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
+    printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
+    //bot.remoteListen();
+    // printf("%d\n", bot.get_digital()->liftEncoderVal());
+
+    // bot.smallLift();
+    // if(remote->absLeftJoystickVal() > 15){
+    //   newChassis.leftPower(remote->leftJoystickVal());
+    // }else{
+    //   newChassis.haltLeft();
+    // };
+    //
+    // if(joystickGetAnalog(1, 2) > 15 || joystickGetAnalog(1, 2) < -15){
+    //   newChassis.rightPower(joystickGetAnalog(1, 2));
+    // }else{
+    //   newChassis.haltRight();
+    // };
+
+    // newMotor.set_Power(100);
+    // if(joystickGetAnalog(1, 4) > 15){
+      // motorSet(motor8, joystickGetAnalog(1, 3));
+      // motorSet(motor2, (joystickGetAnalog(1, 3)));
+    // }
+    // if(joystickGetAnalog(1, 2) > 15){
+      // motorSet(motor3, joystickGetAnalog(1, 2) * -1);
+      // motorSet(motor9, (joystickGetAnalog(1, 2)));
+    // }
+    // motorSet(8, 100);
+    // printf("%d\n", joystickGetAnalog(1, 1));
     delay(50);
   }
   printf("The Program has Ended\n");

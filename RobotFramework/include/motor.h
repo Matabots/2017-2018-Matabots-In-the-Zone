@@ -1,7 +1,7 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 #include <API.h>
-#include "utility/units.h"
+#include "units.h"
 // typedef enum MotorType{
 
 // }MotorType;
@@ -17,7 +17,7 @@ private:
   unsigned char address;
   int* count;
   int* velocity;
-  // int type;
+
 public:
 
   motor(){
