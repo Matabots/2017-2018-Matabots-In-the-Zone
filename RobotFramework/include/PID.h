@@ -36,7 +36,7 @@ class PID
       this->totalError = 0.0;
       this->output = 0.0;
       this->deadband = 0.0;
-      this->sampleTime = 10*(10^-3); //seconds
+      this->sampleTime = 10*pow(10,-3); //seconds
       this->continuous = true;
     }
     PID(double kPInput, double kIInput, double kDInput, double kFInput){
