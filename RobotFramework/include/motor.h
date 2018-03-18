@@ -17,6 +17,8 @@ private:
   unsigned char address;
   int* count;
   int* velocity;
+  int prevTime; //previous millisecond value
+  int prevCount;
 
 public:
 
@@ -24,12 +26,14 @@ public:
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
+    this->prevTime = millis();
   };
   motor(int motorPort){
     this->port = motorPort;
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
+    this->prevTime = millis();
   };
   motor(int motorPort, unsigned char encoderAddress){
     this->address = encoderAddress;
@@ -37,16 +41,20 @@ public:
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
+    this->prevTime = millis();
   };
-  int get_motorType(){
-    return this->type;
+  void velocityControl(int velocity){
+  //  this->setPoint = velocity;
+  //  float vError = (this->setPoint)-get_velocity();
+  //  if(abs(vError) < TOLERANCE){
+      //reached setPoint velocity
+  //  }
   }
-  void set_motorType(motorType mType){
-    this->type = mType;
+
+  //control the motor to spin to a position
+  void positionControl(){
+    //float pError = this->
   }
-  unsigned char get_address(){
-    return this->address;
-  };
   void set_velocity(int velocity){
     int max_vel = 100; //Torque: free spin [rpm]
     if(this->type == HIGHSPEED){
@@ -69,26 +77,33 @@ public:
       printf("Unable to retrive velocity of encoder");
       return -1;
     };
+  };  //control the motor to spin at a certain veloctiy
+  int get_motorType(){
+    return this->type;
+  }
+  void set_motorType(motorType mType){
+    this->type = mType;
+  }
+  unsigned char get_address(){
+    return this->address;
   };
   int get_velocity(Encoder enc){
       int delta_ms;
       int delta_enc;
-      long encoder_counts;
       float motor_velocity;
+      int ticks_per_rev = 360; //encoder
       // Get current encoder value
-      encoder_counts = encoderGet(enc);
-      // This is just used so we don't need to know how often we are called
       // how many mS since we were last here
-      delta_ms = millis()-prevTime;
+      delta_ms = (int)(millis()-(this->prevTime));
       prevTime = millis();
       // Change in encoder count
-      delta_enc = (encoder_counts - encoder_counts_last);
+      delta_enc = encoderGet(enc) - (this->prevCount);
       // save last position
-      encoder_counts_last = encoder_counts;
+      this->prevCount = encoderGet(enc);
       // Calculate velocity in rpm
       motor_velocity = (1000.0 / delta_ms) * delta_enc * 60.0 / ticks_per_rev;
       // multiply by any gear ratio's being used
-      *(this->velocity) = ( motor_velocity * gear_ratio );
+      *(this->velocity) = ( motor_velocity );
       return *(this->velocity);
 
   };
@@ -109,7 +124,12 @@ public:
       return -1;
     };
   };
-
+  int get_prevCount(){
+      return this->prevCount;
+  };
+  int get_prevTime(){
+    return this->prevTime;
+  }
   void reset_encoder(){
     imeReset(this->address);
   }

@@ -1,8 +1,7 @@
 #include "motor.h"
+#include "math.h"
 
-#define TOLERANCE 0.5
-
-class PIDMotor : public motor
+class PID
 {
   private:
     double kP;
@@ -24,7 +23,7 @@ class PIDMotor : public motor
     bool continuous;  //if it is absolute (wraps around). If true, the PID controller considers the max and min as the same value.
 
   public:
-    PIDMotor():motor(){
+    PID(){
       this->kP = 0;
       this->kI = 0;
       this->kD = 0;
@@ -40,7 +39,7 @@ class PIDMotor : public motor
       this->sampleTime = 10*(10^-3); //seconds
       this->continuous = true;
     }
-    PIDMotor(int motorPort, unsigned char encoderAddress, double kPInput, double kIInput, double kDInput, double kFInput):motor(motorPort,encoderAddress){
+    PID(double kPInput, double kIInput, double kDInput, double kFInput){
       this->kP = kPInput;
       this->kI = kIInput;
       this->kD = kDInput;
@@ -57,18 +56,9 @@ class PIDMotor : public motor
       this->continuous = false;
     }
 
-    void getSample(){
-      if((int)millis()<this->sampleTime){
-        this->set_count(imeGet(get_address(), get_pCount()));
-      }
-      if((int)millis()<(this->sampleTime)/2){
-        this->set_count(imeGet(get_address(),get_pCount()));
-      }
-    }
-
     double calculateOutput(double input, double dt){
-      if(dt < (10^-6)){
-        dt = 10^-6;
+      if(dt < (pow(10,-6))){
+        dt = pow(10,-6);
       }
       this->prevInput = input;
       this->error = (this->setPoint) - input;
@@ -90,7 +80,7 @@ class PIDMotor : public motor
       }
 
       double pError = abs(this->error)<(this->deadband) ? 0 : (this->error);
-      double dError = ((this->error)-(this->prevError))/(this->sampleTime);
+      double dError = ((this->error)-((this->prevError))/(this->sampleTime));
       this->output = ((this->kP)*pError) + ((this->kI)*(this->totalError)) + ((this->kD)*(dError));
       this->prevError = this->error;
 
@@ -102,21 +92,6 @@ class PIDMotor : public motor
       }
       return this->output;
     }
-
-    //control the motor to spin at a certain veloctiy
-    void velocityControl(int velocity){
-      this->setPoint = velocity;
-      float vError = (this->setPoint)-get_velocity();
-      if(abs(vError) < TOLERANCE){
-        //reached setPoint velocity
-      }
-    }
-
-    //control the motor to spin to a position
-    void positionControl(){
-      //float pError = this->
-    }
-
     void set_kP(double kPInput){
       this->kP = kPInput;
     }

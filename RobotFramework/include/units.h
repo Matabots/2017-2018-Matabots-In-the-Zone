@@ -67,6 +67,10 @@ double ticksToRotations(Encoder enc){
    }
  };
 
+ int rotationsToTicks(Encoder enc){
+   return encoderGet(enc)*360;
+ }
+
 /**
  * Convert ticks to inches
  * @method ticksToInches

@@ -59,14 +59,14 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
 
-  bot.get_drive()->leftPower(30);
-  bot.get_drive()->rightPower(30);
-
-
    bot.get_digital()->resetDriveEncoders();
 
   while(true)//operatingTime.GetTicks() < 10000)
   {
+
+    bot.get_drive()->leftPower(30);
+    bot.get_drive()->rightPower(30);
+
     //if(abs(ticksToInches(bot.get_digital()->get_LeftEncoder(),bot.get_drive()->get_wheelDiameter())) > 30){
     if(abs(bot.get_digital()->rightEncoderVal()) > 360){// 12 inches
       bot.get_drive()->leftPower(0);

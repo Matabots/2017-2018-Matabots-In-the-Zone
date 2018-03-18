@@ -12,7 +12,7 @@
 #include "motor.h"
 #include "ports.h"
 #include "potentiometer.h"
-#include "PIDMotor.h"
+#include "PID.h"
 // #include "utility/units.h"
 
 class robot{
@@ -25,7 +25,7 @@ class robot{
     control* remote;
     claw* ef;
     i2c* communications;
-    PIDMotor* aMotor;
+    motor* aMotor;
   public:
     //default constructor to allocate memory
     robot(){
@@ -36,7 +36,7 @@ class robot{
       this->ef = new claw();
       this->remote = new control(6, 5, 8);
       this->communications = new i2c();
-      this->aMotor = new PIDMotor();
+      this->aMotor = new motor();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
