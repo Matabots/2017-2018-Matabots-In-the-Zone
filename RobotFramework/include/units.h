@@ -19,6 +19,21 @@
 
 #define PI 3.141492653
 
+int imeVelocity(int velocity, motorType motor){
+  if(motor == TORQUE){//
+    return velocity/39.2;
+  }
+  if(motor == HIGHSPEED){
+    return velocity/24.5;
+  }
+  if(motor == TURBO){
+    return velocity/16.33;
+  }
+  else{
+    return 0;
+  }
+};
+
 double ticksToRotations(Encoder enc){
     return encoderGet(enc)/360;
 };
@@ -41,7 +56,7 @@ double ticksToRotations(Encoder enc){
      return ticks/261.333;
    }
    else{
-     return 10;
+     return 0;
    }
  };
 

@@ -5,9 +5,6 @@
 #include "motor.h"
 #include <vector>
 
-#define vP_GAIN 10.0 //gain for only proportinal controller
-#define vPROPORTIONAL_GAIN 3.48 //PID controller proportinal
-#define vINTEGRAL_CONST 896.9 //PID controller integral
 #define vSAMPLE_PERIOD 100  //Sample period for digital control
 class chassis{
 private:
@@ -20,7 +17,7 @@ public:
 
   chassis(){
     this->wheelDiameter = 4; //inches
-    this->chassisPID = new pid(1.0,0.0,0.0,0.0);
+    this->chassisPID = new pid(10,3.48,896.9,0.0);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;

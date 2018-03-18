@@ -52,15 +52,18 @@ public:
     this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
   };
 
-  void velocityControl(int setPoint,int dt){//pi
+
+  void velocityControlIME(int setPoint,int dt){
     velPID->set_setPoint(setPoint);
     double vel = (this->maxVel)*(velPID->calculateOutput(get_velocity(),dt));
     set_velocity((int)vel);
     //calculate velocity based on
-    double a0 = 1.0;
-    double b0 = (velPID->get_kP()*(1+dt/(2*(velPID->get_kI()))));
-    double b1 = (velPID->get_kP()*(dt/(2*(velPID->get_kI()))-1));
-    this->power = a0*(get_velocity())+b0*(velPID->get_error())+b1*(velPID->get_prevError());  //convert the velocity to motor power based on PID function
+    if(get_velocity() < velPID->get_setPoint()){
+      this->power = (this->power)+1; //increase the power if it's too weak
+    }
+    if(get_velocity() > velPID->get_setPoint()){
+      this->power = (this->power)-1; //increase the power if it's too weak
+    }
   };
 
   //control the motor to spin to a position
@@ -95,21 +98,13 @@ public:
   }
   int get_velocity(){
     if(imeGetVelocity(this->address, this->velocity)){
+      set_velocity(imeVelocity(*(this->velocity), this->type));
       return *(this->velocity);
     }else{
       printf("Unable to retrive velocity of encoder");
       return -1;
     };
   };  //control the motor to spin at a certain veloctiy
-  int get_motorType(){
-    return this->type;
-  }
-  void set_motorType(motorType mType){
-    this->type = mType;
-  }
-  unsigned char get_address(){
-    return this->address;
-  };
   int get_velocity(Encoder enc){
       int delta_ms;
       int delta_enc;
@@ -129,6 +124,15 @@ public:
       *(this->velocity) = ( motor_velocity );
       return *(this->velocity);
 
+  };
+  int get_motorType(){
+    return this->type;
+  }
+  void set_motorType(motorType mType){
+    this->type = mType;
+  }
+  unsigned char get_address(){
+    return this->address;
   };
   int* get_pVelocity(){
     return this->velocity;
