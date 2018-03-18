@@ -5,15 +5,22 @@
 #include "motor.h"
 #include <vector>
 
+#define vP_GAIN 10.0 //gain for only proportinal controller
+#define vPROPORTIONAL_GAIN 3.48 //PID controller proportinal
+#define vINTEGRAL_CONST 896.9 //PID controller integral
+#define vSAMPLE_PERIOD 100  //Sample period for digital control
 class chassis{
 private:
   std::vector<motor*> leftMotors;
   std::vector<motor*> rightMotors;
   int wheelDiameter;
+  float gearRatio;
+  pid* chassisPID;
 public:
 
   chassis(){
     this->wheelDiameter = 4; //inches
+    this->chassisPID = new pid(1.0,0.0,0.0,0.0);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -30,6 +37,7 @@ public:
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
     leftMotor->set_Direction(reverse);
+    leftMotor->set_velPID(this->chassisPID);
     // this->leftMotors.resize(this->leftMotors.size() + 1);
     this->leftMotors.push_back(leftMotor);
   };
@@ -37,6 +45,7 @@ public:
   void addRightMotor(int port, bool reverse){
     motor* rightMotor = new motor(port);
     rightMotor->set_Direction(reverse);
+    rightMotor->set_velPID(this->chassisPID);
     // this->rightMotors.resize(this->rightMotors.size() + 1);
     this->rightMotors.push_back(rightMotor);
   }

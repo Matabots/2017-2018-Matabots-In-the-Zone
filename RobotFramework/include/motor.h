@@ -1,13 +1,9 @@
 #ifndef MOTOR_H
 #define MOTOR_H
-#include <API.h>
+#include "API.h"
+#include "PID.h"
 #include "units.h"
-// typedef enum MotorType{
-
-// }MotorType;
-
 class motor{
-
 private:
 
   int port;
@@ -17,8 +13,11 @@ private:
   unsigned char address;
   int* count;
   int* velocity;
+  int maxVel;
   int prevTime; //previous millisecond value
   int prevCount;
+  pid* velPID;
+  pid* posPID;
 
 public:
 
@@ -26,45 +25,69 @@ public:
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
+    set_maxVel();
     this->prevTime = millis();
+    this->velPID = new pid();
+    this->posPID = new pid();
   };
-  motor(int motorPort){
+  motor(int motorPort, double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
     this->port = motorPort;
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
+    set_maxVel();
     this->prevTime = millis();
+    this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
+    this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
   };
-  motor(int motorPort, unsigned char encoderAddress){
+  motor(int motorPort, unsigned char encoderAddress, double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
     this->address = encoderAddress;
     this->port = motorPort;
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
+    set_maxVel();
     this->prevTime = millis();
+    this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
+    this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
   };
-  void velocityControl(int velocity){
-  //  this->setPoint = velocity;
-  //  float vError = (this->setPoint)-get_velocity();
-  //  if(abs(vError) < TOLERANCE){
-      //reached setPoint velocity
-  //  }
-  }
+
+  void velocityControl(int setPoint,int dt){//pi
+    velPID->set_setPoint(setPoint);
+    double vel = (this->maxVel)*(velPID->calculateOutput(get_velocity(),dt));
+    set_velocity((int)vel);
+    //calculate velocity based on
+    double a0 = 1.0;
+    double b0 = (velPID->get_kP()*(1+dt/(2*(velPID->get_kI()))));
+    double b1 = (velPID->get_kP()*(dt/(2*(velPID->get_kI()))-1));
+    this->power = a0*(get_velocity())+b0*(velPID->get_error())+b1*(velPID->get_prevError());  //convert the velocity to motor power based on PID function
+  };
 
   //control the motor to spin to a position
   void positionControl(){
     //float pError = this->
   }
-  void set_velocity(int velocity){
-    int max_vel = 100; //Torque: free spin [rpm]
+  void set_velPID(double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
+    this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
+  }
+  void set_velPID(pid* controller){
+    this->velPID = controller;
+  }
+  void set_maxVel(){
+    this->maxVel = 100; //Torque: free spin [rpm]
     if(this->type == HIGHSPEED){
-      max_vel = 160;
+      this->maxVel = 160;
     }
     if(this->type == TURBO){
-      max_vel = 240;
+      this->maxVel = 240;
     }
-    if(this->get_velocity() > max_vel){
-      *(this->velocity) = max_vel;
+  };
+  int get_maxVel(){
+    return this->maxVel;
+  }
+  void set_velocity(int velocity){
+    if(this->get_velocity() > this->maxVel){
+      *(this->velocity) = this->maxVel;
     }
     else{
       *(this->velocity) = velocity;
@@ -115,7 +138,7 @@ public:
   };
   void set_count(int inputCount){
     *(this->count) = inputCount;
-  }
+  };
   int get_count(){
     if(imeGet(this->address, this->count)){
       return *(this->count);

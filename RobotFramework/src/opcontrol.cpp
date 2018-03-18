@@ -59,8 +59,7 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
 
-   bot.get_digital()->resetDriveEncoders();
-
+  bot.get_digital()->resetDriveEncoders();
   while(true)//operatingTime.GetTicks() < 10000)
   {
 
