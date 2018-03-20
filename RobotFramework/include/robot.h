@@ -46,7 +46,7 @@ void setup(){
       this->analog->set_potentiometer(analog2);
       this->digital->set_RightEncoder(digital2, digital3, false);
       this->digital->set_LiftEncoder(digital11, digital12, false);
-      this->digital->set_LeftEncoder(digital8, digital9, false);
+      this->digital->set_LeftEncoder(digital9, digital8, false);
       this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, false);
       this->drive->addLeftMotor(motor8, false);

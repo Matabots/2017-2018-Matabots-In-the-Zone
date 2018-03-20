@@ -61,35 +61,12 @@ void operatorControl() {
   printf("Begin operatorControl\n");
   //int motor_velocity = 0;
   bot.get_digital()->resetDriveEncoders();
-  // int prevTime = 0;
-  // int prevEnc = 0;
-  // int delta_ms;
-  // double delta_enc;
-  // static  short   spd_table[10] = {0, 26, 58, 77, 85, 92, 95, 98, 100, 100};
-  // short   index;
-  // float   f, scale, speed;
-int motVel;
+  int motVel;
   while(true)//operatingTime.GetTicks() < 10000)
   {
     bot.get_drive()->leftPower(127);
     bot.get_drive()->rightPower(127);
-    // delta_ms = millis()-prevTime;
-    // prevTime = millis();
-    // delta_enc = (bot.get_digital()->leftEncoderVal())-prevEnc;
-    // prevEnc = (bot.get_digital()->leftEncoderVal());
-    // motor_velocity = (int)((1000.0*60 )/delta_ms)*(delta_enc/360);
-    // // index to tabke
-    // index =  abs( motor_velocity ) >> 4; // div by 16
-    // // fractional part indicates where we are between two table values
-    // f     = (abs( motor_velocity ) - (index << 4)) / 16.0;
-    //
-    // // assume motor is running at 90% of commanded speed
-    // // we really have no idea and if we set this too slow it will
-    // // just trip the current limiters.
-    // scale = (bot.get_drive()->getRightMotorAt(0).get_freeRPM()) / 100.0 * 0.90;
-    // speed = spd_table[index] + (spd_table[index+1] - spd_table[index]) * f;
-    //
-    // motor_velocity = (motor_velocity/abs(motor_velocity)) * (speed * scale);
+
     motVel =  bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
     lcdPrint(uart1, 2, "Vel: %d",motVel );//;
 

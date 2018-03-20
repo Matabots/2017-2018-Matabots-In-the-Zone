@@ -20,6 +20,7 @@ private:
   unsigned char address;
   int count;
   int velocity;
+  int targetVel;
   int freeRPM;
   int prevTime; //previous millisecond value
   int prevCount;
@@ -62,17 +63,33 @@ public:
     this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
   };
 
-
   void velocityControlIME(int setPoint,int dt){
     velPID->set_setPoint(setPoint);
     double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(),dt));
-    set_velocity((int)vel);
+    set_targetVelocity((int)vel);
     //calculate velocity based on
-    if(get_velocity() < velPID->get_setPoint()){
-      this->power = (this->power)+1; //increase the power if it's too weak
+    if(abs(get_velocity()-velPID->get_setPoint())>velPID->get_deadband()){
+      if(get_velocity() < get_targetVelocity()){
+        this->power = (this->power)+1; //increase the power if it's too weak
+      }
+      if(get_velocity() > get_targetVelocity()){
+        this->power = (this->power)-1; //increase the power if it's too weak
+      }
     }
-    if(get_velocity() > velPID->get_setPoint()){
-      this->power = (this->power)-1; //increase the power if it's too weak
+  };
+
+  void velocityControl(Encoder enc, int setPoint, int dt){
+    velPID->set_setPoint(setPoint);
+    double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(encoderGet(enc)),dt)); //set the velocity
+    set_targetVelocity((int)vel);
+    //calculate velocity based on
+    if(abs(get_velocity(encoderGet(enc))-velPID->get_setPoint())>velPID->get_deadband()){
+      if(get_velocity(encoderGet(enc)) < get_targetVelocity()){
+        this->power = (this->power)+1; //increase the power if it's too weak
+      }
+      if(get_velocity(encoderGet(enc)) > get_targetVelocity()){
+        this->power = (this->power)-1; //increase the power if it's too weak
+      }
     }
   };
 
@@ -80,18 +97,20 @@ public:
   void positionControl(){
     //float pError = this->
   }
-
-  void set_velocity(int velocity){
-    if(this->get_velocity() > this->freeRPM){
-      (this->velocity) = this->freeRPM;
+  void set_targetVelocity(int vel){
+    if(vel > this->freeRPM){
+      (this->targetVel) = this->freeRPM;
     }
     else{
-      (this->velocity) = velocity;
+      (this->targetVel) = vel;
     }
+  }
+  int get_targetVelocity(){
+    return this->targetVel;
   }
   int get_velocity(){
     if(imeGetVelocity(this->address, &this->velocity)){
-      set_velocity(imeVelocity((this->velocity), this->type));
+      this->velocity = imeVelocity((this->velocity), this->type);
       return (this->velocity);
     }else{
       printf("Unable to retrive velocity of encoder");
