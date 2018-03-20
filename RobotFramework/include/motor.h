@@ -20,7 +20,7 @@ private:
   unsigned char address;
   int count;
   int velocity;
-  int maxVel;
+  int freeRPM;
   int prevTime; //previous millisecond value
   int prevCount;
   pid* velPID;
@@ -32,8 +32,9 @@ public:
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
-    set_maxVel();
+    set_freeRPM();
     this->prevTime = millis();
+    this->prevCount = 0;
     this->velPID = new pid();
     this->posPID = new pid();
   };
@@ -42,8 +43,9 @@ public:
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
-    set_maxVel();
+    set_freeRPM();
     this->prevTime = millis();
+    this->prevCount = 0;
     this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
     this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
   };
@@ -52,8 +54,9 @@ public:
     this->port = motorPort;
     this->power = 0;
     this->reversed = false;
+    this->prevCount = 0;
     this->type = TORQUE;
-    set_maxVel();
+    set_freeRPM();
     this->prevTime = millis();
     this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
     this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
@@ -62,7 +65,7 @@ public:
 
   void velocityControlIME(int setPoint,int dt){
     velPID->set_setPoint(setPoint);
-    double vel = (this->maxVel)*(velPID->calculateOutput(get_velocity(),dt));
+    double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(),dt));
     set_velocity((int)vel);
     //calculate velocity based on
     if(get_velocity() < velPID->get_setPoint()){
@@ -79,8 +82,8 @@ public:
   }
 
   void set_velocity(int velocity){
-    if(this->get_velocity() > this->maxVel){
-      (this->velocity) = this->maxVel;
+    if(this->get_velocity() > this->freeRPM){
+      (this->velocity) = this->freeRPM;
     }
     else{
       (this->velocity) = velocity;
@@ -95,21 +98,24 @@ public:
       return -1;
     };
   };  //control the motor to spin at a certain veloctiy
+  double delta_ms;
+  double delta_enc;
+  int motor_velocity;
+  int ticks_per_rev; //encoder
+
   int get_velocity(int encoderValue){
-      double delta_ms;
-      double delta_enc;
-      float motor_velocity;
-      int ticks_per_rev = 360; //encoder
+      ticks_per_rev = 360;
       // Get current encoder value
       // how many mS since we were last here
-      delta_ms = (int)(millis()-(this->prevTime));
-      this->prevTime = (int)millis();
+      delta_ms = (int)(millis()-(prevTime));
+      this->prevTime = (int)(millis());
       // Change in encoder count
-      delta_enc = encoderValue - (this->prevCount);
+      delta_enc = encoderValue - (prevCount);
       // save last position
       this->prevCount = encoderValue;
+      //lcdPrint(uart1, 1, "dX:%d DX:%d dT:%d",this->prevCount, encoderValue, this->prevTime);
       // Calculate velocity in rpm
-       motor_velocity = ((1000.0*60 )/delta_ms)*(delta_enc/ticks_per_rev);
+      motor_velocity = ((1000.0*60 )/delta_ms)*(delta_enc/ticks_per_rev);
       // multiply by any gear ratio's being used
       this->velocity =  motor_velocity/2;
       return (this->velocity);
@@ -120,17 +126,17 @@ public:
   void set_velPID(pid* controller){
     this->velPID = controller;
   }
-  void set_maxVel(){
-    this->maxVel = 100; //Torque: free spin [rpm]
+  void set_freeRPM(){
+    this->freeRPM = 100; //Torque: free spin [rpm]
     if(this->type == HIGHSPEED){
-      this->maxVel = 160;
+      this->freeRPM = 160;
     }
     if(this->type == TURBO){
-      this->maxVel = 240;
+      this->freeRPM = 240;
     }
   };
-  int get_maxVel(){
-    return this->maxVel;
+  int get_freeRPM(){
+    return this->freeRPM;
   }
   int get_motorType(){
     return this->type;
