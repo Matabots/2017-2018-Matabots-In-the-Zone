@@ -40,7 +40,8 @@
  */
 
 void operatorControl() {
-
+    lcdInit(uart1);
+    lcdClear(uart1);
   robot bot = robot();
   bot.setup();
 
@@ -58,23 +59,29 @@ void operatorControl() {
   //use millis() for integrated timing
 
   printf("Begin operatorControl\n");
-
+  int motor_velocity = 0;
   bot.get_digital()->resetDriveEncoders();
+  int prevTime = 0;
+  int prevEnc = 0;
+  int delta_ms;
+  double delta_enc;
   while(true)//operatingTime.GetTicks() < 10000)
   {
+    bot.get_drive()->leftPower(127);
+    bot.get_drive()->rightPower(127);
+    delta_ms = millis()-prevTime;
+    prevTime = millis();
+    delta_enc = (bot.get_digital()->rightEncoderVal())-prevEnc;
+    prevEnc = (bot.get_digital()->rightEncoderVal());
+    motor_velocity = (int)((1000.0*60 )/delta_ms)*(delta_enc/360);
 
-    bot.get_drive()->leftPower(30);
-    bot.get_drive()->rightPower(30);
-
-    //if(abs(ticksToInches(bot.get_digital()->get_LeftEncoder(),bot.get_drive()->get_wheelDiameter())) > 30){
-    if(abs(bot.get_digital()->rightEncoderVal()) > 360){// 12 inches
-      bot.get_drive()->leftPower(0);
-      bot.get_drive()->rightPower(0);
-
-      // delay(10);
+    //lcdPrint(uart1, 1, "Vel: %d",bot.get_drive()->getRightMotorAt(0).get_velocity(bot.get_digital()->rightEncoderVal()));//;
+    if(motor_velocity/2 != 0){
+      lcdPrint(uart1, 1, "Vel: %d",(motor_velocity/2));
     }
+
     //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
-    printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
+    //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
     //bot.remoteListen();
     // printf("%d\n", bot.get_digital()->liftEncoderVal());
 
@@ -102,7 +109,7 @@ void operatorControl() {
     // }
     // motorSet(8, 100);
     // printf("%d\n", joystickGetAnalog(1, 1));
-    delay(50);
+    delay(25);
   }
   printf("The Program has Ended\n");
 

@@ -17,7 +17,8 @@ public:
 
   chassis(){
     this->wheelDiameter = 4; //inches
-    this->chassisPID = new pid(10,3.48,896.9,0.0);
+    //this->chassisPID = new pid(10,3.48,896.9,0.0);
+    this->chassisPID = new pid(1.0,0.0,0.0,0.0);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -31,6 +32,12 @@ public:
   void set_rightMotors(std::vector<motor*> motors){
     this->rightMotors = motors;
   };
+  motor getLeftMotorAt(int pos){
+    return *(this->leftMotors[pos]);
+  };
+  motor getRightMotorAt(int pos){
+    return *(this->rightMotors[pos]);
+  }
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
     leftMotor->set_Direction(reverse);

@@ -3,6 +3,13 @@
 #include "API.h"
 #include "PID.h"
 #include "units.h"
+#define SMLIB_I_FREE_393        0.2
+#define SMLIB_I_STALL_393       4.8
+#define SMLIB_RPM_FREE_393      110
+#define SMLIB_R_393             (7.2/SMLIB_I_STALL_393)
+#define SMLIB_L_393             0.000650
+#define SMLIB_Ke_393            (7.2*(1-SMLIB_I_FREE_393/SMLIB_I_STALL_393)/SMLIB_RPM_FREE_393)
+#define SMLIB_I_SAFE393         0.90
 class motor{
 private:
 
@@ -11,8 +18,8 @@ private:
   bool reversed;
   motorType type;
   unsigned char address;
-  int* count;
-  int* velocity;
+  int count;
+  int velocity;
   int maxVel;
   int prevTime; //previous millisecond value
   int prevCount;
@@ -70,6 +77,43 @@ public:
   void positionControl(){
     //float pError = this->
   }
+
+  void set_velocity(int velocity){
+    if(this->get_velocity() > this->maxVel){
+      (this->velocity) = this->maxVel;
+    }
+    else{
+      (this->velocity) = velocity;
+    }
+  }
+  int get_velocity(){
+    if(imeGetVelocity(this->address, &this->velocity)){
+      set_velocity(imeVelocity((this->velocity), this->type));
+      return (this->velocity);
+    }else{
+      printf("Unable to retrive velocity of encoder");
+      return -1;
+    };
+  };  //control the motor to spin at a certain veloctiy
+  int get_velocity(int encoderValue){
+      double delta_ms;
+      double delta_enc;
+      float motor_velocity;
+      int ticks_per_rev = 360; //encoder
+      // Get current encoder value
+      // how many mS since we were last here
+      delta_ms = (int)(millis()-(this->prevTime));
+      this->prevTime = (int)millis();
+      // Change in encoder count
+      delta_enc = encoderValue - (this->prevCount);
+      // save last position
+      this->prevCount = encoderValue;
+      // Calculate velocity in rpm
+       motor_velocity = ((1000.0*60 )/delta_ms)*(delta_enc/ticks_per_rev);
+      // multiply by any gear ratio's being used
+      this->velocity =  motor_velocity/2;
+      return (this->velocity);
+  };
   void set_velPID(double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
     this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
   }
@@ -88,43 +132,6 @@ public:
   int get_maxVel(){
     return this->maxVel;
   }
-  void set_velocity(int velocity){
-    if(this->get_velocity() > this->maxVel){
-      *(this->velocity) = this->maxVel;
-    }
-    else{
-      *(this->velocity) = velocity;
-    }
-  }
-  int get_velocity(){
-    if(imeGetVelocity(this->address, this->velocity)){
-      set_velocity(imeVelocity(*(this->velocity), this->type));
-      return *(this->velocity);
-    }else{
-      printf("Unable to retrive velocity of encoder");
-      return -1;
-    };
-  };  //control the motor to spin at a certain veloctiy
-  int get_velocity(Encoder enc){
-      int delta_ms;
-      int delta_enc;
-      float motor_velocity;
-      int ticks_per_rev = 360; //encoder
-      // Get current encoder value
-      // how many mS since we were last here
-      delta_ms = (int)(millis()-(this->prevTime));
-      prevTime = millis();
-      // Change in encoder count
-      delta_enc = encoderGet(enc) - (this->prevCount);
-      // save last position
-      this->prevCount = encoderGet(enc);
-      // Calculate velocity in rpm
-      motor_velocity = (1000.0 / delta_ms) * delta_enc * 60.0 / ticks_per_rev;
-      // multiply by any gear ratio's being used
-      *(this->velocity) = ( motor_velocity );
-      return *(this->velocity);
-
-  };
   int get_motorType(){
     return this->type;
   }
@@ -134,18 +141,12 @@ public:
   unsigned char get_address(){
     return this->address;
   };
-  int* get_pVelocity(){
-    return this->velocity;
-  };
-  int* get_pCount(){
-    return this->count;
-  };
   void set_count(int inputCount){
-    *(this->count) = inputCount;
+    (this->count) = inputCount;
   };
   int get_count(){
-    if(imeGet(this->address, this->count)){
-      return *(this->count);
+    if(imeGet(this->address, &this->count)){
+      return (this->count);
     }else{
       printf("Unable to retrive value of encoder");
       return -1;
