@@ -41,7 +41,6 @@
 
 void operatorControl() {
     lcdInit(uart1);
-    lcdClear(uart1);
   robot bot = robot();
   bot.setup();
 
@@ -64,12 +63,16 @@ void operatorControl() {
   int motVel;
   while(true)//operatingTime.GetTicks() < 10000)
   {
-    bot.get_drive()->leftPower(127);
-    bot.get_drive()->rightPower(127);
+    lcdClear(uart1);
+    //bot.get_drive()->leftPower(127);
+    bot.get_drive()->leftVelocity(bot.get_digital()->get_LeftEncoder(), 50);
 
-    motVel =  bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
-    lcdPrint(uart1, 2, "Vel: %d",motVel );//;
+    motVel = bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
 
+    lcdPrint(uart1, 1, "Vel: %d",motVel );//;
+    //lcdPrint(uart1, 2, "trgtVel: %d", bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
+
+    //lcdPrint(uart1,1, "trgtVel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
     //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
     //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
     //bot.remoteListen();

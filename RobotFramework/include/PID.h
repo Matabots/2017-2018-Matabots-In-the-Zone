@@ -57,7 +57,7 @@ class pid{
       this->continuous = false;
     };
 
-    double calculateOutput(double input, double dt){
+    double calculateOutput(double input, double dt){ //dt is in seconds
       if(dt < (pow(10,-6))){
         dt = pow(10,-6);
       }

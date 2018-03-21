@@ -34,6 +34,7 @@ public:
     this->reversed = false;
     this->type = TORQUE;
     set_freeRPM();
+    this->targetVel = 0;
     this->prevTime = millis();
     this->prevCount = 0;
     this->velPID = new pid();
@@ -45,6 +46,7 @@ public:
     this->reversed = false;
     this->type = TORQUE;
     set_freeRPM();
+    this->targetVel = 0;
     this->prevTime = millis();
     this->prevCount = 0;
     this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
@@ -54,6 +56,7 @@ public:
     this->address = encoderAddress;
     this->port = motorPort;
     this->power = 0;
+    this->targetVel =0;
     this->reversed = false;
     this->prevCount = 0;
     this->type = TORQUE;
@@ -63,7 +66,10 @@ public:
     this->posPID = new pid(kPInput,kIInput,kDInput,kFInput);
   };
 
-  void velocityControlIME(int setPoint,int dt){
+  void velocityControlIME(int setPoint){
+    int dt = millis()-prevTime;
+    dt = dt/1000;
+    this->prevTime = millis();
     velPID->set_setPoint(setPoint);
     double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(),dt));
     set_targetVelocity((int)vel);
@@ -76,21 +82,28 @@ public:
         this->power = (this->power)-1; //increase the power if it's too weak
       }
     }
+    set_Power(this->power);
   };
 
-  void velocityControl(Encoder enc, int setPoint, int dt){
-    velPID->set_setPoint(setPoint);
+  void velocityControl(Encoder enc, int setPoint){
+    int dt = millis()-prevTime;
+    dt = dt/1000;
+    this->prevTime = millis();
+    set_targetVelocity(setPoint);
+    velPID->set_setPoint(this->targetVel);
     double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(encoderGet(enc)),dt)); //set the velocity
     set_targetVelocity((int)vel);
     //calculate velocity based on
     if(abs(get_velocity(encoderGet(enc))-velPID->get_setPoint())>velPID->get_deadband()){
       if(get_velocity(encoderGet(enc)) < get_targetVelocity()){
         this->power = (this->power)+1; //increase the power if it's too weak
+
       }
       if(get_velocity(encoderGet(enc)) > get_targetVelocity()){
         this->power = (this->power)-1; //increase the power if it's too weak
       }
     }
+    set_Power(this->power);
   };
 
   //control the motor to spin to a position

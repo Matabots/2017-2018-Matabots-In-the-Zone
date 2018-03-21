@@ -18,7 +18,7 @@ public:
   chassis(){
     this->wheelDiameter = 4; //inches
     //this->chassisPID = new pid(10,3.48,896.9,0.0);
-    this->chassisPID = new pid(1.0,0.0,0.0,0.0);
+    this->chassisPID = new pid(10.0,0.0,0.0,0.0);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -55,17 +55,33 @@ public:
   }
 
   void leftPower(int power){
-    if(leftMotors[0]->get_Power() != power){
       for(int x=0;x<(int)(this->leftMotors.size());x++) {
         this->leftMotors[x]->set_Power(power);
       }
-    }
+
   };
 
   void rightPower(int power){
-    for(int x=0;x<(int)(this->rightMotors.size());x++) {
-      this->rightMotors[x]->set_Power(power);
-    }
+      for(int x=0;x<(int)(this->rightMotors.size());x++) {
+        this->rightMotors[x]->set_Power(power);
+      }
+
+  };
+
+  void leftVelocity(Encoder enc, int vel){
+  //  if(leftMotors[0]->get_velocity(encoderGet(enc)) != vel){
+      for(int x=0;x<(int)(this->leftMotors.size());x++) {
+        this->leftMotors[x]->set_targetVelocity(vel);
+        this->leftMotors[x]->velocityControl(enc, vel);
+      }
+  //  }
+  };
+
+  void rightVelocity(Encoder enc, int vel){
+      for(int x=0;x<(int)(this->rightMotors.size());x++) {
+        this->rightMotors[x]->velocityControl(enc, vel);
+      }
+
   };
 
   void haltLeft(){
