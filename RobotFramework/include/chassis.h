@@ -18,7 +18,7 @@ public:
   chassis(){
     this->wheelDiameter = 4; //inches
     //this->chassisPID = new pid(10,3.48,896.9,0.0);
-    this->chassisPID = new pid(10.0,0.0,0.0,0.0);
+    this->chassisPID = new pid(2.0,0.0,0.0,0.0);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -32,11 +32,11 @@ public:
   void set_rightMotors(std::vector<motor*> motors){
     this->rightMotors = motors;
   };
-  motor getLeftMotorAt(int pos){
-    return *(this->leftMotors[pos]);
+  motor* getLeftMotorAt(int pos){
+    return (this->leftMotors[pos]);
   };
-  motor getRightMotorAt(int pos){
-    return *(this->rightMotors[pos]);
+  motor* getRightMotorAt(int pos){
+    return (this->rightMotors[pos]);
   }
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
@@ -68,16 +68,15 @@ public:
 
   };
 
-  void leftVelocity(Encoder enc, int vel){
+  void leftVelocity(Encoder* enc, int vel){
   //  if(leftMotors[0]->get_velocity(encoderGet(enc)) != vel){
       for(int x=0;x<(int)(this->leftMotors.size());x++) {
-        this->leftMotors[x]->set_targetVelocity(vel);
         this->leftMotors[x]->velocityControl(enc, vel);
       }
   //  }
   };
 
-  void rightVelocity(Encoder enc, int vel){
+  void rightVelocity(Encoder* enc, int vel){
       for(int x=0;x<(int)(this->rightMotors.size());x++) {
         this->rightMotors[x]->velocityControl(enc, vel);
       }

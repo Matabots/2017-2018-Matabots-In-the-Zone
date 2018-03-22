@@ -30,15 +30,17 @@ class pid{
       this->kD = 0;
       this->kF = 0;
       this->setPoint = 0.0;
-      this->maxInput = 1.0;
-      this->minInput = -1.0;
+      this->maxInput = 120.0;
+      this->minInput = -100.0;
+      this->maxOutput = 100.0;
+      this->minOutput = -120.0;
       this->error = 0.0;
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 0.0;
-      this->sampleTime = 10*pow(10,-3); //seconds
-      this->continuous = true;
+      this->deadband = 5;
+      this->sampleTime = pow(10,-2); //seconds
+      this->continuous = false;
     };
     pid(double kPInput, double kIInput, double kDInput, double kFInput){
       this->kP = kPInput;
@@ -47,13 +49,15 @@ class pid{
       this->kF = kFInput;
       this->sampleTime = 10;
       this->setPoint = 0;
-      this->maxInput = 1.0;
-      this->minInput = -1.0;
+      this->maxInput = 100.0;
+      this->minInput = -100.0;
+      this->maxOutput = 120.0;
+      this->minOutput = -120.0;
       this->error = 0.0;
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 0.0;
+      this->deadband = 5;
       this->continuous = false;
     };
 
@@ -61,18 +65,19 @@ class pid{
       if(dt < (pow(10,-6))){
         dt = pow(10,-6);
       }
-      this->prevInput = input;
+
       this->error = (this->setPoint) - input;
-      if(continuous){
-        if(abs(this->error) > ((this->maxInput)-(this->minInput))/2){
-          if(this->error > 0){
-            this->error = (this->error)-(this->maxInput)+(this->minInput);
-          }
-          else{
-            this->error = (this->error)+(this->maxInput)-(this->minInput);
-          }
-        }
-      }
+
+      // if(continuous == true){
+      //   if(abs(this->error) > ((this->maxInput)-(this->minInput))/2){
+      //     if(this->error > 0){
+      //       this->error = (this->error)-(this->maxInput)+(this->minInput);
+      //     }
+      //     else{
+      //       this->error = (this->error)+(this->maxInput)-(this->minInput);
+      //     }
+      //   }
+      // }
 
       if((this->error)*(this->kP) < this->maxOutput && (this->error)*(this->kP) > this->minOutput){
         this->totalError += (this->error)*dt;
@@ -81,9 +86,12 @@ class pid{
       }
 
       double pError = abs(this->error)<(this->deadband) ? 0 : (this->error);
-      double dError = ((this->error)-((this->prevError))/(this->sampleTime));
-      this->output = ((this->kP)*pError) + ((this->kI)*(this->totalError)) + ((this->kD)*(dError));
+      double dError = ((this->error)-((this->prevError))/(dt));
+      this->output = ((this->kP)*pError) + ((this->kI)*(this->totalError)) + ((this->kD)*(dError) + (this->kF)*(this->setPoint));
+
+
       this->prevError = this->error;
+      this->prevInput = input;
 
       if((this->output)>(this->maxOutput)){
         this->output = this->maxOutput;
@@ -91,6 +99,8 @@ class pid{
       if((this->output)<(this->minOutput)){
         this->output = this->minOutput;
       }
+      //lcdPrint(uart1, 2, "out: %f", this->output);
+      lcdPrint(uart1,2,"kP: %f",this->kP);
       return this->output;
     };
     void set_kP(double kPInput){
@@ -131,11 +141,11 @@ class pid{
     };
     void set_setPoint(int target){
       if((this->maxInput)>(this->minInput)){
-        if(target > maxInput){
-          this->setPoint = maxInput;
+        if(target > this->maxInput){
+          this->setPoint = this->maxInput;
         }
-        else if(target < minInput){
-          this->setPoint = minInput;
+        else if(target < this->minInput){
+          this->setPoint = this->minInput;
         }
         else{
           this->setPoint = target;

@@ -64,12 +64,21 @@ void operatorControl() {
   while(true)//operatingTime.GetTicks() < 10000)
   {
     lcdClear(uart1);
-    //bot.get_drive()->leftPower(127);
-    bot.get_drive()->leftVelocity(bot.get_digital()->get_LeftEncoder(), 50);
+    //
+   // bot.get_drive()->leftPower(127);
+    bot.get_drive()->leftVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
+    bot.get_drive()->rightVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
+    delay(20);
 
-    motVel = bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
+    motVel = bot.get_drive()->getLeftMotorAt(0)->get_velocity(bot.get_digital()->get_pLeftEncoder());
 
-    lcdPrint(uart1, 1, "Vel: %d",motVel );//;
+    lcdPrint(uart1,1,"motVel:%d tV:%d", motVel,bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity());
+
+
+    // lcdPrint(uart1,1,"tV:%d,vel:%d",bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity(), motVel);
+
+    // lcdPrint(uart1,1,"tV: %d, vel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity(), motVel);
+    //lcdPrint(uart1, 1, "tV: %d vel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity(), motVel);//;
     //lcdPrint(uart1, 2, "trgtVel: %d", bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
 
     //lcdPrint(uart1,1, "trgtVel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
@@ -102,7 +111,7 @@ void operatorControl() {
     // }
     // motorSet(8, 100);
     // printf("%d\n", joystickGetAnalog(1, 1));
-    delay(25);
+    delay(50);
   }
   printf("The Program has Ended\n");
 

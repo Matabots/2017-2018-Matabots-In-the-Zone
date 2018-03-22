@@ -3,13 +3,7 @@
 #include "API.h"
 #include "PID.h"
 #include "units.h"
-#define SMLIB_I_FREE_393        0.2
-#define SMLIB_I_STALL_393       4.8
-#define SMLIB_RPM_FREE_393      110
-#define SMLIB_R_393             (7.2/SMLIB_I_STALL_393)
-#define SMLIB_L_393             0.000650
-#define SMLIB_Ke_393            (7.2*(1-SMLIB_I_FREE_393/SMLIB_I_STALL_393)/SMLIB_RPM_FREE_393)
-#define SMLIB_I_SAFE393         0.90
+
 class motor{
 private:
 
@@ -24,6 +18,7 @@ private:
   int freeRPM;
   int prevTime; //previous millisecond value
   int prevCount;
+  int sampleTime; //time it takes between reading values in seconds
   pid* velPID;
   pid* posPID;
 
@@ -33,12 +28,12 @@ public:
     this->power = 0;
     this->reversed = false;
     this->type = TORQUE;
-    set_freeRPM();
     this->targetVel = 0;
     this->prevTime = millis();
     this->prevCount = 0;
     this->velPID = new pid();
     this->posPID = new pid();
+    set_freeRPM();
   };
   motor(int motorPort, double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
     this->port = motorPort;
@@ -85,25 +80,26 @@ public:
     set_Power(this->power);
   };
 
-  void velocityControl(Encoder enc, int setPoint){
-    int dt = millis()-prevTime;
-    dt = dt/1000;
-    this->prevTime = millis();
+  void velocityControl(Encoder* enc, int setPoint){
+    // int mil = millis();
+    // double dt = mil-this->prevTime;
+    // this->prevTime = mil;
+    double dt = 50/1000;
     set_targetVelocity(setPoint);
-    velPID->set_setPoint(this->targetVel);
-    double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(encoderGet(enc)),dt)); //set the velocity
-    set_targetVelocity((int)vel);
+    this->velPID->set_setPoint(this->targetVel);
+    //lcdPrint(uart1, 2, "tV: %f", (double)this->velPID->get_setPoint());
+    this->velocity = get_velocity(enc);
+    double vel_output = this->velocity+(this->velPID->calculateOutput(this->velocity,dt));//*(this->freeRPM); //the speed of the robot
     //calculate velocity based on
-    if(abs(get_velocity(encoderGet(enc))-velPID->get_setPoint())>velPID->get_deadband()){
-      if(get_velocity(encoderGet(enc)) < get_targetVelocity()){
-        this->power = (this->power)+1; //increase the power if it's too weak
-
-      }
-      if(get_velocity(encoderGet(enc)) > get_targetVelocity()){
-        this->power = (this->power)-1; //increase the power if it's too weak
-      }
+    if(abs(this->velPID->get_setPoint()-(this->velocity)) > (this->velPID->get_deadband())){
+      // if(this->velocity < (get_targetVelocity())){
+      //   set_Power(this->power-1); //increase the power if it's too weak
+      // }
+      // else if(this->velocity > (get_targetVelocity())){
+      //   set_Power(this->power+1); //increase the power if it's too weak
+      // }
+      set_Power(vel_output);
     }
-    set_Power(this->power);
   };
 
   //control the motor to spin to a position
@@ -111,7 +107,7 @@ public:
     //float pError = this->
   }
   void set_targetVelocity(int vel){
-    if(vel > this->freeRPM){
+    if(vel >= this->freeRPM){
       (this->targetVel) = this->freeRPM;
     }
     else{
@@ -130,26 +126,28 @@ public:
       return -1;
     };
   };  //control the motor to spin at a certain veloctiy
-  double delta_ms;
-  double delta_enc;
-  int motor_velocity;
-  int ticks_per_rev; //encoder
 
-  int get_velocity(int encoderValue){
+
+  int get_velocity(Encoder* encoderValue){
+    double delta_ms;
+    double delta_enc;
+    double motor_velocity;
+    double ticks_per_rev; //encoder
       ticks_per_rev = 360;
       // Get current encoder value
       // how many mS since we were last here
-      delta_ms = (int)(millis()-(prevTime));
-      this->prevTime = (int)(millis());
+      double mil = millis();
+      delta_ms = (mil-(prevTime));
+      this->prevTime = (mil);
       // Change in encoder count
-      delta_enc = encoderValue - (prevCount);
+      delta_enc = encoderGet(*encoderValue) - (this->prevCount);
       // save last position
-      this->prevCount = encoderValue;
+      this->prevCount = encoderGet(*encoderValue);
       //lcdPrint(uart1, 1, "dX:%d DX:%d dT:%d",this->prevCount, encoderValue, this->prevTime);
       // Calculate velocity in rpm
       motor_velocity = ((1000.0*60 )/delta_ms)*(delta_enc/ticks_per_rev);
       // multiply by any gear ratio's being used
-      this->velocity =  motor_velocity/2;
+      this->velocity =  (int)(motor_velocity/2);
       return (this->velocity);
   };
   void set_velPID(double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
@@ -157,6 +155,9 @@ public:
   }
   void set_velPID(pid* controller){
     this->velPID = controller;
+  }
+  pid* get_velPID(){
+    return this->velPID;
   }
   void set_freeRPM(){
     this->freeRPM = 100; //Torque: free spin [rpm]
