@@ -64,13 +64,13 @@ void setup(){
   ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog2);
-      //this->digital->set_RightEncoder(digital2, digital3, false);
-      //this->digital->set_LiftEncoder(digital11, digital12, false);
-      //this->digital->set_LeftEncoder(digital8, digital9, true);
-      this->digital->set_coneLiftEncoder(digital4, digital5, false);
+      // this->digital->set_RightEncoder(digital2, digital3, false);
+      // this->digital->set_LiftEncoder(digital11, digital12, false);
+      // this->digital->set_LeftEncoder(digital8, digital9, true);
+      // this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, true);
       this->drive->addLeftMotor(motor3, false);
-      this->drive->addLeftMotor(motor4, false);
+      this->drive->addLeftMotor(motor4, true);
       this->drive->addRightMotor(motor7, true);
       this->drive->addRightMotor(motor8, false);
       this->drive->addRightMotor(motor9, false);

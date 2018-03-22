@@ -62,22 +62,18 @@ public:
   };
 
   void velocityControlIME(int setPoint){
-    int dt = millis()-prevTime;
-    dt = dt/1000;
-    this->prevTime = millis();
-    velPID->set_setPoint(setPoint);
-    double vel = (this->freeRPM)*(velPID->calculateOutput(get_velocity(),dt));
-    set_targetVelocity((int)vel);
+    // int dt = millis()-prevTime;
+    // dt = dt/1000;
+    // this->prevTime = millis();
+    double dt = 50/1000;
+    set_targetVelocity(setPoint);
+    this->velPID->set_setPoint(this->targetVel);
+    this->velocity = get_velocity();
+    double vel_output = this->velocity+(this->velPID->calculateOutput(this->velocity,dt));
     //calculate velocity based on
-    if(abs(get_velocity()-velPID->get_setPoint())>velPID->get_deadband()){
-      if(get_velocity() < get_targetVelocity()){
-        this->power = (this->power)+1; //increase the power if it's too weak
-      }
-      if(get_velocity() > get_targetVelocity()){
-        this->power = (this->power)-1; //increase the power if it's too weak
-      }
+    if(abs(this->velPID->get_setPoint()-(this->velocity))>(this->velPID->get_deadband())){
+      set_Power(vel_output);
     }
-    set_Power(this->power);
   };
 
   void velocityControl(Encoder* enc, int setPoint){
@@ -92,12 +88,6 @@ public:
     double vel_output = this->velocity+(this->velPID->calculateOutput(this->velocity,dt));//*(this->freeRPM); //the speed of the robot
     //calculate velocity based on
     if(abs(this->velPID->get_setPoint()-(this->velocity)) > (this->velPID->get_deadband())){
-      // if(this->velocity < (get_targetVelocity())){
-      //   set_Power(this->power-1); //increase the power if it's too weak
-      // }
-      // else if(this->velocity > (get_targetVelocity())){
-      //   set_Power(this->power+1); //increase the power if it's too weak
-      // }
       set_Power(vel_output);
     }
   };
@@ -118,7 +108,7 @@ public:
     return this->targetVel;
   }
   int get_velocity(){
-    if(imeGetVelocity(this->address, &this->velocity)){
+    if(imeGetVelocity(this->address,&this->velocity)){
       this->velocity = imeVelocity((this->velocity), this->type);
       return (this->velocity);
     }else{
@@ -180,6 +170,9 @@ public:
   unsigned char get_address(){
     return this->address;
   };
+  void set_address(unsigned char add){
+    this->address = add;
+  }
   void set_count(int inputCount){
     (this->count) = inputCount;
   };
