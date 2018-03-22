@@ -40,7 +40,7 @@
  */
 
 void operatorControl() {
-    lcdInit(uart1);
+  lcdInit(uart1);
   robot bot = robot();
   bot.setup();
 
@@ -59,20 +59,20 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
   //int motor_velocity = 0;
-  bot.get_digital()->resetDriveEncoders();
-  int motVel;
+  //bot.get_digital()->resetDriveEncoders();
+  //int motVel;
   while(true)//operatingTime.GetTicks() < 10000)
   {
     lcdClear(uart1);
     //
    // bot.get_drive()->leftPower(127);
-    bot.get_drive()->leftVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
-    bot.get_drive()->rightVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
-    delay(20);
-
-    motVel = bot.get_drive()->getLeftMotorAt(0)->get_velocity(bot.get_digital()->get_pLeftEncoder());
-
-    lcdPrint(uart1,1,"motVel:%d tV:%d", motVel,bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity());
+    // bot.get_drive()->leftVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
+    // bot.get_drive()->rightVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
+    // delay(20);
+    //
+    // motVel = bot.get_drive()->getLeftMotorAt(0)->get_velocity(bot.get_digital()->get_pLeftEncoder());
+    //
+    // lcdPrint(uart1,1,"motVel:%d tV:%d", motVel,bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity());
 
 
     // lcdPrint(uart1,1,"tV:%d,vel:%d",bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity(), motVel);
@@ -84,7 +84,9 @@ void operatorControl() {
     //lcdPrint(uart1,1, "trgtVel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
     //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
     //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
-    //bot.remoteListen();
+    bot.remoteListen();
+
+    lcdPrint(uart1,1, "left:%d right:%d",bot.get_drive()->getLeftMotorAt(0)->get_Power(),bot.get_drive()->getRightMotorAt(0)->get_Power());
     // printf("%d\n", bot.get_digital()->liftEncoderVal());
 
     // bot.smallLift();
