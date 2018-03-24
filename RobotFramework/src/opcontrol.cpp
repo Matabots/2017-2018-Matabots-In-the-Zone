@@ -16,7 +16,8 @@
 #include "../include/utility/drive.h"
 #include "../include/utility/arm.h"
 #include "../include/utility/motors.h"
-
+// #include <iostream>
+// #include <string>
 //required includes
 #include "main.h"
 #include "robot.h"
@@ -38,13 +39,28 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
+ // void i2cTest()
+ // {
+  //  robot Bot = robot();
+  //  i2c iSqC = i2c();
 
+  //  while(true)
+  //  {
+  //    printf("%d\n", Bot.get_digital()->liftEncoderVal());
+  //    delay(50);
+  //  }
+
+//
 void operatorControl() {
-  lcdInit(uart1);
-
-  int IMECount = imeInitializeAll();
+//     lcdInit(uart1);
+//     lcdClear(uart1);
   robot bot = robot();
   bot.setup();
+  i2c iSqC = i2c();
+  usartInit(uart1, 9600, SERIAL_DATABITS_8);
+  char* pntr;
+  pntr = (char*) malloc (sizeof(char)*1);
+  // std::string sauce = "";
 
   // motor newMotor = motor(motor2);
   // chassis newChassis = chassis();
@@ -60,43 +76,42 @@ void operatorControl() {
   //use millis() for integrated timing
 
   printf("Begin operatorControl\n");
-  lcdPrint(uart1,1,"imes:%d",IMECount);
-  delay(1000);
-  imeReset(0);
-  imeReset(1);
-  //int counts = 0;
-  //int motor_velocity = 0;
-  //bot.get_digital()->resetDriveEncoders();
-  //int motVel;
+  // //int motor_velocity = 0;
+  // bot.get_digital()->resetDriveEncoders();
+  // int motVel;
+
   while(true)//operatingTime.GetTicks() < 10000)
   {
-    lcdClear(uart1);
-    //
-     bot.get_drive()->leftVelocity(50);
-      bot.get_drive()->rightVelocity(50);
-    // bot.get_drive()->rightVelocity(bot.get_digital()->get_pLeftEncoder(), 50);
-    // delay(20);
-    //
-    // motVel = bot.get_drive()->getLeftMotorAt(0)->get_velocity(bot.get_digital()->get_pLeftEncoder());
-    //
-    // lcdPrint(uart1,1,"motVel:%d tV:%d", motVel,bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity());
-    lcdPrint(uart1,1,"motVel:%d",bot.get_drive()->getLeftMotorAt(0)->get_velocity());
-    //imeGet(1,&counts);
-    //lcdPrint(uart1,2,"counts:%d", counts);
+    // while(true)
+    // {
+      // printf("%d\n",iSqc.read();
+      fread(pntr,sizeof(char),1,uart1);
 
-    //bot.get_drive()->leftPower(100);
-    // lcdPrint(uart1,1,"tV:%d,vel:%d",bot.get_drive()->getLeftMotorAt(0)->get_targetVelocity(), motVel);
+      // for(x=0;x<3;x++){
+        printf("%c\n", pntr[0]);
+      // };
+if (pntr[0] == '&')
+{
+  //std::cout << sauce << '\n';
+  // sauce = "";
+}
+else
+{
+  //sauce += pntr[0];
+  //pntr[0] = '';
+}
+      //iSqC.read();
+      delay(50);
+    // }
+  //   bot.get_drive()->leftPower(127);
+  //   bot.get_drive()->rightPower(127);
+  //
+  //   motVel =  bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
+  //   lcdPrint(uart1, 2, "Vel: %d",motVel );//;
 
-    // lcdPrint(uart1,1,"tV: %d, vel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity(), motVel);
-    //lcdPrint(uart1, 1, "tV: %d vel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity(), motVel);//;
-    //lcdPrint(uart1, 2, "trgtVel: %d", bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
-
-    //lcdPrint(uart1,1, "trgtVel: %d",bot.get_drive()->getLeftMotorAt(0).get_targetVelocity());
     //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
     //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
     //bot.remoteListen();
-
-    //lcdPrint(uart1,1, "left:%d right:%d",bot.get_drive()->getLeftMotorAt(0)->get_Power(),bot.get_drive()->getRightMotorAt(0)->get_Power());
     // printf("%d\n", bot.get_digital()->liftEncoderVal());
 
     // bot.smallLift();
@@ -123,12 +138,8 @@ void operatorControl() {
     // }
     // motorSet(8, 100);
     // printf("%d\n", joystickGetAnalog(1, 1));
-<<<<<<< HEAD
-    delay(25); 
-=======
-    delay(50);
->>>>>>> 65b65709343b43aa68e3263556fe9f7b38a08d71
+  //   delay(25);
   }
-  printf("The Program has Ended\n");
+  // printf("The Program has Ended\n");
 
 }
