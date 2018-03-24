@@ -99,7 +99,7 @@ void operatorControl() {
     // }
     // motorSet(8, 100);
     // printf("%d\n", joystickGetAnalog(1, 1));
-    delay(25);
+    delay(25); 
   }
   printf("The Program has Ended\n");
 

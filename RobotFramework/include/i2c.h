@@ -41,7 +41,7 @@ public:
             // printf("ERROR: Failed to read sensor data from slave!\n");
         }
   }
-
+ 
   uint8_t* getData(){
     return this->data_in;
 
