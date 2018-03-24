@@ -33,7 +33,7 @@ class robot{
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new claw();
-      this->remote = new control(6, 5, 8);
+      this->remote = new control(7, 6, 5, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
     };
@@ -42,19 +42,42 @@ class robot{
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup(){
       //add motors, sensors, reset values for sensors here
+  ///////////////////////////////////////////
+  ////////////// BEA (OLD) ////////////////////////
+      // this->analog->set_gyro(analog8, 0);
+      // this->analog->set_potentiometer(analog2);
+      // this->digital->set_RightEncoder(digital2, digital3, false);
+      // this->digital->set_LiftEncoder(digital11, digital12, false);
+      // this->digital->set_LeftEncoder(digital8, digital9, true);
+      // this->digital->set_coneLiftEncoder(digital4, digital5, false);
+      // this->drive->addLeftMotor(motor2, false);
+      // this->drive->addLeftMotor(motor8, false);
+      // this->drive->addRightMotor(motor3, true);
+      // this->drive->addRightMotor(motor9, false);
+      // this->arm->addPrimaryLift(motor7, false);
+      // this->arm->addPrimaryLift(motor6, true);
+      // this->arm->addSecondaryLift(motor5, false);
+      // this->ef->set_Port(motor4);
+      // this->ef->set_Direction(false);
+
+  ///////////////////////////////////////////
+  ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog2);
-      this->digital->set_RightEncoder(digital2, digital3, false);
-      this->digital->set_LiftEncoder(digital11, digital12, false);
-      this->digital->set_LeftEncoder(digital9, digital8, false);
-      this->digital->set_coneLiftEncoder(digital4, digital5, false);
-      this->drive->addLeftMotor(motor2, false);
-      this->drive->addLeftMotor(motor8, false);
-      this->drive->addRightMotor(motor3, true);
+      // this->digital->set_RightEncoder(digital2, digital3, false);
+      // this->digital->set_LiftEncoder(digital11, digital12, false);
+      // this->digital->set_LeftEncoder(digital8, digital9, true);
+      // this->digital->set_coneLiftEncoder(digital4, digital5, false);
+      this->drive->addLeftMotor(motor2, true);
+      this->drive->addLeftMotor(motor3, false);
+      this->drive->addLeftMotor(motor4, true);
+      this->drive->addRightMotor(motor7, true);
+      this->drive->addRightMotor(motor8, false);
       this->drive->addRightMotor(motor9, false);
-      this->arm->addPrimaryLift(motor7, false);
-      this->arm->addPrimaryLift(motor6, true);
-      this->arm->addSecondaryLift(motor5, false);
+      //this->arm->addPrimaryLift(motor7, false);
+      //this->arm->addPrimaryLift(motor6, true);
+      //this->arm->addSecondaryLift(motor5, false);
+      this->arm->addGoalLift(motor5, false);
       this->ef->set_Port(motor4);
       this->ef->set_Direction(false);
 };
@@ -112,6 +135,7 @@ void setup(){
       clawButtons();
       bigLift();
       smallLift();
+      goalLift();
     };
     void joystickInputs(){
       rightJoystick();
@@ -150,7 +174,7 @@ void setup(){
         this->arm->primaryLiftPower(-100);
         delay(50);
       }else{
-        this->arm->haltGroupOne();
+        this->arm->haltPrimaryLift();
       }
     };
     void smallLift(){
@@ -162,10 +186,19 @@ void setup(){
         this->arm->secondaryLiftPower(100);
         delay(50);
       }else{
-        this->arm->haltGroupTwo();
+        this->arm->haltSecondaryLift();
       }
     };
-
+    void goalLift(){
+      if(this->remote->goalLiftUp()){
+        this->arm->goalLiftPower(100);
+      }else if(this->remote->goalLiftDown()){
+        this->arm->goalLiftPower(-100);
+        delay(50);
+      }else{
+        this->arm->haltGoalLift();
+      }
+    }
 
   // void smallLift(){
   //     if(this->remote->smallLiftUp()){

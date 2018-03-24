@@ -1,16 +1,18 @@
 #ifndef CONTROL_H
 #define CONTROL_H
-
+#include "API.h"
 class control{
 private:
     int bigLift;
     int smallLift;
+    int goalLifter;
     int claw;
 public:
-  control(int bigLift, int smallLift, int claw){
+  control(int bigLift, int smallLift, int goalLift, int claw){
       //setup all controller bindings here
       this->bigLift = bigLift;
       this->smallLift = smallLift;
+      this->goalLifter = goalLift;
       this->claw = claw;
     };
   //return functions here
@@ -32,6 +34,12 @@ public:
     int bigLiftDown(){
       return joystickGetDigital(1, this->bigLift, JOY_DOWN);
     };
+    int goalLiftUp(){
+      return joystickGetDigital(1,this->goalLifter, JOY_UP);
+    };
+    int goalLiftDown(){
+      return joystickGetDigital(1,this->goalLifter,JOY_DOWN);
+    }
     int rightJoystickVal(){
       return joystickGetAnalog(1, 2);
     };

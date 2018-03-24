@@ -11,6 +11,9 @@ class digitalSensors{
     Encoder rightEncoder;
     Encoder liftEncoder;
     Encoder coneLiftEncoder;
+
+
+
   public:
     digitalSensors(){
 
@@ -38,6 +41,9 @@ class digitalSensors{
     };
     Encoder get_LeftEncoder(){
       return this->leftEncoder;
+    };
+    Encoder* get_pLeftEncoder(){
+      return &this->leftEncoder;
     };
     int leftEncoderVal(){
       return encoderGet(this->leftEncoder);
