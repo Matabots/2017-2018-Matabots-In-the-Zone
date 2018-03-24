@@ -6,9 +6,9 @@ classifier: haarcascade_frontalface_default.xml from OpenCV library
 '''
 
 # load classifier
-faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+faceCascade = cv2.CascadeClassifier('lbpcascade_frontalface.xml')
 
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(1)
 
 while True:
     # Capture frame-by-frame
