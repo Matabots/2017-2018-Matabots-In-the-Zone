@@ -56,7 +56,7 @@ double ticksToRotations(Encoder enc){
      return ticks/261.333;
    }
    else{
-     return 0;
+     return 1/360;
    }
  };
 
@@ -78,7 +78,7 @@ double ticksToRotations(Encoder enc){
      return rotations*261.333;
    }
    else{
-     return 10;
+     return 360;
    }
  };
 

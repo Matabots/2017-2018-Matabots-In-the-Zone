@@ -13,6 +13,7 @@ private:
   motorType type;
   unsigned char address;
   int count;
+  int targetCount;
   int velocity;
   int targetVel;
   int freeRPM;
@@ -92,10 +93,20 @@ public:
     }
   };
 
-  //control the motor to spin to a position
-  void positionControl(){
-    //float pError = this->
+  //control the motor to spin to a target degree
+  void positionControlIME(double setPointDeg){
+    double dt = 50/1000;
+    double rotations = setPointDeg/360;
+    int setPointCount = rotationsToTicks(rotations, this->type);
+    set_targetCount(setPointCount);
+    this->posPID->set_setPoint(this->targetCount);
+    this->count = get_count();
+    double vel_output = this->posPID->calculateOutput(this->count, dt);
+    if(abs(this->posPID->get_setPoint()-(this->count)) > (this->posPID->get_deadband())){
+      set_Power(vel_output);
+    }
   }
+
   void set_targetVelocity(int vel){
     if(vel >= this->freeRPM){
       (this->targetVel) = this->freeRPM;
@@ -117,6 +128,12 @@ public:
     };
   };  //control the motor to spin at a certain veloctiy
 
+  int get_targetCount(){
+    return targetCount;
+  }
+  void set_targetCount(int tCount){
+    this->targetCount = tCount;
+  }
 
   int get_velocity(Encoder* encoderValue){
     double delta_ms;
@@ -176,6 +193,7 @@ public:
   void set_count(int inputCount){
     (this->count) = inputCount;
   };
+
   int get_count(){
     if(imeGet(this->address, &this->count)){
       return (this->count);
@@ -184,6 +202,7 @@ public:
       return -1;
     };
   };
+
   int get_prevCount(){
       return this->prevCount;
   };

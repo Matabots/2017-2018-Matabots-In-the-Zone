@@ -56,10 +56,10 @@ void operatorControl() {
 //     lcdClear(uart1);
   robot bot = robot();
   bot.setup();
-  i2c iSqC = i2c();
+/*  i2c iSqC = i2c();
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
-  pntr = (char*) malloc (sizeof(char)*1);
+  pntr = (char*) malloc (sizeof(char)*1);*/
   // std::string sauce = "";
 
   // motor newMotor = motor(motor2);
@@ -85,7 +85,10 @@ void operatorControl() {
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
-      fread(pntr,sizeof(char),1,uart1);
+
+
+////////////////// UART //////////////////////////////////////////////////////////////
+  /*    fread(pntr,sizeof(char),1,uart1);
 
       // for(x=0;x<3;x++){
         printf("%c\n", pntr[0]);
@@ -100,8 +103,11 @@ else
   //sauce += pntr[0];
   //pntr[0] = '';
 }
+*/
+////////////////////////////////////////////////////////////////////////////////////////
+
+
       //iSqC.read();
-      delay(50);
     // }
   //   bot.get_drive()->leftPower(127);
   //   bot.get_drive()->rightPower(127);
@@ -111,7 +117,7 @@ else
 
     //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
     //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
-    //bot.remoteListen();
+    bot.remoteListen();
     // printf("%d\n", bot.get_digital()->liftEncoderVal());
 
     // bot.smallLift();
@@ -139,6 +145,8 @@ else
     // motorSet(8, 100);
     // printf("%d\n", joystickGetAnalog(1, 1));
   //   delay(25);
+
+  delay(50);
   }
   // printf("The Program has Ended\n");
 
