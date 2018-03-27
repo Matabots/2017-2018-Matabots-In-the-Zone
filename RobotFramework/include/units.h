@@ -60,6 +60,9 @@ double ticksToRotations(Encoder enc){
    }
  };
 
+double ticksToDegrees(int ticks, motorType motor){
+  return ticksToRotations(ticks, motor)/360;
+}
 /**
  * Converts rotations to ticks
  * @method rotationsToTicks

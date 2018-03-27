@@ -12,13 +12,15 @@ private:
   std::vector<motor*> rightMotors;
   int wheelDiameter;
   float gearRatio;
-  pid* chassisPID;
+  pid* chassisVelPID;
+  pid* chassisPosPID;
 public:
 
   chassis(){
     this->wheelDiameter = 4; //inches
-    //this->chassisPID = new pid(10,3.48,896.9,0.0);
-    this->chassisPID = new pid(2.0,0.0,0.0,0.0);
+    //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
+    this->chassisVelPID = new pid(2.0,1.0,0.0,0.0);
+    this->chassisPosPID = new pid(0.0,0.0,0.0,0.0);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -41,7 +43,8 @@ public:
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
     leftMotor->set_Direction(reverse);
-    leftMotor->set_velPID(this->chassisPID);
+    leftMotor->set_velPID(this->chassisVelPID);
+    leftMotor->set_posPID(this->chassisPosPID);
     leftMotor->set_address(0);
     // this->leftMotors.resize(this->leftMotors.size() + 1);
     this->leftMotors.push_back(leftMotor);
@@ -50,7 +53,8 @@ public:
   void addRightMotor(int port, bool reverse){
     motor* rightMotor = new motor(port);
     rightMotor->set_Direction(reverse);
-    rightMotor->set_velPID(this->chassisPID);
+    rightMotor->set_velPID(this->chassisVelPID);
+    rightMotor->set_posPID(this->chassisPosPID);
     rightMotor->set_address(1);
     //this->rightMotors.resize(this->rightMotors.size() + 1);
     this->rightMotors.push_back(rightMotor);
@@ -96,6 +100,25 @@ public:
       for(int x=0;x<(int)(this->rightMotors.size());x++) {
         this->rightMotors[x]->velocityControlIME(vel);
       }
+  };
+
+  //
+  void leftPosition(int posInch){
+    int posDeg = 0;
+    for(int x=0;x<(int)(this->leftMotors.size());x++){
+      posDeg = inchesToTicks((double)(this->leftMotors[x]->get_count()), (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+      posDeg = ticksToDegrees(posDeg, this->leftMotors[x]->get_motorType());
+      this->leftMotors[x]->positionControlIME(posDeg);
+    }
+  };
+
+  void rightPosition(int posInch){
+    int posDeg = 0;
+    for(int x=0;x<(int)(this->rightMotors.size());x++){
+      posDeg = inchesToTicks((double)(this->rightMotors[x]->get_count()), (double)(this->wheelDiameter), this->rightMotors[x]->get_motorType());
+      posDeg = ticksToDegrees(posDeg, this->rightMotors[x]->get_motorType());
+      this->rightMotors[x]->positionControlIME(posDeg);
+    }
   };
 
   void haltLeft(){

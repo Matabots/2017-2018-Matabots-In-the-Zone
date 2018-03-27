@@ -62,11 +62,6 @@ void operatorControl() {
   pntr = (char*) malloc (sizeof(char)*1);*/
   // std::string sauce = "";
 
-  // motor newMotor = motor(motor2);
-  // chassis newChassis = chassis();
-  // control* remote = new control();
-  // newChassis.addLeftMotor(2, false);
-  // newChassis.addRightMotor(3, false);
 
   //bot.smallLift(100);
   //delay(100);
@@ -77,16 +72,20 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
-  // bot.get_digital()->resetDriveEncoders();
+  bot.get_digital()->resetDriveEncoders();
   // int motVel;
 
   while(true)//operatingTime.GetTicks() < 10000)
   {
+
+    //bot.remoteListen();
+
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
 
-
+      bot.get_drive()->leftPosition(10); //drive forward for 10 inches
+      
 ////////////////// UART //////////////////////////////////////////////////////////////
   /*    fread(pntr,sizeof(char),1,uart1);
 
@@ -117,7 +116,6 @@ else
 
     //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
     //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
-    bot.remoteListen();
     // printf("%d\n", bot.get_digital()->liftEncoderVal());
 
     // bot.smallLift();

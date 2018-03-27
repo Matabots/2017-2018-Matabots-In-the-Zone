@@ -61,23 +61,24 @@ class pid{
       this->continuous = false;
     };
 
-    double calculateOutput(double input, double dt){ //dt is in seconds
+    double calculateOutput(double input, double dt){ //dt is in milliseconds
+      dt = dt/1000;
       if(dt < (pow(10,-6))){
         dt = pow(10,-6);
       }
 
       this->error = (this->setPoint) - input;
 
-      // if(continuous == true){
-      //   if(abs(this->error) > ((this->maxInput)-(this->minInput))/2){
-      //     if(this->error > 0){
-      //       this->error = (this->error)-(this->maxInput)+(this->minInput);
-      //     }
-      //     else{
-      //       this->error = (this->error)+(this->maxInput)-(this->minInput);
-      //     }
-      //   }
-      // }
+      if(continuous == true){
+        if(abs(this->error) > ((this->maxInput)-(this->minInput))/2){
+          if(this->error > 0){
+            this->error = (this->error)-(this->maxInput)+(this->minInput);
+          }
+          else{
+            this->error = (this->error)+(this->maxInput)-(this->minInput);
+          }
+        }
+      }
 
       if((this->error)*(this->kP) < this->maxOutput && (this->error)*(this->kP) > this->minOutput){
         this->totalError += (this->error)*dt;

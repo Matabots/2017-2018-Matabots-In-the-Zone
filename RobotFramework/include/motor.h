@@ -3,6 +3,7 @@
 #include "API.h"
 #include "PID.h"
 #include "units.h"
+#include "motionProfile.h"
 
 class motor{
 private:
@@ -66,7 +67,7 @@ public:
     // int dt = millis()-prevTime;
     // dt = dt/1000;
     // this->prevTime = millis();
-    double dt = 50/1000;
+    double dt = 50;
     set_targetVelocity(setPoint);
     this->velPID->set_setPoint(this->targetVel);
     this->velocity = get_velocity();
@@ -81,7 +82,7 @@ public:
     // int mil = millis();
     // double dt = mil-this->prevTime;
     // this->prevTime = mil;
-    double dt = 50/1000;
+    double dt = 50;
     set_targetVelocity(setPoint);
     this->velPID->set_setPoint(this->targetVel);
     //lcdPrint(uart1, 2, "tV: %f", (double)this->velPID->get_setPoint());
@@ -95,7 +96,7 @@ public:
 
   //control the motor to spin to a target degree
   void positionControlIME(double setPointDeg){
-    double dt = 50/1000;
+    double dt = 50;
     double rotations = setPointDeg/360;
     int setPointCount = rotationsToTicks(rotations, this->type);
     set_targetCount(setPointCount);
@@ -103,7 +104,7 @@ public:
     this->count = get_count();
     double vel_output = this->posPID->calculateOutput(this->count, dt);
     if(abs(this->posPID->get_setPoint()-(this->count)) > (this->posPID->get_deadband())){
-      set_Power(vel_output);
+      velocityControlIME(vel_output);
     }
   }
 
@@ -166,6 +167,12 @@ public:
   pid* get_velPID(){
     return this->velPID;
   }
+  void set_posPID(pid* controller){
+    this->posPID = controller;
+  }
+  pid* get_posPID(){
+    return this->posPID;
+  }
   void set_freeRPM(){
     this->freeRPM = 100; //Torque: free spin [rpm]
     if(this->type == HIGHSPEED){
@@ -178,7 +185,7 @@ public:
   int get_freeRPM(){
     return this->freeRPM;
   }
-  int get_motorType(){
+  motorType get_motorType(){
     return this->type;
   }
   void set_motorType(motorType mType){
@@ -190,9 +197,6 @@ public:
   void set_address(unsigned char add){
     this->address = add;
   }
-  void set_count(int inputCount){
-    (this->count) = inputCount;
-  };
 
   int get_count(){
     if(imeGet(this->address, &this->count)){
@@ -208,11 +212,11 @@ public:
   };
   int get_prevTime(){
     return this->prevTime;
-  }
+  };
+
   void reset_encoder(){
     imeReset(this->address);
-  }
-
+  };
   void set_encoderPort(int encoderPort){
     this->address = encoderPort;
   };
