@@ -52,10 +52,15 @@
 
 //
 void operatorControl() {
-//     lcdInit(uart1);
-//     lcdClear(uart1);
+  //   lcdInit(uart2);
+    // lcdClear(uart2);
+
+  int count = imeInitializeAll();
+  printf("ime's: %d \n",count);
   robot bot = robot();
   bot.setup();
+  imeReset(0);
+  imeReset(1);
 /*  i2c iSqC = i2c();
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
@@ -72,7 +77,7 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
-  bot.get_digital()->resetDriveEncoders();
+  //bot.get_digital()->resetDriveEncoders();  //do not uncomment unless for external encoders
   // int motVel;
 
   while(true)//operatingTime.GetTicks() < 10000)
@@ -83,9 +88,13 @@ void operatorControl() {
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
+      //bot.get_drive()->rightVelocity(50); FUCK VELOCITY CONTROL UNTIL I GET TIME
+      //bot.get_drive()->leftVelocity(50);
+      bot.get_drive()->leftPosition(100);
+      //motorSet(motor8,80);
+      //motorSet(motor9,-80);
+      //bot.get_drive()->leftPosition(10); //drive forward for 10 inches
 
-      bot.get_drive()->leftPosition(10); //drive forward for 10 inches
-      
 ////////////////// UART //////////////////////////////////////////////////////////////
   /*    fread(pntr,sizeof(char),1,uart1);
 

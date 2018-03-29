@@ -3,7 +3,7 @@
 #include "API.h"
 #include "PID.h"
 #include "units.h"
-#include "motionProfile.h"
+//#include "motionProfile.h"
 
 class motor{
 private:
@@ -67,6 +67,7 @@ public:
     // int dt = millis()-prevTime;
     // dt = dt/1000;
     // this->prevTime = millis();
+    //set_Power(50);
     double dt = 50;
     set_targetVelocity(setPoint);
     this->velPID->set_setPoint(this->targetVel);
@@ -75,6 +76,8 @@ public:
     //calculate velocity based on
     if(abs(this->velPID->get_setPoint()-(this->velocity))>(this->velPID->get_deadband())){
       set_Power(vel_output);
+      printf("PID: %f \n",this->velPID->get_kP());
+      printf("trg: %d \n", setPoint);
     }
   };
 
@@ -102,9 +105,12 @@ public:
     set_targetCount(setPointCount);
     this->posPID->set_setPoint(this->targetCount);
     this->count = get_count();
+    // printf("PID: %f \n",this->posPID->get_kP());
+    // printf("trg: %f \n", setPointDeg);
     double vel_output = this->posPID->calculateOutput(this->count, dt);
     if(abs(this->posPID->get_setPoint()-(this->count)) > (this->posPID->get_deadband())){
-      velocityControlIME(vel_output);
+      set_Power(vel_output); //replace with velocity control when you get chance
+      printf("vel: %f \n",vel_output);
     }
   }
 

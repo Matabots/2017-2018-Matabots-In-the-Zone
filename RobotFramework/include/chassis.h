@@ -19,8 +19,9 @@ public:
   chassis(){
     this->wheelDiameter = 4; //inches
     //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
-    this->chassisVelPID = new pid(2.0,1.0,0.0,0.0);
-    this->chassisPosPID = new pid(0.0,0.0,0.0,0.0);
+    this->chassisVelPID = new pid(1.5,0.0,0.0,0.0);
+    this->chassisPosPID = new pid(0.85,0.0,0.0,0.0);//4.0,0,0
+                                                  //0.85,0,0 for gyro turn
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -104,19 +105,19 @@ public:
 
   //
   void leftPosition(int posInch){
-    int posDeg = 0;
+    printf("posIn: %d \n", posInch);
+    double posDeg;
     for(int x=0;x<(int)(this->leftMotors.size());x++){
-      posDeg = inchesToTicks((double)(this->leftMotors[x]->get_count()), (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
-      posDeg = ticksToDegrees(posDeg, this->leftMotors[x]->get_motorType());
-      this->leftMotors[x]->positionControlIME(posDeg);
+      posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+      printf("1st eq: %f \n", posDeg);
+    this->leftMotors[x]->positionControlIME(posDeg);
     }
   };
 
   void rightPosition(int posInch){
-    int posDeg = 0;
+    double posDeg = 0;
     for(int x=0;x<(int)(this->rightMotors.size());x++){
-      posDeg = inchesToTicks((double)(this->rightMotors[x]->get_count()), (double)(this->wheelDiameter), this->rightMotors[x]->get_motorType());
-      posDeg = ticksToDegrees(posDeg, this->rightMotors[x]->get_motorType());
+      posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
       this->rightMotors[x]->positionControlIME(posDeg);
     }
   };

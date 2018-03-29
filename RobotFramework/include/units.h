@@ -115,8 +115,9 @@ double ticksToDegrees(int ticks, motorType motor){
  * @return               Ticks
  */
 
-  int inchesToTicks(double ticks, double wheelDiameter, motorType motor) {
-      return rotationsToTicks(ticks, motor) * wheelDiameter * PI;
+  double inchesToDeg(double inches, double wheelDiameter, motorType motor) {
+      return (rotationsToTicks(1, motor)*inches)/(wheelDiameter * PI);
   };
+
 
 #endif /* INCLUDE_XDRIVE_H_ */
