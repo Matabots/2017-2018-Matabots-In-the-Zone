@@ -80,23 +80,29 @@ void operatorControl() {
   //bot.get_digital()->resetDriveEncoders();  //do not uncomment unless for external encoders
   // int motVel;
 
-  bot.get_drive()->leftPosition(50);
-  bot.get_drive()->rightPosition(50);
-  int timer = millis();
-  while(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() || millis() - timer < 500)//operatingTime.GetTicks() < 10000)
-  {
-    if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
-      timer = millis();
-    }
-    //bot.remoteListen();
+  // bot.get_drive()->leftPosition(50);
+  // bot.get_drive()->rightPosition(50);
+  // int timer = millis();
+  // while(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() || millis() - timer < 500)//operatingTime.GetTicks() < 10000)
+  // {
+  //   if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+  //     timer = millis();
+  //   }
+  //   bot.get_drive()->leftPosition(50);
+  //   bot.get_drive()->rightPosition(50);delay(50);
+  // }
+  // bot.get_drive()->rightPower(0);
+  // bot.get_drive()->leftPower(0);
+
+  while(true){
+    bot.remoteListen();
+  }
 
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
       //bot.get_drive()->rightVelocity(50); FUCK VELOCITY CONTROL UNTIL I GET TIME
       //bot.get_drive()->leftVelocity(50);
-      bot.get_drive()->leftPosition(50);
-      bot.get_drive()->rightPosition(50);
       //motorSet(motor8,80);
       //motorSet(motor9,-80);
       //bot.get_drive()->leftPosition(10); //drive forward for 10 inches
@@ -122,10 +128,7 @@ else
 
 
 
-  delay(50);
-  }
-  bot.get_drive()->rightPower(0);
-  bot.get_drive()->leftPower(0);
+
   // printf("The Program has Ended\n");
 
 }

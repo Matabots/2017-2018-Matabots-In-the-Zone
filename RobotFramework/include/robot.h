@@ -33,7 +33,7 @@ class robot{
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new claw();
-      this->remote = new control(7, 6, 5, 8);
+      this->remote = new control(6, 7, 5, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
     };
@@ -72,12 +72,12 @@ void setup(){
       this->drive->addLeftMotor(motor3, true);
       this->drive->addRightMotor(motor8, false);
       this->drive->addRightMotor(motor9, true);
-      //this->arm->addPrimaryLift(motor7, false);
-      //this->arm->addPrimaryLift(motor6, true);
-      //this->arm->addSecondaryLift(motor5, false);
+      this->arm->addPrimaryLift(motor4, false);
+      this->arm->addPrimaryLift(motor7, true);
+      this->arm->addSecondaryLift(motor5, false);
+      this->arm->addSecondaryLift(motor6, true);
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);
-      this->ef->set_Port(motor4);
       this->ef->set_Direction(false);
 };
 
