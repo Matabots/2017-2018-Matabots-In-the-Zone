@@ -19,6 +19,21 @@
 
 #define PI 3.141492653
 
+double getTypeTicks(motorType motor){
+  if(motor == TORQUE){
+    return 627.2;
+  }
+  if(motor == HIGHSPEED){
+    return 392;
+  }
+  if(motor == TURBO){
+    return 261.333;
+  }
+  else{
+    return 360;
+  }
+};
+
 int imeVelocity(int velocity, motorType motor){
   if(motor == TORQUE){//
     return velocity/39.2;
@@ -116,8 +131,11 @@ double ticksToDegrees(int ticks, motorType motor){
  */
 
   double inchesToDeg(double inches, double wheelDiameter, motorType motor) {
-      return (rotationsToTicks(1, motor)*inches)/(wheelDiameter * PI);
+      return (360*inches)/(wheelDiameter * PI);
   };
+  double degToInches(double deg, double wheelDiameter){
+    return (wheelDiameter*PI*deg)/360;
+  }
 
 
 #endif /* INCLUDE_XDRIVE_H_ */

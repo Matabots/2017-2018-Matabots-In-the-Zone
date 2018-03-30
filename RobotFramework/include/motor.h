@@ -11,6 +11,7 @@ private:
   int port;
   int power;
   bool reversed;
+  bool imeReversed;
   motorType type;
   unsigned char address;
   int count;
@@ -29,6 +30,7 @@ public:
   motor(){
     this->power = 0;
     this->reversed = false;
+    this->imeReversed = false;
     this->type = TORQUE;
     this->targetVel = 0;
     this->prevTime = millis();
@@ -41,6 +43,7 @@ public:
     this->port = motorPort;
     this->power = 0;
     this->reversed = false;
+    this->imeReversed = false;
     this->type = TORQUE;
     set_freeRPM();
     this->targetVel = 0;
@@ -55,6 +58,7 @@ public:
     this->power = 0;
     this->targetVel =0;
     this->reversed = false;
+    this->imeReversed = false;
     this->prevCount = 0;
     this->type = TORQUE;
     set_freeRPM();
@@ -102,15 +106,17 @@ public:
     double dt = 50;
     double rotations = setPointDeg/360;
     int setPointCount = rotationsToTicks(rotations, this->type);
+
     set_targetCount(setPointCount);
+    printf("setPt: %d \n", this->targetCount);
     this->posPID->set_setPoint(this->targetCount);
     this->count = get_count();
-    // printf("PID: %f \n",this->posPID->get_kP());
-    // printf("trg: %f \n", setPointDeg);
+    // // printf("PID: %f \n",this->posPID->get_kP());
+    // // printf("trg: %f \n", setPointDeg);
     double vel_output = this->posPID->calculateOutput(this->count, dt);
     if(abs(this->posPID->get_setPoint()-(this->count)) > (this->posPID->get_deadband())){
       set_Power(vel_output); //replace with velocity control when you get chance
-      printf("vel: %f \n",vel_output);
+    //  printf("vel: %f \n",vel_output);
     }
   }
 
@@ -203,19 +209,33 @@ public:
   void set_address(unsigned char add){
     this->address = add;
   }
+  bool get_imeReversed(){
+    return this->imeReversed;
+  };
+  void set_imeReversed(bool val){
+    this->imeReversed = true;
+  };
 
   int get_count(){
-    if(imeGet(this->address, &this->count)){
-      return (this->count);
-    }else{
+    if(!(this->imeReversed)){
+      if(imeGet(this->address, &this->count)){
+        return (this->count);
+      }
+    }
+    else if(this->imeReversed){
+      if(imeGet(this->address, &this->count)){
+        return (-this->count);
+      }
+    }
       printf("Unable to retrive value of encoder");
       return -1;
-    };
+
   };
 
   int get_prevCount(){
       return this->prevCount;
   };
+
   int get_prevTime(){
     return this->prevTime;
   };
@@ -255,6 +275,9 @@ public:
   };
   int get_Speed(){
     return motorGet(this->port);
+  };
+  void set_type(motorType motor){
+    this->type = motor;
   };
 };
 #endif

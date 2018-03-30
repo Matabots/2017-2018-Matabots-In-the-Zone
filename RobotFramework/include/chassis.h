@@ -20,8 +20,9 @@ public:
     this->wheelDiameter = 4; //inches
     //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
     this->chassisVelPID = new pid(1.5,0.0,0.0,0.0);
-    this->chassisPosPID = new pid(0.85,0.0,0.0,0.0);//4.0,0,0
-                                                  //0.85,0,0 for gyro turn
+    this->chassisPosPID = new pid(0.3,0.0,-0.01,0.0);//4.0,0,0
+                            //0.45                      //0.85,0,0 for gyro turn
+    this->chassisPosPID->set_deadband(50);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -44,6 +45,7 @@ public:
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
     leftMotor->set_Direction(reverse);
+    leftMotor->set_type(TURBO);
     leftMotor->set_velPID(this->chassisVelPID);
     leftMotor->set_posPID(this->chassisPosPID);
     leftMotor->set_address(0);
@@ -54,8 +56,10 @@ public:
   void addRightMotor(int port, bool reverse){
     motor* rightMotor = new motor(port);
     rightMotor->set_Direction(reverse);
+    rightMotor->set_type(TURBO);
     rightMotor->set_velPID(this->chassisVelPID);
     rightMotor->set_posPID(this->chassisPosPID);
+    rightMotor->set_imeReversed(true);
     rightMotor->set_address(1);
     //this->rightMotors.resize(this->rightMotors.size() + 1);
     this->rightMotors.push_back(rightMotor);
@@ -105,17 +109,18 @@ public:
 
   //
   void leftPosition(int posInch){
-    printf("posIn: %d \n", posInch);
+  printf("leftPos: %d\n",this->leftMotors[0]->get_count());
     double posDeg;
     for(int x=0;x<(int)(this->leftMotors.size());x++){
-      posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
-      printf("1st eq: %f \n", posDeg);
+    posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+    //printf("posDeg: %f \n", posDeg);
     this->leftMotors[x]->positionControlIME(posDeg);
     }
   };
 
   void rightPosition(int posInch){
     double posDeg = 0;
+    printf("rightPos: %d\n",this->rightMotors[0]->get_count());
     for(int x=0;x<(int)(this->rightMotors.size());x++){
       posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
       this->rightMotors[x]->positionControlIME(posDeg);

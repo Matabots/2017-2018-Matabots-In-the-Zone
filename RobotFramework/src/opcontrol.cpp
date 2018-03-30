@@ -80,9 +80,14 @@ void operatorControl() {
   //bot.get_digital()->resetDriveEncoders();  //do not uncomment unless for external encoders
   // int motVel;
 
-  while(true)//operatingTime.GetTicks() < 10000)
+  bot.get_drive()->leftPosition(50);
+  bot.get_drive()->rightPosition(50);
+  int timer = millis();
+  while(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() || millis() - timer < 500)//operatingTime.GetTicks() < 10000)
   {
-
+    if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+      timer = millis();
+    }
     //bot.remoteListen();
 
     // while(true)
@@ -90,7 +95,8 @@ void operatorControl() {
       // printf("%d\n",iSqc.read();
       //bot.get_drive()->rightVelocity(50); FUCK VELOCITY CONTROL UNTIL I GET TIME
       //bot.get_drive()->leftVelocity(50);
-      bot.get_drive()->leftPosition(100);
+      bot.get_drive()->leftPosition(50);
+      bot.get_drive()->rightPosition(50);
       //motorSet(motor8,80);
       //motorSet(motor9,-80);
       //bot.get_drive()->leftPosition(10); //drive forward for 10 inches
@@ -115,46 +121,11 @@ else
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-      //iSqC.read();
-    // }
-  //   bot.get_drive()->leftPower(127);
-  //   bot.get_drive()->rightPower(127);
-  //
-  //   motVel =  bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
-  //   lcdPrint(uart1, 2, "Vel: %d",motVel );//;
-
-    //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
-    //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
-    // printf("%d\n", bot.get_digital()->liftEncoderVal());
-
-    // bot.smallLift();
-    // if(remote->absLeftJoystickVal() > 15){
-    //   newChassis.leftPower(remote->leftJoystickVal());
-    // }else{
-    //   newChassis.haltLeft();
-    // };
-    //
-    // if(joystickGetAnalog(1, 2) > 15 || joystickGetAnalog(1, 2) < -15){
-    //   newChassis.rightPower(joystickGetAnalog(1, 2));
-    // }else{
-    //   newChassis.haltRight();
-    // };
-
-    // newMotor.set_Power(100);
-    // if(joystickGetAnalog(1, 4) > 15){
-      // motorSet(motor8, joystickGetAnalog(1, 3));
-      // motorSet(motor2, (joystickGetAnalog(1, 3)));
-    // }
-    // if(joystickGetAnalog(1, 2) > 15){
-      // motorSet(motor3, joystickGetAnalog(1, 2) * -1);
-      // motorSet(motor9, (joystickGetAnalog(1, 2)));
-    // }
-    // motorSet(8, 100);
-    // printf("%d\n", joystickGetAnalog(1, 1));
-  //   delay(25);
 
   delay(50);
   }
+  bot.get_drive()->rightPower(0);
+  bot.get_drive()->leftPower(0);
   // printf("The Program has Ended\n");
 
 }

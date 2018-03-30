@@ -1,8 +1,9 @@
 #ifndef PID_H
 #define PID_H
+
 #include "API.h"
 #include "math.h"
-
+#include <limits>
 class pid{
   private:
     double kP;
@@ -30,8 +31,10 @@ class pid{
       this->kD = 0;
       this->kF = 0;
       this->setPoint = 0.0;
-      this->maxInput = 120.0;
-      this->minInput = -100.0;
+
+      this->maxInput = std::numeric_limits<int>::max();//120.0;
+      this->minInput = std::numeric_limits<int>::min();//-100.0;
+
       this->maxOutput = 100.0;
       this->minOutput = -120.0;
       this->error = 0.0;
@@ -49,8 +52,10 @@ class pid{
       this->kF = kFInput;
       this->sampleTime = 10;
       this->setPoint = 0;
-      this->maxInput = 100.0;
-      this->minInput = -100.0;
+
+      this->maxInput = std::numeric_limits<int>::max();// 100.0;
+      this->minInput = std::numeric_limits<int>::min();// -100.0;
+
       this->maxOutput = 120.0;
       this->minOutput = -120.0;
       this->error = 0.0;
@@ -183,6 +188,10 @@ class pid{
     double get_prevInput(){
       return this->prevInput;
     };
+    void set_maxMinInput(int max,int min){
+      this->maxInput = max;
+      this->minInput = min;
+    }
     void set_continuous(bool val){
       this->continuous = val;
     };
