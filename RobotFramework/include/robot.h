@@ -64,8 +64,8 @@ void setup(){
   ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog2);
-      //this->digital->set_RightEncoder(digital2, digital3, false);
-      //this->digital->set_LiftEncoder(digital11, digital12, false);
+      this->digital->set_leftLiftEncoder(digital9, digital10, false);
+      this->digital->set_rightLiftEncoder(digital11, digital12, false);
       //this->digital->set_LeftEncoder(digital8, digital9, true);
       // this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, false);
@@ -79,6 +79,10 @@ void setup(){
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);
       this->ef->set_Direction(false);
+      ///////////////////////////////////////////
+      ////////////// CSUN2  ////////////////////////
+      //Dinero add your setup code here
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -78,6 +78,7 @@ void operatorControl() {
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
   //bot.get_digital()->resetDriveEncoders();  //do not uncomment unless for external encoders
+  //bot.get_digital()->resetLiftEncoders();
   // int motVel;
 
   // bot.get_drive()->leftPosition(50);
@@ -96,6 +97,9 @@ void operatorControl() {
 
   while(true){
     bot.remoteListen();
+  //  printf("leftEnc: %d  rightEnc: %d",bot.get_digital()->leftEncoderVal(), bot.get_digital()->rightEncoderVal());
+    //printf("leftEnc: %d",bot.get_digital()->leftEncoderVal());
+    delay(50);
   }
 
     // while(true)

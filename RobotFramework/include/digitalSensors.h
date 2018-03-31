@@ -9,7 +9,8 @@ class digitalSensors{
   private:
     Encoder leftEncoder;
     Encoder rightEncoder;
-    Encoder liftEncoder;
+    Encoder rightLiftEncoder;
+    Encoder leftLiftEncoder;
     Encoder coneLiftEncoder;
 
 
@@ -27,15 +28,26 @@ class digitalSensors{
     int coneLiftEncoderVal(){
       return encoderGet(this->coneLiftEncoder);
     };
-    void set_LiftEncoder(int port1, int port2, bool direction){
-      this->liftEncoder = encoderInit(port1, port2, direction);
+    void set_leftLiftEncoder(int port1, int port2, bool direction){
+      this->leftLiftEncoder = encoderInit(port1, port2, direction);
     };
-    Encoder get_LiftEncoder(){
-      return this->liftEncoder;
+    Encoder get_leftLiftEncoder(){
+      return this->leftLiftEncoder;
     };
-    int liftEncoderVal(){
-      return encoderGet(this->liftEncoder);
+    int leftLiftEncoderVal(){
+      return encoderGet(this->leftLiftEncoder);
     };
+
+    void set_rightLiftEncoder(int port1, int port2, bool direction){
+      this->rightLiftEncoder = encoderInit(port1, port2, direction);
+    };
+    Encoder get_rightLiftEncoder(){
+      return this->rightLiftEncoder;
+    };
+    int rightLiftEncoderVal(){
+      return encoderGet(this->rightLiftEncoder);
+    };
+
     void set_LeftEncoder(int port1, int port2, bool direction){
       this->leftEncoder = encoderInit(port1, port2, direction);
     };
@@ -61,8 +73,9 @@ class digitalSensors{
       encoderReset(this->leftEncoder);
       encoderReset(this->rightEncoder);
     };
-    void resetLiftEncoder(){
-      encoderReset(this->liftEncoder);
+    void resetLiftEncoders(){
+      encoderReset(this->rightLiftEncoder);
+      encoderReset(this->leftLiftEncoder);
     };
 
     void printEncoderValues(){
