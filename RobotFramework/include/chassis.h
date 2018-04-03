@@ -27,6 +27,7 @@ public:
     this->chassisPosPID->set_deadband(75);
     this->currPos.x = 0;
     this->currPos.y = 0;
+    waypoints = new path(currPos);
   };
   void updatePos(){
     this->currPos.x = this->currPos.x + ticksToInches(((this->getLeftMotorAt(0)->get_count())-this->getLeftMotorAt(0)->get_prevCount()),this->wheelDiameter,this->getLeftMotorAt(0)->get_motorType());

@@ -33,7 +33,9 @@ public:
   std::vector<CartesianVector> get_waypointList(){
     return this->waypointList;
   };
-
+  int size(){
+    return this->waypointList.size();
+  }
   void addWaypoint(CartesianVector vector){
     this->waypointList.push_back(vector);
   };
@@ -47,22 +49,15 @@ public:
     if(abs(step) > abs(this->maxStep)){
       step = this->maxStep;
     }
-    int length = sqrt(pow(abs(xShift),2)+pow(abs(yShift),2))/step;
+    int length = (int)(sqrt(pow(abs(xShift),2)+pow(abs(yShift),2))/step);
     xShift = (xShift/abs(xShift))*step;
     yShift = (yShift/abs(yShift))*step;
-    CartesianVector posx[length];
-    CartesianVector posy[length];
-    std::vector<CartesianVector> tempList;
+
+    CartesianVector tempPos;
     for(int i =0;i<length;i++){
-       tempList[i].x = posx[i].x;
-       tempList[i].y = posy[i].y;
-    }
-    tempList[0] = pos;
-    for(int i=1; i < (int)tempList.size(); i++)
-    {
-        tempList[i].x = tempList[i-1].x+xShift;
-        tempList[i].y = tempList[i-1].y+yShift;
-        addWaypoint(tempList[i]);
+        tempPos.x += xShift;
+        tempPos.y += yShift;
+        addWaypoint(pos);
     }
   };
 
