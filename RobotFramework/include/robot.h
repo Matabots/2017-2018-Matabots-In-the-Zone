@@ -13,6 +13,7 @@
 #include "motor.h"
 #include "ports.h"
 #include "potentiometer.h"
+#include "path.h"
 // #include "utility/units.h"
 
 class robot{

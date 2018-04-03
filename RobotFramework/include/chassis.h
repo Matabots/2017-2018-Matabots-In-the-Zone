@@ -128,7 +128,6 @@ public:
   };
 
   void haltLeft(){
-
     for(std::vector<motor>::size_type i = 0; i != this->leftMotors.size(); i++) {
       this->leftMotors[i]->set_Power(0);
     }

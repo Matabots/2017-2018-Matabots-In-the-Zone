@@ -16,11 +16,13 @@
 typedef struct CartesianVector {
   double x;
   double y;
+  int timeStamp;
 } CartesianVector;
 
 typedef struct PolarVector {
   double r;
   double angle;
+  int timeStamp;
 } PolarVector;
 
 /**
