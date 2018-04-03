@@ -6,21 +6,21 @@ private:
     int bigLift;
     int smallLift;
     int goalLifter;
-    int claw;
+    int roller;
 public:
-  control(int bigLift, int smallLift, int goalLift, int claw){
+  control(int bigLift, int smallLift, int goalLift, int roller){
       //setup all controller bindings here
       this->bigLift = bigLift;
       this->smallLift = smallLift;
       this->goalLifter = goalLift;
-      this->claw = claw;
+      this->roller = roller;
     };
   //return functions here
-    int clawOpen(){
-      return joystickGetDigital(1, this->claw, JOY_UP);
+    int rollerOpen(){
+      return joystickGetDigital(1, this->roller, JOY_UP);
     };
-    int clawClose(){
-      return joystickGetDigital(1, this->claw, JOY_RIGHT);
+    int rollerClose(){
+      return joystickGetDigital(1, this->roller, JOY_DOWN);
     };
     int smallLiftUp(){
       return joystickGetDigital(1, this->smallLift, JOY_UP);

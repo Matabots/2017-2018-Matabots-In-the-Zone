@@ -7,6 +7,7 @@
 #include "lift.h"
 #include "control.h"
 #include "claw.h"
+#include "roller.h"
 #include "i2c.h"
 #include <vector>
 #include "motor.h"
@@ -22,7 +23,7 @@ class robot{
     chassis* drive;
     lift* arm;
     control* remote;
-    claw* ef;
+    roller* ef;
     i2c* communications;
     motor* aMotor;
   public:
@@ -32,7 +33,7 @@ class robot{
       this->analog = new analogSensors();
       this->digital = new digitalSensors();
       this->arm = new lift();
-      this->ef = new claw();
+      this->ef = new roller();
       this->remote = new control(6, 7, 5, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
@@ -74,11 +75,12 @@ void setup(){
       this->drive->addRightMotor(motor9, true);
       this->arm->addPrimaryLift(motor4, false);
       this->arm->addPrimaryLift(motor7, true);
-      this->arm->addSecondaryLift(motor5, false);
+      //this->arm->addSecondaryLift(motor5, false);
       this->arm->addSecondaryLift(motor6, true);
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);
-      this->ef->set_Direction(false);
+      this->ef->addRoller(motor5, true);
+
       ///////////////////////////////////////////
       ////////////// CSUN2  ////////////////////////
       //Dinero add your setup code here
@@ -124,10 +126,10 @@ void setup(){
     lift* get_arm(){
       return this->arm;
     };
-    void set_ef(claw ef){
+    void set_ef(roller ef){
       this->ef = &ef;
     };
-    claw* get_ef(){
+    roller* get_ef(){
       return this->ef;
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +137,7 @@ void setup(){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     void remoteListen(){
       joystickInputs();
-      clawButtons();
+      rollerButtons();
       bigLift();
       smallLift();
       goalLift();
@@ -158,11 +160,11 @@ void setup(){
   			this->drive->haltRight();
   		}
     };
-    void clawButtons(){
-      if(this->remote->clawOpen()){
+    void rollerButtons(){
+      if(this->remote->rollerOpen()){
         this->ef->set_Power(100);
         delay(50);
-      }else if(this->remote->clawClose()){
+      }else if(this->remote->rollerClose()){
         this->ef->set_Power(-100);
         delay(50);
       }else{
