@@ -4,7 +4,7 @@
 #include "ports.h"
 #include "motor.h"
 #include <vector>
-
+#include "path.h"
 #define vSAMPLE_PERIOD 100  //Sample period for digital control
 class chassis{
 private:
@@ -14,15 +14,27 @@ private:
   float gearRatio;
   pid* chassisVelPID;
   pid* chassisPosPID;
+  path* waypoints;
+  CartesianVector currPos;
 public:
 
   chassis(){
     this->wheelDiameter = 4; //inches
     //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
     this->chassisVelPID = new pid(1.5,0.0,0.0,0.0);
-    this->chassisPosPID = new pid(0.3,0.0,-0.01,0.0);//4.0,0,0
+    this->chassisPosPID = new pid(0.45,0.0,0.0125,0.0);//4.0,0,0
                             //0.45                      //0.85,0,0 for gyro turn
-    this->chassisPosPID->set_deadband(50);
+    this->chassisPosPID->set_deadband(75);
+    this->currPos.x = 0;
+    this->currPos.y = 0;
+  };
+  void updatePos(){
+    this->currPos.x = this->currPos.x + ticksToInches(((this->getLeftMotorAt(0)->get_count())-this->getLeftMotorAt(0)->get_prevCount()),this->wheelDiameter,this->getLeftMotorAt(0)->get_motorType());
+    this->currPos.y = 0;
+  }
+  void generatePathTo(CartesianVector targetPos){
+    this->waypoints->set_minStep(2);
+    this->waypoints->fillWaypointList(this->currPos, targetPos);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -41,6 +53,14 @@ public:
   };
   motor* getRightMotorAt(int pos){
     return (this->rightMotors[pos]);
+  }
+  CartesianVector get_currPos(){
+    return this->currPos;
+  }
+  void set_currPos(double x, double y)
+  {
+    this->currPos.x = x;
+    this->currPos.y = y;
   }
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
@@ -147,5 +167,9 @@ public:
   void set_wheelDiameter(int dia){
     this->wheelDiameter = dia;
   };
+
+  path* get_waypoints(){
+    return this->waypoints;
+  }
 };
 #endif

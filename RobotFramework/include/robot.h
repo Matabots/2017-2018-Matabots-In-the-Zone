@@ -11,10 +11,9 @@
 #include "i2c.h"
 #include <vector>
 #include "motor.h"
+#include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
-#include "path.h"
-// #include "utility/units.h"
 
 class robot{
   private:
@@ -81,7 +80,6 @@ void setup(){
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);
       this->ef->addRoller(motor5, true);
-
       ///////////////////////////////////////////
       ////////////// CSUN2  ////////////////////////
       //Dinero add your setup code here

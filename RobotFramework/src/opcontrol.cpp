@@ -21,7 +21,6 @@
 //required includes
 #include "main.h"
 #include "robot.h"
-
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via he Field Management System
@@ -80,27 +79,36 @@ void operatorControl() {
   //bot.get_digital()->resetDriveEncoders();  //do not uncomment unless for external encoders
   //bot.get_digital()->resetLiftEncoders();
   // int motVel;
-
-  // bot.get_drive()->leftPosition(50);
-  // bot.get_drive()->rightPosition(50);
-  // int timer = millis();
-  // while(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() || millis() - timer < 500)//operatingTime.GetTicks() < 10000)
-  // {
-  //   if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
-  //     timer = millis();
-  //   }
-  //   bot.get_drive()->leftPosition(50);
-  //   bot.get_drive()->rightPosition(50);delay(50);
-  // }
-  // bot.get_drive()->rightPower(0);
-  // bot.get_drive()->leftPower(0);
-
-  while(true){
-    bot.remoteListen();
-  //  printf("leftEnc: %d  rightEnc: %d",bot.get_digital()->leftEncoderVal(), bot.get_digital()->rightEncoderVal());
-    //printf("leftEnc: %d",bot.get_digital()->leftEncoderVal());
+  bool waypointComplete = false;
+  int timer = millis();
+  CartesianVector tP;
+  tP.x = 10;
+  tP.y = 0;
+  bot.get_drive()->generatePathTo(tP);
+  int wpNum = 0;
+  while(!waypointComplete)
+  {
+    if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) < bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() || millis() - timer > 500)//operatingTime.GetTicks() < 10000)
+    {
+      wpNum++;
+    }
+    if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+      timer = millis();
+    }
+    bot.get_drive()->leftPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
+    bot.get_drive()->rightPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
+    printf("%f",bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_kD());
+    bot.get_drive()->updatePos();
     delay(50);
   }
+  bot.get_drive()->rightPower(0);
+  bot.get_drive()->leftPower(0);
+
+  // while(true){
+  //   bot.remoteListen();
+  //
+  //   delay(50);
+  // }
 
     // while(true)
     // {

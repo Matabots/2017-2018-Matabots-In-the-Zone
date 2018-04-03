@@ -21,6 +21,7 @@ class pid{
     double totalError;
     double output;
     double deadband;  //the time in which the PID controller maintains output. If the error is less than deadband, treat error for kP as 0
+    double toleranceI;
     int sampleTime; //time it takes between reading values in seconds
     bool continuous;  //if it is absolute (wraps around). If true, the PID controller considers the max and min as the same value.
 
@@ -41,7 +42,8 @@ class pid{
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 5;
+      this->deadband = 10;
+      this->toleranceI = 250;
       this->sampleTime = pow(10,-2); //seconds
       this->continuous = false;
     };
@@ -62,7 +64,8 @@ class pid{
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 5;
+      this->deadband = 10;
+      this->toleranceI = 250;
       this->continuous = false;
     };
 
@@ -85,7 +88,8 @@ class pid{
         }
       }
 
-      if((this->error)*(this->kP) < this->maxOutput && (this->error)*(this->kP) > this->minOutput){
+      //if((this->error)*(this->kP) < this->maxOutput && (this->error)*(this->kP) > this->minOutput){
+      if(abs((this->error)) < abs(this->toleranceI)){
         this->totalError += (this->error)*dt;
       } else{
         this->totalError = 0;
@@ -182,6 +186,12 @@ class pid{
     double get_deadband(){
       return this->deadband;
     };
+    void set_toleranceI(double tolerance){
+      this->toleranceI = tolerance;
+    };
+    double get_toleranceI(){
+      return this->toleranceI;
+    }
     void set_prevInput(double input){
       this->prevInput = input;
     };

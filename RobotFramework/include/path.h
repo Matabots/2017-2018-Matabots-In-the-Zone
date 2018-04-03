@@ -50,9 +50,13 @@ public:
     int length = sqrt(pow(abs(xShift),2)+pow(abs(yShift),2))/step;
     xShift = (xShift/abs(xShift))*step;
     yShift = (yShift/abs(yShift))*step;
-
+    CartesianVector posx[length];
+    CartesianVector posy[length];
     std::vector<CartesianVector> tempList;
-    tempList.resize(length);
+    for(int i =0;i<length;i++){
+       tempList[i].x = posx[i].x;
+       tempList[i].y = posy[i].y;
+    }
     tempList[0] = pos;
     for(int i=1; i < (int)tempList.size(); i++)
     {
@@ -63,13 +67,8 @@ public:
   };
 
   CartesianVector get_waypointAt(int index){
-    if(index < (int)(this->waypointList.size())){
       return this->waypointList[index];
-    }
-    else{
-      printf("Index %d is out of bounds. Max length is: %d\n",index, this->waypointList.size()-1);
-    }
-  }
+  };
 
   void set_minStep(int minStep){
     this->minStep = minStep;
