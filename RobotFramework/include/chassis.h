@@ -22,9 +22,10 @@ public:
     this->wheelDiameter = 4; //inches
     //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
     this->chassisVelPID = new pid(1.5,0.0,0.0,0.0);
-    this->chassisPosPID = new pid(0.45,0.0,0.0125,0.0);//4.0,0,0
+    //this->chassisPosPID = new pid(0.45,0.0,0.0125,0.0);//4.0,0,0
                             //0.45                      //0.85,0,0 for gyro turn
-    this->chassisPosPID->set_deadband(75);
+    this->chassisPosPID = new pid(1.2,0.0,0.0,0.0);
+    this->chassisPosPID->set_deadband(5);
     this->currPos.x = 0;
     this->currPos.y = 0;
     waypoints = new path(currPos);

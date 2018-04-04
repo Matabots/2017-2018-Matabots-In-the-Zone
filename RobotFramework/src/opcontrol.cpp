@@ -81,9 +81,9 @@ void operatorControl() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
   // int motVel;
  bool waypointComplete = false;
-//  int timer = millis();
+  // int timer = millis();
   CartesianVector tP;
-  tP.x = 10;
+  tP.x = 26;
   tP.y = 0;
   bot.get_drive()->generatePathTo(tP);
   int wpNum = 0;
@@ -92,19 +92,20 @@ void operatorControl() {
     // if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
     //   timer = millis();
     // }
-    // bot.get_drive()->leftPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
-    // bot.get_drive()->rightPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
+    bot.get_drive()->leftPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
+    bot.get_drive()->rightPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
     //printf("%f",bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_kD());
-    printf("running now\n");
-    bot.get_drive()->leftPower(20);
-      if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) < bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() )//|| millis() - timer > 500)//operatingTime.GetTicks() < 10000)
+    printf("ticks: %f\n", bot.get_drive()->get_currPos().x);
+    bot.get_drive()->get_waypoints()->printWaypoints();
+    //bot.get_drive()->leftPower(30);
+      if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) < bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() )//&& millis() - timer > 100)//operatingTime.GetTicks() < 10000)
       {
         wpNum++;
         if(wpNum == bot.get_drive()->get_waypoints()->size()){
           waypointComplete = true;
         }
       }
-    bot.get_drive()->updatePos();
+     bot.get_drive()->updatePos();
     delay(50);
   }
   //////////////////////////////////////////////////////////////////////////////////////

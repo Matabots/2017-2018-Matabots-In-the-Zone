@@ -14,12 +14,12 @@ public:
 
   path(){
     this->minStep = 0;
-    this->maxStep = 1000;
+    this->maxStep = 10;
   };
   path(CartesianVector initialPos){
     this->waypointList.push_back(initialPos);
     this->minStep = 0;
-    this->maxStep = 1000;
+    this->maxStep = 10;
   };
   path(double x, double y, int timeStamp){
     CartesianVector initialPos;
@@ -51,13 +51,16 @@ public:
     }
     int length = (int)(sqrt(pow(abs(xShift),2)+pow(abs(yShift),2))/step);
     xShift = (xShift/abs(xShift))*step;
+    printf("xShift: %f\n",xShift);
     yShift = (yShift/abs(yShift))*step;
 
     CartesianVector tempPos;
-    for(int i =0;i<length;i++){
+    tempPos.x = pos.x;
+    tempPos.y = pos.y;
+    for(int i=1;i<length+1;i++){
         tempPos.x += xShift;
         tempPos.y += yShift;
-        addWaypoint(pos);
+        addWaypoint(tempPos);
     }
   };
 
@@ -77,7 +80,14 @@ public:
   int get_maxStep(){
     return this->maxStep;
   };
+  void printWaypoints(){
 
+    for(int i =0;i<(int)(this->waypointList.size());i++){
+
+      printf(" %f,", get_waypointAt(i).x);
+      printf("\n");
+    }
+  };
 };
 
 #endif
