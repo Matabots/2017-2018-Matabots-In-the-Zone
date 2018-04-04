@@ -42,8 +42,8 @@ class pid{
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 10;
-      this->toleranceI = 250;
+      this->deadband = 3;
+      this->toleranceI = 15;
       this->sampleTime = pow(10,-2); //seconds
       this->continuous = false;
     };
@@ -64,8 +64,8 @@ class pid{
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 10;
-      this->toleranceI = 250;
+      this->deadband = 3;
+      this->toleranceI = 15;
       this->continuous = false;
     };
 
@@ -95,7 +95,7 @@ class pid{
         this->totalError = 0;
       }
 
-      double pError = abs(this->error)<(this->deadband) ? 0 : (this->error);
+      double pError = abs(this->error)<abs(this->deadband) ? 0 : (this->error);
       double dError = ((this->error)-((this->prevError))/(dt));
       this->output = ((this->kP)*pError) + ((this->kI)*(this->totalError)) + ((this->kD)*(dError) + (this->kF)*(this->setPoint));
 
@@ -181,7 +181,7 @@ class pid{
       set_setPoint(this->setPoint);
     };
     void set_deadband(int band){
-      this->deadband = deadband;
+      this->deadband = band;
     };
     double get_deadband(){
       return this->deadband;

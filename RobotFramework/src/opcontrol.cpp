@@ -82,32 +82,37 @@ void operatorControl() {
   // int motVel;
  bool waypointComplete = false;
   // int timer = millis();
-  CartesianVector tP;
-  tP.x = 26;
-  tP.y = 0;
-  bot.get_drive()->generatePathTo(tP);
-  int wpNum = 0;
+  // CartesianVector tP;
+  // tP.x = 26;
+  // tP.y = 0;
+  // bot.get_drive()->generatePathTo(tP);
+  // int wpNum = 0;
+
   while(!waypointComplete)
   {
     // if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
     //   timer = millis();
-    // }
-    bot.get_drive()->leftPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
-    bot.get_drive()->rightPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
-    //printf("%f",bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_kD());
-    printf("ticks: %f\n", bot.get_drive()->get_currPos().x);
-    bot.get_drive()->get_waypoints()->printWaypoints();
-    //bot.get_drive()->leftPower(30);
-      if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) < bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() )//&& millis() - timer > 100)//operatingTime.GetTicks() < 10000)
-      {
-        wpNum++;
-        if(wpNum == bot.get_drive()->get_waypoints()->size()){
+    // // }
+    bot.get_drive()->leftPosition(50);
+    bot.get_drive()->rightPosition(50);
+    // bot.get_drive()->leftPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
+    // bot.get_drive()->rightPosition((bot.get_drive()->get_waypoints()->get_waypointAt(wpNum).x));
+    // //printf("%f",bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_kD());
+     printf("ticks: %f\n", bot.get_drive()->get_currPos().x);
+    // bot.get_drive()->get_waypoints()->printWaypoints();
+    // //bot.get_drive()->leftPower(30);
+    //   if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) < bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() )//&& millis() - timer > 100)//operatingTime.GetTicks() < 10000)
+    //   {
+    //     wpNum++;
+        if(abs(20-bot.get_drive()->get_currPos().x) < 3 ){
           waypointComplete = true;
         }
-      }
+    //   }
      bot.get_drive()->updatePos();
     delay(50);
   }
+  bot.get_drive()->leftPower(0);
+  bot.get_drive()->rightPower(0);
   //////////////////////////////////////////////////////////////////////////////////////
 
 //  bot.get_drive()->rightPower(0);

@@ -24,8 +24,10 @@ public:
     this->chassisVelPID = new pid(1.5,0.0,0.0,0.0);
     //this->chassisPosPID = new pid(0.45,0.0,0.0125,0.0);//4.0,0,0
                             //0.45                      //0.85,0,0 for gyro turn
-    this->chassisPosPID = new pid(1.2,0.0,0.0,0.0);
-    this->chassisPosPID->set_deadband(5);
+    // this->chassisPosPID = new pid(0.85,0.024,0.016,0.0);
+    // this->chassisPosPID->set_deadband(10);
+    this->chassisPosPID = new pid(3.5,0.00,0.0,0.0);
+    this->chassisPosPID->set_deadband(3);
     this->currPos.x = 0;
     this->currPos.y = 0;
     waypoints = new path(currPos);
@@ -36,7 +38,7 @@ public:
   }
   void generatePathTo(CartesianVector targetPos){
     this->waypoints->set_minStep(2);
-    this->waypoints->fillWaypointList(this->currPos, targetPos);
+    this->waypoints->fillWaypointList(this->currPos, targetPos, 7);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -132,20 +134,20 @@ public:
   //
   void leftPosition(int posInch){
   printf("leftPos: %d\n",this->leftMotors[0]->get_count());
-    double posDeg;
+  //  double posDeg;
     for(int x=0;x<(int)(this->leftMotors.size());x++){
-    posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+    //posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
     //printf("posDeg: %f \n", posDeg);
-    this->leftMotors[x]->positionControlIME(posDeg);
+    this->leftMotors[x]->positionControlIME(posInch);
     }
   };
 
   void rightPosition(int posInch){
-    double posDeg = 0;
+  //  double posDeg = 0;
     printf("rightPos: %d\n",this->rightMotors[0]->get_count());
     for(int x=0;x<(int)(this->rightMotors.size());x++){
-      posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
-      this->rightMotors[x]->positionControlIME(posDeg);
+    //  posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+      this->rightMotors[x]->positionControlIME(posInch);
     }
   };
 

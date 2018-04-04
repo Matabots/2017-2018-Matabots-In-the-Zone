@@ -75,7 +75,6 @@ void setup(){
       this->drive->addRightMotor(motor9, true);
       this->arm->addPrimaryLift(motor4, false);
       this->arm->addPrimaryLift(motor7, true);
-      //this->arm->addSecondaryLift(motor5, false);
       this->arm->addSecondaryLift(motor6, true);
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);

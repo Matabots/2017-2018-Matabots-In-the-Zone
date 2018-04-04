@@ -43,12 +43,14 @@ public:
   void fillWaypointList(CartesianVector pos, CartesianVector targetPos, double step = 0){
     double xShift = targetPos.x - pos.x;
     double yShift = targetPos.y - pos.y;
+
     if(abs(step) < abs(this->minStep)){
       step = this->minStep;
     }
     if(abs(step) > abs(this->maxStep)){
       step = this->maxStep;
     }
+
     int length = (int)(sqrt(pow(abs(xShift),2)+pow(abs(yShift),2))/step);
     xShift = (xShift/abs(xShift))*step;
     printf("xShift: %f\n",xShift);
@@ -60,6 +62,12 @@ public:
     for(int i=1;i<length+1;i++){
         tempPos.x += xShift;
         tempPos.y += yShift;
+        if(abs(tempPos.x)>abs(targetPos.x)){
+          tempPos.x = targetPos.x;
+        }
+        if(abs(tempPos.y)>abs(targetPos.y)){
+          tempPos.y = targetPos.y;
+        }
         addWaypoint(tempPos);
     }
   };

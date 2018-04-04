@@ -100,9 +100,28 @@ public:
       set_Power(vel_output);
     }
   };
+  //control the motor to spin to a target degree
+  void positionControlIME(double setPointIn){
+    double dt = 50;
+
+    this->posPID->set_setPoint(setPointIn);
+    this->count = get_count();
+    double in = ticksToRotations(this->count,this->type)*(3.14*4);
+    printf("in: %f\n",in);
+    printf("trgtIn: %f\n",setPointIn);
+    printf("dead: %f",this->posPID->get_deadband());
+    // // printf("PID: %f \n",this->posPID->get_kP());
+    // // printf("trg: %f \n", setPointDeg);
+    double vel_output = this->posPID->calculateOutput(in, dt);
+    if(abs(setPointIn-in) > (this->posPID->get_deadband())){
+      set_Power(vel_output); //replace with velocity control when you get chance
+      printf("vel: %f",vel_output);
+    //  printf("vel: %f \n",vel_output);
+    }
+  }
 
   //control the motor to spin to a target degree
-  void positionControlIME(double setPointDeg){
+  void tickControlIME(double setPointDeg){
     double dt = 50;
     double rotations = setPointDeg/360;
     int setPointCount = rotationsToTicks(rotations, this->type);
@@ -116,6 +135,7 @@ public:
     double vel_output = this->posPID->calculateOutput(this->count, dt);
     if(abs(this->posPID->get_setPoint()-(this->count)) > (this->posPID->get_deadband())){
       set_Power(vel_output); //replace with velocity control when you get chance
+      printf("vel: %f",vel_output);
     //  printf("vel: %f \n",vel_output);
     }
   }
