@@ -3,6 +3,7 @@
 
 #include "ports.h"
 #include "motor.h"
+#include "math.h"
 #include <vector>
 #include "path.h"
 #define vSAMPLE_PERIOD 100  //Sample period for digital control
@@ -32,6 +33,8 @@ public:
     this->currPos.y = 0;
     waypoints = new path(currPos);
   };
+
+
   void updatePos(){
     this->currPos.x = this->currPos.x + ticksToInches(((this->getLeftMotorAt(0)->get_count())-this->getLeftMotorAt(0)->get_prevCount()),this->wheelDiameter,this->getLeftMotorAt(0)->get_motorType());
     this->currPos.y = 0;
@@ -161,6 +164,18 @@ public:
   void haltRight(){
     for(std::vector<motor>::size_type i = 0; i != this->rightMotors.size(); i++) {
       this->rightMotors[i]->set_Power(0);
+    }
+  };
+
+  void moveToPos(CartesianVector vector){
+    double deltaX = vector.x - this->currPos.x;
+    double deltaY = vector.y - this->currPos.y;
+    int length = (int)(sqrt(pow(abs(deltaX),2)+pow(abs(deltaY),2)));
+    leftPosition(length);
+    rightPosition(length);
+    if(abs(length) <  this->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+      leftPower(0);
+      rightPower(0);
     }
   };
 

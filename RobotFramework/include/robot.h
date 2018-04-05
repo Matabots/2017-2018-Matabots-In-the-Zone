@@ -26,6 +26,7 @@ class robot{
     roller* ef;
     i2c* communications;
     motor* aMotor;
+    state robotState;
   public:
     //default constructor to allocate memory
     robot(){
@@ -37,6 +38,7 @@ class robot{
       this->remote = new control(6, 7, 5, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
+      this->robotState = INIT;
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -65,8 +67,8 @@ void setup(){
   ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog2);
-      this->digital->set_leftLiftEncoder(digital9, digital10, false);
-      this->digital->set_rightLiftEncoder(digital11, digital12, false);
+      this->digital->set_leftLiftEncoder(digital3, digital4, false);
+      this->digital->set_rightLiftEncoder(digital11, digital12, true);
       //this->digital->set_LeftEncoder(digital8, digital9, true);
       // this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, false);
@@ -84,7 +86,39 @@ void setup(){
       //Dinero add your setup code here
 
 };
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void runRobot(){
+    switch(robotState){
+      case INIT:
 
+
+      break;
+      case TURN:
+
+
+      break;
+      case MOVE:
+
+        this->drive->moveToPos(this->drive->get_waypoints()->get_waypointAt(0));
+
+      break;
+      case MGOAL:
+
+
+      break;
+      case AUTOLOAD:
+        //Move Primary lift to lowest position
+        
+        //Lower Secondary Lift to Lowest Position
+        //Intake Cone
+        //Raise Primary Lift to correct height
+        //Raise Secondary Lift to correct height
+        //Outtake
+        //return Primary and Secondary Lift to Lowest position
+      break;
+
+    };
+};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////Setters and Getters///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

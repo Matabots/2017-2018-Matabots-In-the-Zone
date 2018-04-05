@@ -17,8 +17,19 @@
    TURBO
  } motorType;
 
-
 #define PI 3.141492653
+
+typedef enum state{
+  INIT,
+  TURN,
+  MOVE,
+  MGOAL,
+  AUTOLOAD
+}state;
+
+double avg(double num1, double num2){
+  return (num1-num2)/2;
+};
 
 double getTypeTicks(motorType motor){
   if(motor == TORQUE){

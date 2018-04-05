@@ -28,6 +28,7 @@ class digitalSensors{
     int coneLiftEncoderVal(){
       return encoderGet(this->coneLiftEncoder);
     };
+
     void set_leftLiftEncoder(int port1, int port2, bool direction){
       this->leftLiftEncoder = encoderInit(port1, port2, direction);
     };
@@ -45,7 +46,7 @@ class digitalSensors{
       return this->rightLiftEncoder;
     };
     int rightLiftEncoderVal(){
-      return encoderGet(this->rightLiftEncoder);
+      return encoderGet(this->rightLiftEncoder)/2; //for some reason the right side is counting 2x as much
     };
 
     void set_LeftEncoder(int port1, int port2, bool direction){
