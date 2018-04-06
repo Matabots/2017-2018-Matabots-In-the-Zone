@@ -264,7 +264,7 @@ void autoLoad(){
               this->ef->halt();
             }
           break;
-
+          //this is a change
           case CONEHEIGHT:
             //Raise Primary Lift to correct height (10deg/cone)
             if(this->stackedCones < 9){

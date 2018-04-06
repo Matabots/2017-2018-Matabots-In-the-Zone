@@ -127,11 +127,11 @@ void operatorControl() {
 //  bot.get_drive()->rightPower(0);
 //  bot.get_drive()->leftPower(0);
 
-  while(true){
-    bot.remoteListen();
-
-    delay(50);
-  }
+  // while(true){
+  //   bot.remoteListen();
+  //
+  //   delay(50);
+  // }
 
     // while(true)
     // {
