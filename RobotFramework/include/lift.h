@@ -76,16 +76,16 @@ public:
       }
     }
   };
-  void secondaryLiftPosition(int counts, int potentiometer){
+  void secondaryLiftPosition(int targetCount, int potentiometer){
     for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
-      if(potentiometer < counts){
-        this->secondaryLift[i]->set_Power(-75);
+      if(abs(potentiometer) < targetCount){
+        this->secondaryLift[i]->set_Power(-50);
       }
-      else if(potentiometer > counts){
-        this->secondaryLift[i]->set_Power(100);
+      else if(abs(potentiometer) > targetCount){
+        this->secondaryLift[i]->set_Power(50);
       }
       else{
-        this->secondaryLift[i]->set_Power(0);
+        haltSecondaryLift();
       }
     }
   };

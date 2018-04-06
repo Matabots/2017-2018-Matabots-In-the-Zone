@@ -76,7 +76,7 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
-
+//////////////////////////////////////////////////////////////////////////////////////////////
   // bot.get_digital()->resetLiftEncoders();
   // while(true){
   //     printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
