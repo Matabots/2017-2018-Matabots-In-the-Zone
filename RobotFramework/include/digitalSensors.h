@@ -12,13 +12,22 @@ class digitalSensors{
     Encoder rightLiftEncoder;
     Encoder leftLiftEncoder;
     Encoder coneLiftEncoder;
-
+    int limitSwitchPort;
+    int limitSwitch;
 
 
   public:
     digitalSensors(){
 
     };
+    void set_limitSwitch(int port){
+      this->limitSwitchPort = (port);
+    };
+    int get_limitSwitch(){
+      this->limitSwitch = digitalRead(this->limitSwitchPort);
+      return this->limitSwitch;
+    };
+
     void set_coneLiftEncoder(int port1, int port2, bool direction){
       this->coneLiftEncoder = encoderInit(port1, port2, direction);
     };

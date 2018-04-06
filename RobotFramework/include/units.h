@@ -27,6 +27,13 @@ typedef enum state{
   AUTOLOAD
 }state;
 
+typedef enum subState{
+  BOTTOM,
+  INTAKE,
+  CONEHEIGHT,
+  OUTTAKE
+}subState;
+
 double avg(double num1, double num2){
   return (num1-num2)/2;
 };

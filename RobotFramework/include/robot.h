@@ -27,6 +27,8 @@ class robot{
     i2c* communications;
     motor* aMotor;
     state robotState;
+    subState robotSubState;
+    int stackedCones;
   public:
     //default constructor to allocate memory
     robot(){
@@ -39,6 +41,8 @@ class robot{
       this->communications = new i2c();
       this->aMotor = new motor();
       this->robotState = INIT;
+      this->robotSubState = BOTTOM;
+      stackedCones = 0;
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -67,6 +71,7 @@ void setup(){
   ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog2);
+      this->digital->set_limitSwitch(digital5);
       this->digital->set_leftLiftEncoder(digital3, digital4, false);
       this->digital->set_rightLiftEncoder(digital11, digital12, true);
       //this->digital->set_LeftEncoder(digital8, digital9, true);
@@ -86,39 +91,7 @@ void setup(){
       //Dinero add your setup code here
 
 };
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void runRobot(){
-    switch(robotState){
-      case INIT:
 
-
-      break;
-      case TURN:
-
-
-      break;
-      case MOVE:
-
-        this->drive->moveToPos(this->drive->get_waypoints()->get_waypointAt(0));
-
-      break;
-      case MGOAL:
-
-
-      break;
-      case AUTOLOAD:
-        //Move Primary lift to lowest position
-        
-        //Lower Secondary Lift to Lowest Position
-        //Intake Cone
-        //Raise Primary Lift to correct height
-        //Raise Secondary Lift to correct height
-        //Outtake
-        //return Primary and Secondary Lift to Lowest position
-      break;
-
-    };
-};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////Setters and Getters///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -267,8 +240,71 @@ void runRobot(){
 ////////////////////////////////////////////////////////Routines related to movement will belong here////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void runRobot(){
+    switch(robotState){
+      case INIT:
 
-      //PID HERE
+      break;
+      case TURN:
+
+
+      break;
+      case MOVE:
+        this->drive->moveToPos(this->drive->get_waypoints()->get_waypointAt(0));
+      break;
+      case MGOAL: //make sure the mobile goal is in place
+        this->arm->goalLiftPower(-127);
+        if(this->arm->get_goalLiftAt(0)->get_count() < 5){
+          robotState = AUTOLOAD;
+          this->arm->haltGoalLift();
+        }
+      break;
+      case AUTOLOAD:
+        switch(robotSubState){
+          case BOTTOM:
+            //Move Primary lift to lowest position
+            this->arm->primaryLiftPosition(0, this->digital->leftLiftEncoderVal());
+            //Lower Secondary Lift to Lowest Position
+            //this->arm->secondaryLiftPosition(0,)
+            if(this->digital->leftLiftEncoderVal() <= 2){
+              robotSubState = INTAKE;
+              this->arm->haltPrimaryLift();
+            }
+          break;
+
+          case INTAKE:
+            //Intake Cone
+            this->ef->set_Power(100);
+            if(this->digital->get_limitSwitch() == 1){
+              robotSubState = CONEHEIGHT;
+              this->ef->halt();
+            }
+          break;
+
+          case CONEHEIGHT:
+            //Raise Primary Lift to correct height (10deg/cone)
+            this->arm->primaryLiftPosition(12*(stackedCones+1), this->digital->leftLiftEncoderVal());
+            //Raise Secondary Lift to correct height
+            if(this->digital->leftLiftEncoderVal() >= 12*(stackedCones+1)){
+              robotSubState = OUTTAKE;
+              this->arm->haltPrimaryLift();
+            }
+
+          break;
+
+          case OUTTAKE:
+            //Outtake
+            this->ef->set_Power(-100);
+            delay(1000);
+            robotSubState = CONEHEIGHT;
+            this->ef->halt();
+          break;
+      };
+      break;
+
+    };
+};
 
 };
 #endif

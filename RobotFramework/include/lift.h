@@ -29,6 +29,9 @@ public:
   std::vector<motor*> get_goalLift(){
     return this->goalLift;
   }
+  motor* get_goalLiftAt(int x){
+    return this->goalLift[x];
+  }
   void set_goalLift(std::vector<motor*> motors){
     this->goalLift = motors;
   }
@@ -49,11 +52,27 @@ public:
   void addGoalLift(int port, bool reverse){
     motor* goalMotor = new motor(port);
     goalMotor->set_Direction(reverse);
+    goalMotor->set_type(TORQUE);
+    goalMotor->set_address(2);
     this->goalLift.push_back(goalMotor);
   }
   void primaryLiftPower(int power){
     for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
       this->primaryLift[i]->set_Power(power);
+    }
+  };
+
+  void primaryLiftPosition(int deg, int encoderVal){
+    for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
+      if(encoderVal < deg){
+        this->primaryLift[i]->set_Power(127);
+      }
+      else if(encoderVal > deg){
+        this->primaryLift[i]->set_Power(-127);
+      }
+      else{
+        this->primaryLift[i]->set_Power(0);
+      }
     }
   };
 

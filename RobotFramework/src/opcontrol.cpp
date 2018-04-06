@@ -76,11 +76,12 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
-  //bot.get_digital()->resetDriveEncoders();  //do not uncomment unless for external encoders
+
   bot.get_digital()->resetLiftEncoders();
   while(true){
       printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
       printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
+      bot.get_arm()->primaryLiftPosition(5, bot.get_digital()->leftLiftEncoderVal());
       delay(50);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////
