@@ -20,19 +20,29 @@
 #define PI 3.141492653
 
 typedef enum state{
-  INIT,
-  TURN,
-  MOVE,
-  MGOAL,
-  AUTOLOAD
-}state;
-
-typedef enum subState{
   BOTTOM,
   INTAKE,
   CONEHEIGHT,
   OUTTAKE
-}subState;
+}state;
+
+void printState(state rState){
+  switch(rState){
+    case BOTTOM:
+      printf("BOTTOM\n");
+    break;
+    case INTAKE:
+      printf("INTAKE\n");
+    break;
+    case CONEHEIGHT:
+      printf("CONEHEIGHT\n");
+    break;
+    case OUTTAKE:
+      printf("OUTTAKE\n");
+    break;
+
+  }
+};
 
 double avg(double num1, double num2){
   return (num1-num2)/2;

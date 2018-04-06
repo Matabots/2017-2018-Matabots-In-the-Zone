@@ -77,13 +77,15 @@ void operatorControl() {
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
 
-  bot.get_digital()->resetLiftEncoders();
-  while(true){
-      printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
-      printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
-      bot.get_arm()->primaryLiftPosition(5, bot.get_digital()->leftLiftEncoderVal());
-      delay(50);
-    }
+  // bot.get_digital()->resetLiftEncoders();
+  // while(true){
+  //     printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
+  //     printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
+  //     printf("analog: %d\n",bot.get_analog()->get_potentiometerVal());
+  //     printState(bot.get_state());
+  //     bot.autoLoad();
+  //     delay(50);
+  //   }
 ////////////////////////////////////////////////////////////////////////////////////////////////
   // int motVel;
   // int timer = millis();
@@ -125,11 +127,11 @@ void operatorControl() {
 //  bot.get_drive()->rightPower(0);
 //  bot.get_drive()->leftPower(0);
 
-  // while(true){
-  //   bot.remoteListen();
-  //
-  //   delay(50);
-  // }
+  while(true){
+    bot.remoteListen();
+
+    delay(50);
+  }
 
     // while(true)
     // {

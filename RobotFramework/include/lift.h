@@ -9,6 +9,7 @@ private:
   std::vector<motor*> primaryLift;
   std::vector<motor*> secondaryLift;
   std::vector<motor*> goalLift;
+
 public:
 
   lift(){
@@ -65,13 +66,26 @@ public:
   void primaryLiftPosition(int deg, int encoderVal){
     for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
       if(encoderVal < deg){
-        this->primaryLift[i]->set_Power(127);
+        this->primaryLift[i]->set_Power(100);
       }
       else if(encoderVal > deg){
-        this->primaryLift[i]->set_Power(-127);
+        this->primaryLift[i]->set_Power(-100);
       }
       else{
         this->primaryLift[i]->set_Power(0);
+      }
+    }
+  };
+  void secondaryLiftPosition(int counts, int potentiometer){
+    for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
+      if(potentiometer < counts){
+        this->secondaryLift[i]->set_Power(-75);
+      }
+      else if(potentiometer > counts){
+        this->secondaryLift[i]->set_Power(100);
+      }
+      else{
+        this->secondaryLift[i]->set_Power(0);
       }
     }
   };
