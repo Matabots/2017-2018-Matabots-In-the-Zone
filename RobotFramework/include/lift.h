@@ -7,6 +7,7 @@
 class lift{
 private:
   std::vector<motor*> primaryLift;
+  pid* primaryLiftPosPID;
   std::vector<motor*> secondaryLift;
   std::vector<motor*> goalLift;
 
@@ -37,8 +38,9 @@ public:
     this->goalLift = motors;
   }
   void addPrimaryLift(int port, bool reverse){
-    motor* liftMotor = new motor(port);
+    motor* liftMotor = new motor(port,7.0,0.0,0.0,0.0);
     liftMotor->set_Direction(reverse);
+    liftMotor->set_type(ENC);
     // this->primaryLift.resize(this->primaryLift.size() + 1);
     this->primaryLift.push_back(liftMotor);
   };
@@ -65,15 +67,7 @@ public:
 
   void primaryLiftPosition(int deg, int encoderVal){
     for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
-      if(encoderVal < deg){
-        this->primaryLift[i]->set_Power(100);
-      }
-      else if(encoderVal > deg){
-        this->primaryLift[i]->set_Power(-100);
-      }
-      else{
-        this->primaryLift[i]->set_Power(0);
-      }
+      this->primaryLift[i]->tickControl(deg,encoderVal);
     }
   };
   void secondaryLiftPosition(int targetCount, int potentiometer){
@@ -82,7 +76,7 @@ public:
         this->secondaryLift[i]->set_Power(-50);
       }
       else if(abs(potentiometer) > targetCount){
-        this->secondaryLift[i]->set_Power(75);
+        this->secondaryLift[i]->set_Power(100);
       }
       else{
         haltSecondaryLift();

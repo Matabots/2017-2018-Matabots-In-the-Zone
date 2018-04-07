@@ -287,13 +287,12 @@ void autoLoad(){
           case CONEHEIGHT:
             //Raise Primary Lift to correct height (10deg/cone)
 
-              this->arm->primaryLiftPosition(12*(this->stackedCones), this->digital->leftLiftEncoderVal());
+              this->arm->primaryLiftPosition(11*(this->stackedCones+1), this->digital->leftLiftEncoderVal());
               //Raise Secondary Lift to correct height
-              this->arm->secondaryLiftPosition(700, this->analog->get_potentiometerVal());
+              this->arm->secondaryLiftPosition(300, this->analog->get_potentiometerVal());
 
-            if(this->digital->leftLiftEncoderVal() >= 12*(this->stackedCones) && this->analog->get_potentiometerVal() < 700){
+            if(this->digital->leftLiftEncoderVal() >= 11*(this->stackedCones+1) && this->analog->get_potentiometerVal() < 600){
               robotState = OUTTAKE;
-              this->stackedCones++;
               this->arm->haltSecondaryLift();
               this->arm->haltPrimaryLift();
               delay(500);
@@ -305,6 +304,7 @@ void autoLoad(){
             this->ef->set_Power(100);
             delay(1000);
             robotState = ADJUSTHEIGHT;
+            this->stackedCones++;
             this->ef->halt();
             delay(1000);
           break;

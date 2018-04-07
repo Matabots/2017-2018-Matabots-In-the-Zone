@@ -81,6 +81,7 @@ void operatorControl() {
   while(true){
       printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
       printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
+      printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
       printf("cones: %d\n",bot.get_stackedCones());
       printState(bot.get_state());
       bot.autoLoad();

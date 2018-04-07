@@ -14,7 +14,8 @@
  typedef enum motorType {
    TORQUE,
    HIGHSPEED,
-   TURBO
+   TURBO,
+   ENC
  } motorType;
 
 #define PI 3.141492653
@@ -129,7 +130,7 @@ double ticksToDegrees(int ticks, motorType motor){
      return rotations*261.333;
    }
    else{
-     return 360;
+     return rotations*360;
    }
  };
 
