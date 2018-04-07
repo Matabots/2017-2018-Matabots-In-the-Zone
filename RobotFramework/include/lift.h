@@ -82,7 +82,7 @@ public:
         this->secondaryLift[i]->set_Power(-50);
       }
       else if(abs(potentiometer) > targetCount){
-        this->secondaryLift[i]->set_Power(50);
+        this->secondaryLift[i]->set_Power(75);
       }
       else{
         haltSecondaryLift();

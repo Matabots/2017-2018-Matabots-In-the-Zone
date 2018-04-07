@@ -39,7 +39,7 @@ class robot{
       this->remote = new control(6, 7, 5, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
-      this->robotState = BOTTOM;
+      this->robotState = ADJUSTHEIGHT;
       this->stackedCones = 0;
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +138,9 @@ void setup(){
     roller* get_ef(){
       return this->ef;
     };
+    int get_stackedCones(){
+      return this->stackedCones;
+    }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////These are the operator control functions////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +183,8 @@ void setup(){
     void bigLift(){
       if(this->remote->bigLiftUp()){
         this->arm->primaryLiftPower(100);
+        this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
+        this->arm->primaryLiftPosition(20, this->digital->leftLiftEncoderVal());
         delay(50);
       }else if(this->remote->bigLiftDown()){
         this->arm->primaryLiftPower(-100);
@@ -243,13 +248,27 @@ void setup(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void autoLoad(){
+  if(this->stackedCones < 8){
     switch(robotState){
-          case BOTTOM:
+
+          case ADJUSTHEIGHT:
             //Lower Secondary Lift to Lowest Position
             this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
+            if(this->analog->get_potentiometerVal() > 1700){
+              //this->arm->primaryLiftPosition(15, this->digital->leftLiftEncoderVal());
+              //if(this->digital->leftLiftEncoderVal() >= 20){
+                robotState = BOTTOM;
+                this->arm->haltPrimaryLift();
+                this->arm->haltSecondaryLift();
+                delay(500);
+              //}
+            }
+          break;
+          case BOTTOM:
             //Move Primary lift to lowest position
             this->arm->primaryLiftPosition(0, this->digital->leftLiftEncoderVal());
-            if(this->digital->leftLiftEncoderVal() <= 3 && this->analog->get_potentiometerVal() > 1700){
+            this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
+            if(this->digital->leftLiftEncoderVal() <= 0 && this->analog->get_potentiometerVal() > 1700){
               robotState = INTAKE;
               this->arm->haltPrimaryLift();
               this->arm->haltSecondaryLift();
@@ -267,13 +286,12 @@ void autoLoad(){
           //this is a change
           case CONEHEIGHT:
             //Raise Primary Lift to correct height (10deg/cone)
-            if(this->stackedCones < 9){
-              this->arm->primaryLiftPosition(12*(this->stackedCones+1), this->digital->leftLiftEncoderVal());
-              //Raise Secondary Lift to correct height
-              this->arm->secondaryLiftPosition(400, this->analog->get_potentiometerVal());
-            }
 
-            if(this->digital->leftLiftEncoderVal() >= 12*(this->stackedCones+1) && this->analog->get_potentiometerVal() < 400){
+              this->arm->primaryLiftPosition(12*(this->stackedCones), this->digital->leftLiftEncoderVal());
+              //Raise Secondary Lift to correct height
+              this->arm->secondaryLiftPosition(700, this->analog->get_potentiometerVal());
+
+            if(this->digital->leftLiftEncoderVal() >= 12*(this->stackedCones) && this->analog->get_potentiometerVal() < 700){
               robotState = OUTTAKE;
               this->stackedCones++;
               this->arm->haltSecondaryLift();
@@ -284,24 +302,15 @@ void autoLoad(){
 
           case OUTTAKE:
             //Outtake
-            this->ef->set_Power(127);
+            this->ef->set_Power(100);
             delay(1000);
             robotState = ADJUSTHEIGHT;
             this->ef->halt();
             delay(1000);
           break;
 
-          case ADJUSTHEIGHT:
-            //Lower Secondary Lift to Lowest Position
-            this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
-            this->arm->primaryLiftPosition(12*(this->stackedCones), this->digital->leftLiftEncoderVal());
-            if(this->digital->leftLiftEncoderVal() >= 12*(this->stackedCones+1)  && this->analog->get_potentiometerVal() > 1700){
-              robotState = BOTTOM;
-              delay(500);
-            }
-          break;
       };
-
+    };
     };
 };
 
