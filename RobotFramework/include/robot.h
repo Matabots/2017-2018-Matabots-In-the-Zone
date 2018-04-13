@@ -14,6 +14,7 @@
 #include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
+#include "uart.h"
 
 class robot{
   private:
@@ -28,6 +29,7 @@ class robot{
     motor* aMotor;
     state robotState;
     int stackedCones;
+    botUart* uartComms;
   public:
     //default constructor to allocate memory
     robot(){
@@ -41,6 +43,7 @@ class robot{
       this->aMotor = new motor();
       this->robotState = ADJUSTHEIGHT;
       this->stackedCones = 0;
+      this->uartComms = new botUart();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
