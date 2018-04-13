@@ -21,6 +21,8 @@
 //required includes
 #include "main.h"
 #include "robot.h"
+#include "../include/uart.h"
+#include "uart.h"
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -54,12 +56,17 @@
 void operatorControl() {
 //     lcdInit(uart1);
 //     lcdClear(uart1);
+  printf("Starting.\n");
   robot bot = robot();
   bot.setup();
-  i2c iSqC = i2c();
-  usartInit(uart1, 9600, SERIAL_DATABITS_8);
-  char* pntr;
-  pntr = (char*) malloc (sizeof(char)*1);
+  // printf("Ran setup.\n");
+  //i2c iSqC = i2c();
+  // usartInit(uart1, 9600, SERIAL_DATABITS_8);
+  // printf("Created uart.\n");
+  //usartInit(uart1, 9600, SERIAL_8N1);
+  // char* pntr;
+  // pntr = (char*) malloc (sizeof(char)*1);
+  // printf("Allocated memory.\n");
   // std::string sauce = "";
 
   // motor newMotor = motor(motor2);
@@ -75,33 +82,44 @@ void operatorControl() {
   //bot.smallLift(0);
   //use millis() for integrated timing
 
-  printf("Begin operatorControl\n");
+  // printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
   // bot.get_digital()->resetDriveEncoders();
   // int motVel;
 
+  botUart* botUart1 = new botUart();
+
   while(true)//operatingTime.GetTicks() < 10000)
   {
+    // botUart1.readData();
+
+    // printf("%c\n", 's');
+    botUart1->runUART();
+    // botUart1->readData();
+    // //botUart1->printStr();
+    // botUart1->setObVals();
+    // botUart1->printObVals();
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
-      fread(pntr,sizeof(char),1,uart1);
+      // fread(pntr,sizeof(char),1,uart1);
+      //fgets(pntr,sizeof(char),1,uart1);
 
       // for(x=0;x<3;x++){
-        printf("%c\n", pntr[0]);
+        // printf("%c\n", pntr[0]);
       // };
-if (pntr[0] == '&')
-{
-  //std::cout << sauce << '\n';
-  // sauce = "";
-}
-else
-{
-  //sauce += pntr[0];
-  //pntr[0] = '';
-}
+      // if (pntr[0] == '&')
+      // {
+      //   //std::cout << sauce << '\n';
+      //   // sauce = "";
+      // }
+      // else
+      // {
+      //   //sauce += pntr[0];
+      //   //pntr[0] = '';
+      // }
       //iSqC.read();
-      delay(50);
+      delay(25);
     // }
   //   bot.get_drive()->leftPower(127);
   //   bot.get_drive()->rightPower(127);
