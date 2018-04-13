@@ -21,9 +21,12 @@
 //required includes
 #include "main.h"
 #include "robot.h"
+<<<<<<< HEAD
 #include "../include/uart.h"
 #include "uart.h"
 
+=======
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via he Field Management System
@@ -54,6 +57,7 @@
 
 //
 void operatorControl() {
+<<<<<<< HEAD
 //     lcdInit(uart1);
 //     lcdClear(uart1);
   printf("Starting.\n");
@@ -67,13 +71,23 @@ void operatorControl() {
   // char* pntr;
   // pntr = (char*) malloc (sizeof(char)*1);
   // printf("Allocated memory.\n");
+=======
+  //   lcdInit(uart2);
+    // lcdClear(uart2);
+
+  int count = imeInitializeAll();
+  printf("ime's: %d \n",count);
+  robot bot = robot();
+  bot.setup();
+  imeReset(0);
+  imeReset(1);
+/*  i2c iSqC = i2c();
+  usartInit(uart1, 9600, SERIAL_DATABITS_8);
+  char* pntr;
+  pntr = (char*) malloc (sizeof(char)*1);*/
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
   // std::string sauce = "";
 
-  // motor newMotor = motor(motor2);
-  // chassis newChassis = chassis();
-  // control* remote = new control();
-  // newChassis.addLeftMotor(2, false);
-  // newChassis.addRightMotor(3, false);
 
   //bot.smallLift(100);
   //delay(100);
@@ -84,9 +98,65 @@ void operatorControl() {
 
   // printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
-  // bot.get_digital()->resetDriveEncoders();
+//////////////////////////////////////////////////////////////////////////////////////////////
+  bot.get_digital()->resetLiftEncoders();
+  while(true){
+      printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
+      printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
+      printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
+      printf("cones: %d\n",bot.get_stackedCones());
+      printState(bot.get_state());
+      bot.autoLoad();
+      delay(50);
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////
   // int motVel;
+  // int timer = millis();
+  // CartesianVector tP;
+  // tP.x = 26;
+  // tP.y = 0;
+  // bot.get_drive()->generatePathTo(tP);
+  // int wpNum = 0;
+///////////////////////////////////////////////////////////////////////////////////
 
+
+
+////////////////////////////////////////////////////////////////
+// bool waypointComplete = false;
+  // while(!waypointComplete)
+  // {
+  //   // if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) > bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+  //   //   timer = millis();
+  //   // // }
+  //   bot.get_drive()->leftPosition(50);
+  //   bot.get_drive()->rightPosition(50);
+  //   printf("ticks: %f\n", bot.get_drive()->get_currPos().x);
+  //   // bot.get_drive()->get_waypoints()->printWaypoints();
+  //   // //bot.get_drive()->leftPower(30);
+  //   //   if(abs(bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()) < bot.get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband() )//&& millis() - timer > 100)//operatingTime.GetTicks() < 10000)
+  //   //   {
+  //   //     wpNum++;
+  //       if(abs(20-bot.get_drive()->get_currPos().x) < 3 ){
+  //         waypointComplete = true;
+  //       }
+  //   //   }
+  //    bot.get_drive()->updatePos();
+  //   delay(50);
+  // }
+  // bot.get_drive()->leftPower(0);
+  // bot.get_drive()->rightPower(0);
+  //////////////////////////////////////////////////////////////////////////////////////
+
+//  bot.get_drive()->rightPower(0);
+//  bot.get_drive()->leftPower(0);
+
+  // while(true){
+  //   bot.remoteListen();
+  //
+  //   delay(50);
+  // }
+
+<<<<<<< HEAD
   botUart* botUart1 = new botUart();
 
   while(true)//operatingTime.GetTicks() < 10000)
@@ -104,10 +174,24 @@ void operatorControl() {
       // printf("%d\n",iSqc.read();
       // fread(pntr,sizeof(char),1,uart1);
       //fgets(pntr,sizeof(char),1,uart1);
+=======
+    // while(true)
+    // {
+      // printf("%d\n",iSqc.read();
+      //bot.get_drive()->rightVelocity(50); FUCK VELOCITY CONTROL UNTIL I GET TIME
+      //bot.get_drive()->leftVelocity(50);
+      //motorSet(motor8,80);
+      //motorSet(motor9,-80);
+      //bot.get_drive()->leftPosition(10); //drive forward for 10 inches
+
+////////////////// UART //////////////////////////////////////////////////////////////
+  /*    fread(pntr,sizeof(char),1,uart1);
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
 
       // for(x=0;x<3;x++){
         // printf("%c\n", pntr[0]);
       // };
+<<<<<<< HEAD
       // if (pntr[0] == '&')
       // {
       //   //std::cout << sauce << '\n';
@@ -158,6 +242,24 @@ void operatorControl() {
     // printf("%d\n", joystickGetAnalog(1, 1));
   //   delay(25);
   }
+=======
+if (pntr[0] == '&')
+{
+  //std::cout << sauce << '\n';
+  // sauce = "";
+}
+else
+{
+  //sauce += pntr[0];
+  //pntr[0] = '';
+}
+*/
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
   // printf("The Program has Ended\n");
 
 }

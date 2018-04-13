@@ -14,10 +14,59 @@
  typedef enum motorType {
    TORQUE,
    HIGHSPEED,
-   TURBO
+   TURBO,
+   ENC
  } motorType;
 
 #define PI 3.141492653
+
+typedef enum state{
+  BOTTOM,
+  INTAKE,
+  CONEHEIGHT,
+  OUTTAKE,
+  ADJUSTHEIGHT
+}state;
+
+void printState(state rState){
+  switch(rState){
+    case BOTTOM:
+      printf("BOTTOM\n");
+    break;
+    case INTAKE:
+      printf("INTAKE\n");
+    break;
+    case CONEHEIGHT:
+      printf("CONEHEIGHT\n");
+    break;
+    case OUTTAKE:
+      printf("OUTTAKE\n");
+    break;
+    case ADJUSTHEIGHT:
+      printf("ADJUSTHEIGHT\n");
+    break;
+
+  }
+};
+
+double avg(double num1, double num2){
+  return (num1-num2)/2;
+};
+
+double getTypeTicks(motorType motor){
+  if(motor == TORQUE){
+    return 627.2;
+  }
+  if(motor == HIGHSPEED){
+    return 392;
+  }
+  if(motor == TURBO){
+    return 261.333;
+  }
+  else{
+    return 360;
+  }
+};
 
 int imeVelocity(int velocity, motorType motor){
   if(motor == TORQUE){//
@@ -56,10 +105,13 @@ double ticksToRotations(Encoder enc){
      return ticks/261.333;
    }
    else{
-     return 0;
+     return 1/360;
    }
  };
 
+double ticksToDegrees(int ticks, motorType motor){
+  return ticksToRotations(ticks, motor)/360;
+}
 /**
  * Converts rotations to ticks
  * @method rotationsToTicks
@@ -78,7 +130,7 @@ double ticksToRotations(Encoder enc){
      return rotations*261.333;
    }
    else{
-     return 10;
+     return rotations*360;
    }
  };
 
@@ -112,8 +164,12 @@ double ticksToRotations(Encoder enc){
  * @return               Ticks
  */
 
-  int inchesToTicks(double ticks, double wheelDiameter, motorType motor) {
-      return rotationsToTicks(ticks, motor) * wheelDiameter * PI;
+  double inchesToDeg(double inches, double wheelDiameter, motorType motor) {
+      return (360*inches)/(wheelDiameter * PI);
   };
+  double degToInches(double deg, double wheelDiameter){
+    return (wheelDiameter*PI*deg)/360;
+  }
+
 
 #endif /* INCLUDE_XDRIVE_H_ */

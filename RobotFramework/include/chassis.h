@@ -3,8 +3,9 @@
 
 #include "ports.h"
 #include "motor.h"
+#include "math.h"
 #include <vector>
-
+#include "path.h"
 #define vSAMPLE_PERIOD 100  //Sample period for digital control
 class chassis{
 private:
@@ -12,13 +13,35 @@ private:
   std::vector<motor*> rightMotors;
   int wheelDiameter;
   float gearRatio;
-  pid* chassisPID;
+  pid* chassisVelPID;
+  pid* chassisPosPID;
+  path* waypoints;
+  CartesianVector currPos;
 public:
 
   chassis(){
     this->wheelDiameter = 4; //inches
-    //this->chassisPID = new pid(10,3.48,896.9,0.0);
-    this->chassisPID = new pid(2.0,0.0,0.0,0.0);
+    //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
+    this->chassisVelPID = new pid(1.5,0.0,0.0,0.0);
+    //this->chassisPosPID = new pid(0.45,0.0,0.0125,0.0);//4.0,0,0
+                            //0.45                      //0.85,0,0 for gyro turn
+    // this->chassisPosPID = new pid(0.85,0.024,0.016,0.0);
+    // this->chassisPosPID->set_deadband(10);
+    this->chassisPosPID = new pid(3.5,0.00,0.0,0.0);
+    this->chassisPosPID->set_deadband(3);
+    this->currPos.x = 0;
+    this->currPos.y = 0;
+    waypoints = new path(currPos);
+  };
+
+
+  void updatePos(){
+    this->currPos.x = this->currPos.x + ticksToInches(((this->getLeftMotorAt(0)->get_count())-this->getLeftMotorAt(0)->get_prevCount()),this->wheelDiameter,this->getLeftMotorAt(0)->get_motorType());
+    this->currPos.y = 0;
+  }
+  void generatePathTo(CartesianVector targetPos){
+    this->waypoints->set_minStep(2);
+    this->waypoints->fillWaypointList(this->currPos, targetPos, 7);
   };
   std::vector<motor*> get_leftMotors(){
     return this->leftMotors;
@@ -38,10 +61,20 @@ public:
   motor* getRightMotorAt(int pos){
     return (this->rightMotors[pos]);
   }
+  CartesianVector get_currPos(){
+    return this->currPos;
+  }
+  void set_currPos(double x, double y)
+  {
+    this->currPos.x = x;
+    this->currPos.y = y;
+  }
   void addLeftMotor(int port, bool reverse){
     motor* leftMotor = new motor(port);
     leftMotor->set_Direction(reverse);
-    leftMotor->set_velPID(this->chassisPID);
+    leftMotor->set_type(TURBO);
+    leftMotor->set_velPID(this->chassisVelPID);
+    leftMotor->set_posPID(this->chassisPosPID);
     leftMotor->set_address(0);
     // this->leftMotors.resize(this->leftMotors.size() + 1);
     this->leftMotors.push_back(leftMotor);
@@ -50,7 +83,10 @@ public:
   void addRightMotor(int port, bool reverse){
     motor* rightMotor = new motor(port);
     rightMotor->set_Direction(reverse);
-    rightMotor->set_velPID(this->chassisPID);
+    rightMotor->set_type(TURBO);
+    rightMotor->set_velPID(this->chassisVelPID);
+    rightMotor->set_posPID(this->chassisPosPID);
+    rightMotor->set_imeReversed(true);
     rightMotor->set_address(1);
     //this->rightMotors.resize(this->rightMotors.size() + 1);
     this->rightMotors.push_back(rightMotor);
@@ -98,8 +134,27 @@ public:
       }
   };
 
-  void haltLeft(){
+  //
+  void leftPosition(int posInch){
+  printf("leftPos: %d\n",this->leftMotors[0]->get_count());
+  //  double posDeg;
+    for(int x=0;x<(int)(this->leftMotors.size());x++){
+    //posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+    //printf("posDeg: %f \n", posDeg);
+    this->leftMotors[x]->positionControlIME(posInch);
+    }
+  };
 
+  void rightPosition(int posInch){
+  //  double posDeg = 0;
+    printf("rightPos: %d\n",this->rightMotors[0]->get_count());
+    for(int x=0;x<(int)(this->rightMotors.size());x++){
+    //  posDeg = inchesToDeg(posInch, (double)(this->wheelDiameter), this->leftMotors[x]->get_motorType());
+      this->rightMotors[x]->positionControlIME(posInch);
+    }
+  };
+
+  void haltLeft(){
     for(std::vector<motor>::size_type i = 0; i != this->leftMotors.size(); i++) {
       this->leftMotors[i]->set_Power(0);
     }
@@ -112,6 +167,18 @@ public:
     }
   };
 
+  void moveToPos(CartesianVector vector){
+    double deltaX = vector.x - this->currPos.x;
+    double deltaY = vector.y - this->currPos.y;
+    int length = (int)(sqrt(pow(abs(deltaX),2)+pow(abs(deltaY),2)));
+    leftPosition(length);
+    rightPosition(length);
+    if(abs(length) <  this->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+      leftPower(0);
+      rightPower(0);
+    }
+  };
+
   int get_wheelDiameter(){
     return this->wheelDiameter;
   };
@@ -119,5 +186,9 @@ public:
   void set_wheelDiameter(int dia){
     this->wheelDiameter = dia;
   };
+
+  path* get_waypoints(){
+    return this->waypoints;
+  }
 };
 #endif

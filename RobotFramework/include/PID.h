@@ -1,8 +1,9 @@
 #ifndef PID_H
 #define PID_H
+
 #include "API.h"
 #include "math.h"
-
+#include <limits>
 class pid{
   private:
     double kP;
@@ -20,6 +21,7 @@ class pid{
     double totalError;
     double output;
     double deadband;  //the time in which the PID controller maintains output. If the error is less than deadband, treat error for kP as 0
+    double toleranceI;
     int sampleTime; //time it takes between reading values in seconds
     bool continuous;  //if it is absolute (wraps around). If true, the PID controller considers the max and min as the same value.
 
@@ -30,15 +32,18 @@ class pid{
       this->kD = 0;
       this->kF = 0;
       this->setPoint = 0.0;
-      this->maxInput = 120.0;
-      this->minInput = -100.0;
+
+      this->maxInput = std::numeric_limits<int>::max();//120.0;
+      this->minInput = std::numeric_limits<int>::min();//-100.0;
+
       this->maxOutput = 100.0;
       this->minOutput = -120.0;
       this->error = 0.0;
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 5;
+      this->deadband = 3;
+      this->toleranceI = 15;
       this->sampleTime = pow(10,-2); //seconds
       this->continuous = false;
     };
@@ -49,43 +54,48 @@ class pid{
       this->kF = kFInput;
       this->sampleTime = 10;
       this->setPoint = 0;
-      this->maxInput = 100.0;
-      this->minInput = -100.0;
+
+      this->maxInput = std::numeric_limits<int>::max();// 100.0;
+      this->minInput = std::numeric_limits<int>::min();// -100.0;
+
       this->maxOutput = 120.0;
       this->minOutput = -120.0;
       this->error = 0.0;
       this->prevError = 0.0;
       this->totalError = 0.0;
       this->output = 0.0;
-      this->deadband = 5;
+      this->deadband = 3;
+      this->toleranceI = 15;
       this->continuous = false;
     };
 
-    double calculateOutput(double input, double dt){ //dt is in seconds
+    double calculateOutput(double input, double dt){ //dt is in milliseconds
+      dt = dt/1000;
       if(dt < (pow(10,-6))){
         dt = pow(10,-6);
       }
 
       this->error = (this->setPoint) - input;
 
-      // if(continuous == true){
-      //   if(abs(this->error) > ((this->maxInput)-(this->minInput))/2){
-      //     if(this->error > 0){
-      //       this->error = (this->error)-(this->maxInput)+(this->minInput);
-      //     }
-      //     else{
-      //       this->error = (this->error)+(this->maxInput)-(this->minInput);
-      //     }
-      //   }
-      // }
+      if(continuous == true){
+        if(abs(this->error) > ((this->maxInput)-(this->minInput))/2){
+          if(this->error > 0){
+            this->error = (this->error)-(this->maxInput)+(this->minInput);
+          }
+          else{
+            this->error = (this->error)+(this->maxInput)-(this->minInput);
+          }
+        }
+      }
 
-      if((this->error)*(this->kP) < this->maxOutput && (this->error)*(this->kP) > this->minOutput){
+      //if((this->error)*(this->kP) < this->maxOutput && (this->error)*(this->kP) > this->minOutput){
+      if(abs((this->error)) < abs(this->toleranceI)){
         this->totalError += (this->error)*dt;
       } else{
         this->totalError = 0;
       }
 
-      double pError = abs(this->error)<(this->deadband) ? 0 : (this->error);
+      double pError = abs(this->error)<abs(this->deadband) ? 0 : (this->error);
       double dError = ((this->error)-((this->prevError))/(dt));
       this->output = ((this->kP)*pError) + ((this->kI)*(this->totalError)) + ((this->kD)*(dError) + (this->kF)*(this->setPoint));
 
@@ -171,17 +181,27 @@ class pid{
       set_setPoint(this->setPoint);
     };
     void set_deadband(int band){
-      this->deadband = deadband;
+      this->deadband = band;
     };
     double get_deadband(){
       return this->deadband;
     };
+    void set_toleranceI(double tolerance){
+      this->toleranceI = tolerance;
+    };
+    double get_toleranceI(){
+      return this->toleranceI;
+    }
     void set_prevInput(double input){
       this->prevInput = input;
     };
     double get_prevInput(){
       return this->prevInput;
     };
+    void set_maxMinInput(int max,int min){
+      this->maxInput = max;
+      this->minInput = min;
+    }
     void set_continuous(bool val){
       this->continuous = val;
     };

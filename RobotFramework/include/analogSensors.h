@@ -6,7 +6,7 @@
 class analogSensors{
   private:
   //potentiometers defined first
-  potentiometer clawPotentiometer;
+  potentiometer rollerPotentiometer;
   //all other analog sensors here
   Gyro gyro;
   int deltaGyro;
@@ -14,9 +14,9 @@ class analogSensors{
 
       analogSensors(){
         deltaGyro = 0;
-        this->clawPotentiometer = potentiometer();
+        this->rollerPotentiometer = potentiometer();
         // this->gyro = gyroInit(analog1, 0);
-        // this->clawPotentiometer.set_Potentiometer(analog2);
+        // this->rollerPotentiometer.set_Potentiometer(analog2);
       };
 
       void set_deltaGyro(int num){
@@ -38,10 +38,14 @@ class analogSensors{
         gyroReset(this->gyro);
       };
       void set_potentiometer(int port){
-        this->clawPotentiometer.set_Potentiometer(port);
+        this->rollerPotentiometer.set_Potentiometer(port);
       };
       potentiometer get_potentiometer(){
-        return this->clawPotentiometer;
+        return this->rollerPotentiometer;
+      };
+      int get_potentiometerVal(){
+        return this->rollerPotentiometer.getValue()-1910; //fudge factor to count from 0
+                                                          //1980 is bottom. 0 is top
       };
 
 };

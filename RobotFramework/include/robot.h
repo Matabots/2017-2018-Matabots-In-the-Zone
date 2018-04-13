@@ -7,12 +7,13 @@
 #include "lift.h"
 #include "control.h"
 #include "claw.h"
+#include "roller.h"
 #include "i2c.h"
 #include <vector>
 #include "motor.h"
+#include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
-// #include "utility/units.h"
 
 class robot{
   private:
@@ -22,9 +23,11 @@ class robot{
     chassis* drive;
     lift* arm;
     control* remote;
-    claw* ef;
+    roller* ef;
     i2c* communications;
     motor* aMotor;
+    state robotState;
+    int stackedCones;
   public:
     //default constructor to allocate memory
     robot(){
@@ -32,10 +35,12 @@ class robot{
       this->analog = new analogSensors();
       this->digital = new digitalSensors();
       this->arm = new lift();
-      this->ef = new claw();
-      this->remote = new control(7, 6, 5, 8);
+      this->ef = new roller();
+      this->remote = new control(6, 7, 5, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
+      this->robotState = ADJUSTHEIGHT;
+      this->stackedCones = 0;
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -63,28 +68,34 @@ void setup(){
   ///////////////////////////////////////////
   ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
-      this->analog->set_potentiometer(analog2);
-      // this->digital->set_RightEncoder(digital2, digital3, false);
-      // this->digital->set_LiftEncoder(digital11, digital12, false);
-      // this->digital->set_LeftEncoder(digital8, digital9, true);
+      this->analog->set_potentiometer(analog1);
+      this->digital->set_limitSwitch(digital5);
+      this->digital->set_leftLiftEncoder(digital3, digital4, false);
+      this->digital->set_rightLiftEncoder(digital11, digital12, true);
+      //this->digital->set_LeftEncoder(digital8, digital9, true);
       // this->digital->set_coneLiftEncoder(digital4, digital5, false);
-      this->drive->addLeftMotor(motor2, true);
-      this->drive->addLeftMotor(motor3, false);
-      this->drive->addLeftMotor(motor4, true);
-      this->drive->addRightMotor(motor7, true);
+      this->drive->addLeftMotor(motor2, false);
+      this->drive->addLeftMotor(motor3, true);
       this->drive->addRightMotor(motor8, false);
-      this->drive->addRightMotor(motor9, false);
-      //this->arm->addPrimaryLift(motor7, false);
-      //this->arm->addPrimaryLift(motor6, true);
-      //this->arm->addSecondaryLift(motor5, false);
-      this->arm->addGoalLift(motor5, false);
-      this->ef->set_Port(motor4);
-      this->ef->set_Direction(false);
+      this->drive->addRightMotor(motor9, true);
+      this->arm->addPrimaryLift(motor4, false);
+      this->arm->addPrimaryLift(motor7, true);
+      this->arm->addSecondaryLift(motor6, true);
+      this->arm->addGoalLift(motor1, true);
+      this->arm->addGoalLift(motor10, false);
+      this->ef->addRoller(motor5, true);
+      ///////////////////////////////////////////
+      ////////////// CSUN2  ////////////////////////
+      //Dinero add your setup code here
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////Setters and Getters///////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    state get_state(){
+      return this->robotState;
+    }
     void set_communications(i2c communications){
       this->communications = &communications;
     };
@@ -121,18 +132,21 @@ void setup(){
     lift* get_arm(){
       return this->arm;
     };
-    void set_ef(claw ef){
+    void set_ef(roller ef){
       this->ef = &ef;
     };
-    claw* get_ef(){
+    roller* get_ef(){
       return this->ef;
     };
+    int get_stackedCones(){
+      return this->stackedCones;
+    }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////These are the operator control functions////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     void remoteListen(){
       joystickInputs();
-      clawButtons();
+      rollerButtons();
       bigLift();
       smallLift();
       goalLift();
@@ -155,11 +169,11 @@ void setup(){
   			this->drive->haltRight();
   		}
     };
-    void clawButtons(){
-      if(this->remote->clawOpen()){
+    void rollerButtons(){
+      if(this->remote->rollerOpen()){
         this->ef->set_Power(100);
         delay(50);
-      }else if(this->remote->clawClose()){
+      }else if(this->remote->rollerClose()){
         this->ef->set_Power(-100);
         delay(50);
       }else{
@@ -169,6 +183,8 @@ void setup(){
     void bigLift(){
       if(this->remote->bigLiftUp()){
         this->arm->primaryLiftPower(100);
+        this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
+        this->arm->primaryLiftPosition(20, this->digital->leftLiftEncoderVal());
         delay(50);
       }else if(this->remote->bigLiftDown()){
         this->arm->primaryLiftPower(-100);
@@ -230,8 +246,72 @@ void setup(){
 ////////////////////////////////////////////////////////Routines related to movement will belong here////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void autoLoad(){
+  if(this->stackedCones < 8){
+    switch(robotState){
 
-      //PID HERE
+          case ADJUSTHEIGHT:
+            //Lower Secondary Lift to Lowest Position
+            this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
+            if(this->analog->get_potentiometerVal() > 1700){
+              //this->arm->primaryLiftPosition(15, this->digital->leftLiftEncoderVal());
+              //if(this->digital->leftLiftEncoderVal() >= 20){
+                robotState = BOTTOM;
+                this->arm->haltPrimaryLift();
+                this->arm->haltSecondaryLift();
+                delay(500);
+              //}
+            }
+          break;
+          case BOTTOM:
+            //Move Primary lift to lowest position
+            this->arm->primaryLiftPosition(0, this->digital->leftLiftEncoderVal());
+            this->arm->secondaryLiftPosition(1700, this->analog->get_potentiometerVal());
+            if(this->digital->leftLiftEncoderVal() <= 0 && this->analog->get_potentiometerVal() > 1700){
+              robotState = INTAKE;
+              this->arm->haltPrimaryLift();
+              this->arm->haltSecondaryLift();
+            }
+          break;
 
+          case INTAKE:
+            //Intake Cone
+            this->ef->set_Power(-100);
+            if(this->digital->get_limitSwitch() == 0){
+              robotState = CONEHEIGHT;
+              this->ef->halt();
+            }
+          break;
+          //this is a change
+          case CONEHEIGHT:
+            //Raise Primary Lift to correct height (10deg/cone)
+
+              this->arm->primaryLiftPosition(11*(this->stackedCones+1), this->digital->leftLiftEncoderVal());
+              //Raise Secondary Lift to correct height
+              this->arm->secondaryLiftPosition(300, this->analog->get_potentiometerVal());
+
+            if(this->digital->leftLiftEncoderVal() >= 11*(this->stackedCones+1) && this->analog->get_potentiometerVal() < 600){
+              robotState = OUTTAKE;
+              this->arm->haltSecondaryLift();
+              this->arm->haltPrimaryLift();
+              delay(500);
+            }
+          break;
+
+          case OUTTAKE:
+            //Outtake
+            this->ef->set_Power(100);
+            delay(1000);
+            robotState = ADJUSTHEIGHT;
+            this->stackedCones++;
+            this->ef->halt();
+            delay(1000);
+          break;
+
+      };
+    };
+    };
 };
+
 #endif
