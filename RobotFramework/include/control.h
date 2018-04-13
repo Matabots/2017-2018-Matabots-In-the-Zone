@@ -3,19 +3,34 @@
 #include "API.h"
 class control{
 private:
+    int autonLift;
+    int autonAbort;
     int bigLift;
     int smallLift;
     int goalLifter;
     int roller;
 public:
-  control(int bigLift, int smallLift, int goalLift, int roller){
+  control(int autonLift, int autonAbort, int bigLift, int smallLift, int goalLift, int roller){
       //setup all controller bindings here
       this->bigLift = bigLift;
-      this->smallLift = smallLift;
-      this->goalLifter = goalLift;
-      this->roller = roller;
+      this->smallLift = smallLift; //8R toggle
+      //8L wipe the stack
+      this->goalLifter = goalLift; //7U up 7d down
+      this->roller = roller; //toggle buttons intake 8u 8d outtake
+      this->autonLift = autonLift;
+      this->autonAbort = autonAbort; //7right
+      //7 left to set loading position
     };
   //return functions here
+    int autonLiftProcessAdd(){
+      return joystickGetDigital(1, this->autonLift, JOY_UP);
+    };
+    int autonLiftProcessSubtract(){
+      return joystickGetDigital(1, this->autonLift, JOY_DOWN);
+    };
+    int autoLiftAbort(){
+      return joystickGetDigital(1, this->autonAbort, JOY_RIGHT);
+    }
     int rollerOpen(){
       return joystickGetDigital(1, this->roller, JOY_UP);
     };
@@ -23,10 +38,10 @@ public:
       return joystickGetDigital(1, this->roller, JOY_DOWN);
     };
     int smallLiftUp(){
-      return joystickGetDigital(1, this->smallLift, JOY_UP);
+      return joystickGetDigital(1, this->smallLift, JOY_LEFT);
     };
     int smallLiftDown(){
-      return joystickGetDigital(1, this->smallLift, JOY_DOWN);
+      return joystickGetDigital(1, this->smallLift, JOY_RIGHT);
     };
     int bigLiftUp(){
       return joystickGetDigital(1, this->bigLift, JOY_UP);

@@ -56,6 +56,7 @@ void operatorControl() {
 
   int count = imeInitializeAll();
   printf("ime's: %d \n",count);
+  printf("this changed");
   robot bot = robot();
   bot.setup();
   imeReset(0);
@@ -76,15 +77,16 @@ void operatorControl() {
 
   printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
-//////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////
   bot.get_digital()->resetLiftEncoders();
   while(true){
       printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
+      printf("cones: %d\n",bot.get_stackedCones());
+      printf("targetCones: %d\n",bot.get_targetStack());
       printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
       printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
-      printf("cones: %d\n",bot.get_stackedCones());
       printState(bot.get_state());
-      bot.autoLoad();
+      bot.remoteListen();
       delay(50);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////

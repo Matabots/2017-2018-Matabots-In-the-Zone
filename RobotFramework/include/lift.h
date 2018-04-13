@@ -7,7 +7,7 @@
 class lift{
 private:
   std::vector<motor*> primaryLift;
-  pid* primaryLiftPosPID;
+  pid* primaryLiftPosPID; //currently not being used. Things are being hard coded :(
   std::vector<motor*> secondaryLift;
   std::vector<motor*> goalLift;
 
@@ -38,10 +38,11 @@ public:
     this->goalLift = motors;
   }
   void addPrimaryLift(int port, bool reverse){
-    motor* liftMotor = new motor(port,7.0,0.0,0.0,0.0);
+    motor* liftMotor = new motor(port,9.0,0.0,0.0,0.0);
     liftMotor->set_Direction(reverse);
     liftMotor->set_type(ENC);
-    // this->primaryLift.resize(this->primaryLift.size() + 1);
+    liftMotor->get_posPID()->set_deadband(1);
+    //liftMotor->get_posPID()->set_deadband(3);
     this->primaryLift.push_back(liftMotor);
   };
 
@@ -59,6 +60,14 @@ public:
     goalMotor->set_address(2);
     this->goalLift.push_back(goalMotor);
   }
+
+void set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
+  pid* posPID = new pid(kP,kI,kD,kF);
+  for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
+    this->primaryLift[i]->set_posPID(posPID);
+  }
+};
+
   void primaryLiftPower(int power){
     for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
       this->primaryLift[i]->set_Power(power);
@@ -66,17 +75,19 @@ public:
   };
 
   void primaryLiftPosition(int deg, int encoderVal){
+    printf("kP: %f\n", this->primaryLift[0]->get_posPID()->get_kP());
     for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
       this->primaryLift[i]->tickControl(deg,encoderVal);
     }
   };
+
   void secondaryLiftPosition(int targetCount, int potentiometer){
     for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
-      if(abs(potentiometer) < targetCount){
-        this->secondaryLift[i]->set_Power(-50);
+      if((potentiometer) > (targetCount)){
+        this->secondaryLift[i]->set_Power(-70);
       }
-      else if(abs(potentiometer) > targetCount){
-        this->secondaryLift[i]->set_Power(100);
+      else if((potentiometer) < (targetCount)){
+        this->secondaryLift[i]->set_Power((0.85*(targetCount-potentiometer)));
       }
       else{
         haltSecondaryLift();

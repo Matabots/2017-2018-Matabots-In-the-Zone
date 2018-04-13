@@ -44,8 +44,7 @@ class analogSensors{
         return this->rollerPotentiometer;
       };
       int get_potentiometerVal(){
-        return this->rollerPotentiometer.getValue()-1910; //fudge factor to count from 0
-                                                          //1980 is bottom. 0 is top
+        return this->rollerPotentiometer.getValue(); 
       };
 
 };
