@@ -21,12 +21,9 @@
 //required includes
 #include "main.h"
 #include "robot.h"
-<<<<<<< HEAD
 #include "../include/uart.h"
 #include "uart.h"
 
-=======
->>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via he Field Management System
@@ -57,7 +54,6 @@
 
 //
 void operatorControl() {
-<<<<<<< HEAD
 //     lcdInit(uart1);
 //     lcdClear(uart1);
   printf("Starting.\n");
@@ -71,7 +67,6 @@ void operatorControl() {
   // char* pntr;
   // pntr = (char*) malloc (sizeof(char)*1);
   // printf("Allocated memory.\n");
-=======
   //   lcdInit(uart2);
     // lcdClear(uart2);
 
@@ -86,7 +81,6 @@ void operatorControl() {
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
   pntr = (char*) malloc (sizeof(char)*1);*/
->>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
   // std::string sauce = "";
 
 
@@ -158,15 +152,14 @@ void operatorControl() {
   //   delay(50);
   // }
 
-<<<<<<< HEAD
-  botUart* botUart1 = new botUart();
+//  botUart* botUart1 = new botUart();
 
-  while(true)//operatingTime.GetTicks() < 10000)
-  {
-    // botUart1.readData();
-
-    // printf("%c\n", 's');
-    botUart1->runUART();
+  // while(true)//operatingTime.GetTicks() < 10000)
+  // {
+  //   // botUart1.readData();
+  //
+  //   // printf("%c\n", 's');
+  //   botUart1->runUART();
     // botUart1->readData();
     // //botUart1->printStr();
     // botUart1->setObVals();
@@ -176,7 +169,6 @@ void operatorControl() {
       // printf("%d\n",iSqc.read();
       // fread(pntr,sizeof(char),1,uart1);
       //fgets(pntr,sizeof(char),1,uart1);
-=======
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
@@ -260,8 +252,6 @@ else
 
 
 
-
->>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
   // printf("The Program has Ended\n");
 
 }
