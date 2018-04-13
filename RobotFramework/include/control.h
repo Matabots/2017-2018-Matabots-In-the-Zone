@@ -9,12 +9,13 @@ private:
     int smallLift;
     int goalLifter;
     int roller;
+    int clearStack;
 public:
-  control(int autonLift, int autonAbort, int bigLift, int smallLift, int goalLift, int roller){
+  control(int autonLift, int autonAbort, int clearStacked, int bigLift, int smallLift, int goalLift, int roller){
       //setup all controller bindings here
       this->bigLift = bigLift;
       this->smallLift = smallLift; //8R toggle
-      //8L wipe the stack
+      this->clearStack = clearStacked;//8L wipe the stack
       this->goalLifter = goalLift; //7U up 7d down
       this->roller = roller; //toggle buttons intake 8u 8d outtake
       this->autonLift = autonLift;
@@ -32,16 +33,16 @@ public:
       return joystickGetDigital(1, this->autonAbort, JOY_RIGHT);
     }
     int rollerOpen(){
-      return joystickGetDigital(1, this->roller, JOY_UP);
-    };
-    int rollerClose(){
       return joystickGetDigital(1, this->roller, JOY_DOWN);
     };
-    int smallLiftUp(){
-      return joystickGetDigital(1, this->smallLift, JOY_LEFT);
+    int rollerClose(){
+      return joystickGetDigital(1, this->roller, JOY_UP);
     };
-    int smallLiftDown(){
+    int smallLiftToggle(){
       return joystickGetDigital(1, this->smallLift, JOY_RIGHT);
+    };
+    int clearConeStack(){
+      return joystickGetDigital(1, this->clearStack, JOY_LEFT);
     };
     int bigLiftUp(){
       return joystickGetDigital(1, this->bigLift, JOY_UP);

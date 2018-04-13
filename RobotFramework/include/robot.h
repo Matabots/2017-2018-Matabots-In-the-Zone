@@ -14,7 +14,7 @@
 #include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
-#include "uart.h"
+//#include "uart.h"
 #include "utility.h"
 class robot{
   private:
@@ -29,7 +29,7 @@ class robot{
     motor* aMotor;
     state robotState;
     int stackedCones;
-    botUart* uartComms;
+    // /botUart* uartComms;
     int targetStack;
   public:
   bool autoStacking = false;
@@ -40,13 +40,13 @@ class robot{
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new roller();
-      this->remote = new control(6, 7, 5, 8, 7, 8);
+      this->remote = new control(6, 7, 8, 5, 8, 7, 8);
       this->communications = new i2c();
       this->aMotor = new motor();
       this->robotState = ADJUSTHEIGHT;
       this->stackedCones = 0;
       this->targetStack = 0;
-      this->uartComms = new botUart();
+      //this->uartComms = new botUart();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -254,13 +254,21 @@ void setup(){
         this->arm->haltPrimaryLift();
       }
     };
+    bool toggleUp = true;
     void smallLift(){
       // motorSet(5, speed);
-      if(this->remote->smallLiftUp()){
+      if(this->remote->smallLiftToggle() ){
         this->arm->secondaryLiftPower(-100);
+        if(this->analog->get_potentiometerVal() < 1800){
+          toggleUp = false;
+        }
         delay(50);
-      }else if(this->remote->smallLiftDown()){
+      }
+      else if(this->remote->smallLiftToggle()){
         this->arm->secondaryLiftPower(100);
+        if(this->analog->get_potentiometerVal() > 3000 ){
+          toggleUp = true;
+        }
         delay(50);
       }else{
         this->arm->haltSecondaryLift();
