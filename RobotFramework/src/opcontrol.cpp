@@ -56,9 +56,6 @@
 void operatorControl() {
 //     lcdInit(uart1);
 //     lcdClear(uart1);
-  printf("Starting.\n");
-  robot bot = robot();
-  bot.setup();
   // printf("Ran setup.\n");
   //i2c iSqC = i2c();
   // usartInit(uart1, 9600, SERIAL_DATABITS_8);

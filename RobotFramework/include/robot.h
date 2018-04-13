@@ -14,12 +14,8 @@
 #include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
-<<<<<<< HEAD
 #include "uart.h"
-
-=======
 #include "utility.h"
->>>>>>> 7c39a11ddc2f4f86ac5bffd453b0559f1bfb69e7
 class robot{
   private:
     //private variables (raw pointers)
@@ -33,11 +29,8 @@ class robot{
     motor* aMotor;
     state robotState;
     int stackedCones;
-<<<<<<< HEAD
     botUart* uartComms;
-=======
     int targetStack;
->>>>>>> 7c39a11ddc2f4f86ac5bffd453b0559f1bfb69e7
   public:
   bool autoStacking = false;
     //default constructor to allocate memory
@@ -52,11 +45,8 @@ class robot{
       this->aMotor = new motor();
       this->robotState = ADJUSTHEIGHT;
       this->stackedCones = 0;
-<<<<<<< HEAD
-      this->uartComms = new botUart();
-=======
       this->targetStack = 0;
->>>>>>> 7c39a11ddc2f4f86ac5bffd453b0559f1bfb69e7
+      this->uartComms = new botUart();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
