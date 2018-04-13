@@ -21,6 +21,12 @@
 //required includes
 #include "main.h"
 #include "robot.h"
+<<<<<<< HEAD
+#include "../include/uart.h"
+#include "uart.h"
+
+=======
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
 /*
  * Runs the user operator control code. This function will be started in its own task with the
  * default priority and stack size whenever the robot is enabled via he Field Management System
@@ -51,6 +57,21 @@
 
 //
 void operatorControl() {
+<<<<<<< HEAD
+//     lcdInit(uart1);
+//     lcdClear(uart1);
+  printf("Starting.\n");
+  robot bot = robot();
+  bot.setup();
+  // printf("Ran setup.\n");
+  //i2c iSqC = i2c();
+  // usartInit(uart1, 9600, SERIAL_DATABITS_8);
+  // printf("Created uart.\n");
+  //usartInit(uart1, 9600, SERIAL_8N1);
+  // char* pntr;
+  // pntr = (char*) malloc (sizeof(char)*1);
+  // printf("Allocated memory.\n");
+=======
   //   lcdInit(uart2);
     // lcdClear(uart2);
 
@@ -65,6 +86,7 @@ void operatorControl() {
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
   pntr = (char*) malloc (sizeof(char)*1);*/
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
   // std::string sauce = "";
 
 
@@ -75,7 +97,7 @@ void operatorControl() {
   //bot.smallLift(0);
   //use millis() for integrated timing
 
-  printf("Begin operatorControl\n");
+  // printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
 // //////////////////////////////////////////////////////////////////////////////////////////////
   bot.get_digital()->resetLiftEncoders();
@@ -136,6 +158,25 @@ void operatorControl() {
   //   delay(50);
   // }
 
+<<<<<<< HEAD
+  botUart* botUart1 = new botUart();
+
+  while(true)//operatingTime.GetTicks() < 10000)
+  {
+    // botUart1.readData();
+
+    // printf("%c\n", 's');
+    botUart1->runUART();
+    // botUart1->readData();
+    // //botUart1->printStr();
+    // botUart1->setObVals();
+    // botUart1->printObVals();
+    // while(true)
+    // {
+      // printf("%d\n",iSqc.read();
+      // fread(pntr,sizeof(char),1,uart1);
+      //fgets(pntr,sizeof(char),1,uart1);
+=======
     // while(true)
     // {
       // printf("%d\n",iSqc.read();
@@ -147,10 +188,63 @@ void operatorControl() {
 
 ////////////////// UART //////////////////////////////////////////////////////////////
   /*    fread(pntr,sizeof(char),1,uart1);
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
 
       // for(x=0;x<3;x++){
-        printf("%c\n", pntr[0]);
+        // printf("%c\n", pntr[0]);
       // };
+<<<<<<< HEAD
+      // if (pntr[0] == '&')
+      // {
+      //   //std::cout << sauce << '\n';
+      //   // sauce = "";
+      // }
+      // else
+      // {
+      //   //sauce += pntr[0];
+      //   //pntr[0] = '';
+      // }
+      //iSqC.read();
+      delay(25);
+    // }
+  //   bot.get_drive()->leftPower(127);
+  //   bot.get_drive()->rightPower(127);
+  //
+  //   motVel =  bot.get_drive()->getLeftMotorAt(0).get_velocity(bot.get_digital()->leftEncoderVal());
+  //   lcdPrint(uart1, 2, "Vel: %d",motVel );//;
+
+    //printf("Inches: %d \n",(int)abs(ticksToInches(bot.get_digital()->get_RightEncoder(),bot.get_drive()->get_wheelDiameter())));
+    //printf("Ticks: %d \n",(int)abs(bot.get_digital()->leftEncoderVal()));
+    //bot.remoteListen();
+    // printf("%d\n", bot.get_digital()->liftEncoderVal());
+
+    // bot.smallLift();
+    // if(remote->absLeftJoystickVal() > 15){
+    //   newChassis.leftPower(remote->leftJoystickVal());
+    // }else{
+    //   newChassis.haltLeft();
+    // };
+    //
+    // if(joystickGetAnalog(1, 2) > 15 || joystickGetAnalog(1, 2) < -15){
+    //   newChassis.rightPower(joystickGetAnalog(1, 2));
+    // }else{
+    //   newChassis.haltRight();
+    // };
+
+    // newMotor.set_Power(100);
+    // if(joystickGetAnalog(1, 4) > 15){
+      // motorSet(motor8, joystickGetAnalog(1, 3));
+      // motorSet(motor2, (joystickGetAnalog(1, 3)));
+    // }
+    // if(joystickGetAnalog(1, 2) > 15){
+      // motorSet(motor3, joystickGetAnalog(1, 2) * -1);
+      // motorSet(motor9, (joystickGetAnalog(1, 2)));
+    // }
+    // motorSet(8, 100);
+    // printf("%d\n", joystickGetAnalog(1, 1));
+  //   delay(25);
+  }
+=======
 if (pntr[0] == '&')
 {
   //std::cout << sauce << '\n';
@@ -167,6 +261,7 @@ else
 
 
 
+>>>>>>> 951d77628b906356d2b5c6d0a113c54c66f16603
   // printf("The Program has Ended\n");
 
 }
