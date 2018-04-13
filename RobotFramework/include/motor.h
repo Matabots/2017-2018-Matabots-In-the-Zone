@@ -275,7 +275,7 @@ public:
     double vel_output = this->posPID->calculateOutput(in, dt);
     if(abs(setPointIn-in) > (this->posPID->get_deadband())){
       set_Power(vel_output); //replace with velocity control when you get chance
-      printf("vel: %f",vel_output);
+      //printf("vel: %f",vel_output);
     //  printf("vel: %f \n",vel_output);
     }
   };
@@ -286,7 +286,7 @@ public:
     double rotations = setPointDeg/360;
     int setPointCount = rotationsToTicks(rotations, this->type);
     set_targetCount(setPointCount);
-    printf("setPt: %d \n", this->targetCount);
+    //printf("setPt: %d \n", this->targetCount);
     this->posPID->set_setPoint(this->targetCount);
     this->count = currTick;
     // // printf("PID: %f \n",this->posPID->get_kP());
@@ -294,7 +294,7 @@ public:
     double vel_output = this->posPID->calculateOutput(this->count, dt);
     if(abs(this->posPID->get_setPoint()-(this->count)) > (this->posPID->get_deadband())){
       set_Power(vel_output); //replace with velocity control when you get chance
-      printf("vel: %f",vel_output);
+      //printf("vel: %f",vel_output);
     //  printf("vel: %f \n",vel_output);
     }
   };

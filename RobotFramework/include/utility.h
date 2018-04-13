@@ -28,5 +28,8 @@ int clamp(int d, int min, int max, int overrideMin, int overrideMax);
  */
 int abs(int value);
 
+double average(double num1, double num2){
+  return (num1+num2)/2;
+}
 
 #endif /* INCLUDE_UTILITY_H_ */
