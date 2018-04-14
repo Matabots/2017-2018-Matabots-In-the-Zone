@@ -179,6 +179,49 @@ public:
     }
   };
 
+  void turnToAngle(int targetAngle){
+    // bool atGyro = false;
+    // int tolerance = 8;//7
+  	// float KpT = 0.85;// was 0.8
+  	// float difference = (targetAngle - this->);
+    //
+  	// 	time1[T1] =0;
+  	// 	if(abs(difference) > tolerance)// || time1[T1] > 500)
+  	// 	{
+  	// 			GyroUpdate();
+  	// 		  difference = (targetGyro - gyroVal);
+    //       //calculate to see if it is faster to turn left or right
+    //       if(difference > 180)
+    //       {
+    //               difference -= 360;
+    //       }
+    //       if(difference < -180)
+    //       {
+    //               difference += 360;
+    //       }
+    //       if(abs(difference)>tolerance)
+    //       {
+    //       	time1[T1] =0;
+    //       }
+    //       int power = difference * KpT;
+    //
+    //       power = power < -100 ? -100 : power;
+    //       power = power > 100 ? 100 : power;
+    //       if(power < 0 && power > -25)
+    //       {
+    //       	power = -25*KpT;
+    //       }
+    //       if(power > 0 && power<25)
+    //       {
+    //       	power = 25*KpT;
+    //     	}
+    //
+    //       leftPower(-power);
+    //       rightPower(power);
+  	// 	}
+  	// 	atGyro = true;
+  };
+
   int get_wheelDiameter(){
     return this->wheelDiameter;
   };

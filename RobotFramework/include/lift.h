@@ -38,7 +38,7 @@ public:
     this->goalLift = motors;
   }
   void addPrimaryLift(int port, bool reverse){
-    motor* liftMotor = new motor(port,9.0,0.0,0.0,0.0);
+    motor* liftMotor = new motor(port,11.0,0.0,0.0,0.0);
     liftMotor->set_Direction(reverse);
     liftMotor->set_type(ENC);
     liftMotor->get_posPID()->set_deadband(1);
@@ -87,7 +87,7 @@ void set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
         this->secondaryLift[i]->set_Power(-70);
       }
       else if((potentiometer) < (targetCount)){
-        this->secondaryLift[i]->set_Power((0.85*(targetCount-potentiometer)));
+        this->secondaryLift[i]->set_Power((0.65*(targetCount-potentiometer)));
       }
       else{
         haltSecondaryLift();

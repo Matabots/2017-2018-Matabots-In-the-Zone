@@ -15,7 +15,7 @@
 #include "ports.h"
 #include "potentiometer.h"
 #include "../include/uart.h"
-#include "uart.h"
+//#include "uart.h"
 #include "utility.h"
 class robot{
   private:
@@ -158,7 +158,7 @@ void setup(){
       joystickInputs();
       autonLiftProcess();
       autoAbort();
-      this->uartComms->runUART();
+      //this->uartComms->runUART();
       if(!autoStacking){
         rollerButtons();
         bigLift();
@@ -256,6 +256,7 @@ void setup(){
         this->arm->haltPrimaryLift();
       }
     };
+
     bool toggleUp = true;
     void smallLift(){
       // motorSet(5, speed);
@@ -276,6 +277,7 @@ void setup(){
       //   this->arm->haltSecondaryLift();
       // }
     };
+
     void goalLift(){
       if(this->remote->goalLiftUp()){
         this->arm->goalLiftPower(100);
@@ -332,9 +334,10 @@ void autoLoad( ){
 
           case ADJUSTHEIGHT:
             //Lower Secondary Lift to Lowest Position
+            this->ef->halt();
             this->arm->primaryLiftPosition(10*(this->stackedCones), this->digital->leftLiftEncoderVal());
-            this->arm->secondaryLiftPosition(1800, this->analog->get_potentiometerVal());
-            if(this->analog->get_potentiometerVal() < 1800){
+            this->arm->secondaryLiftPosition(400, this->analog->get_potentiometerVal());
+            if(this->analog->get_potentiometerVal() < 400){
                 robotState = BOTTOM;
                 this->ef->set_Power(-100);
                 this->arm->haltPrimaryLift();
@@ -348,12 +351,12 @@ void autoLoad( ){
               printf("I should have changed");
             }
             this->ef->set_Power(-100);
-            this->arm->primaryLiftPosition(3, this->digital->leftLiftEncoderVal());
+            this->arm->primaryLiftPosition(2, this->digital->leftLiftEncoderVal());
 
-            this->arm->secondaryLiftPosition(1800, this->analog->get_potentiometerVal());
-            if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) <= 3 && this->analog->get_potentiometerVal() < 1800){
+            this->arm->secondaryLiftPosition(400, this->analog->get_potentiometerVal());
+            if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) <= 3 && this->analog->get_potentiometerVal() < 400){
               robotState = INTAKE;
-              this->arm->set_primaryLiftPosPID(9.0,0.0,0.0);
+              this->arm->set_primaryLiftPosPID(11.0,0.0,0.0);
               this->arm->haltPrimaryLift();
               this->arm->haltSecondaryLift();
             }
@@ -361,7 +364,7 @@ void autoLoad( ){
 
           case INTAKE:
             //Intake Cone
-            if(this->analog->get_potentiometerVal() > 1800){
+            if(this->analog->get_potentiometerVal() > 400 || average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) > 7){
               robotState = BOTTOM;
             }
             if(this->digital->get_limitSwitch() == 0){
@@ -374,16 +377,18 @@ void autoLoad( ){
             //Raise Primary Lift to correct height (10deg/cone)
 
             this->arm->primaryLiftPosition(10*(this->stackedCones+1), this->digital->leftLiftEncoderVal());
+
+            this->ef->halt();
             //Raise Secondary Lift to correct height
               if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= 10*(this->stackedCones-1)){
-                  this->arm->secondaryLiftPosition(3000, this->analog->get_potentiometerVal());
+                  this->arm->secondaryLiftPosition(1500, this->analog->get_potentiometerVal());
               }
 
-            if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= 10*(this->stackedCones+1) && this->analog->get_potentiometerVal() > 3000){
+            if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= 10*(this->stackedCones+1) && this->analog->get_potentiometerVal() > 1500){
               robotState = OUTTAKE;
               this->arm->haltSecondaryLift();
               this->arm->haltPrimaryLift();
-              delay(350);
+              delay(500);
             }
           break;
 
