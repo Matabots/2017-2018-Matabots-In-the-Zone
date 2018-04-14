@@ -257,22 +257,22 @@ void setup(){
     bool toggleUp = true;
     void smallLift(){
       // motorSet(5, speed);
-      if(this->remote->smallLiftToggle() ){
-        this->arm->secondaryLiftPower(-100);
-        if(this->analog->get_potentiometerVal() < 1800){
-          toggleUp = false;
-        }
-        delay(50);
-      }
-      else if(this->remote->smallLiftToggle()){
-        this->arm->secondaryLiftPower(100);
-        if(this->analog->get_potentiometerVal() > 3000 ){
-          toggleUp = true;
-        }
-        delay(50);
-      }else{
-        this->arm->haltSecondaryLift();
-      }
+      // if(this->remote->smallLiftToggle() ){
+      //   this->arm->secondaryLiftPower(-100);
+      //   // if(this->analog->get_potentiometerVal() < 1800){
+      //   //   toggleUp = false;
+      //   // }
+      //   delay(50);
+      // }
+      // else if(this->remote->smallLiftToggle()){
+      //   this->arm->secondaryLiftPower(100);
+      //   // if(this->analog->get_potentiometerVal() > 3000 ){
+      //   //   toggleUp = true;
+      //   // }
+      //   delay(50);
+      // }else{
+      //   this->arm->haltSecondaryLift();
+      // }
     };
     void goalLift(){
       if(this->remote->goalLiftUp()){
