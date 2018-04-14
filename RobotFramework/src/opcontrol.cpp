@@ -149,14 +149,14 @@ void operatorControl() {
   //   delay(50);
   // }
 
-//  botUart* botUart1 = new botUart();
+ // botUart* botUart1 = new botUart();
 
   // while(true)//operatingTime.GetTicks() < 10000)
   // {
   //   // botUart1.readData();
   //
   //   // printf("%c\n", 's');
-  //   botUart1->runUART();
+    // botUart1->runUART();
     // botUart1->readData();
     // //botUart1->printStr();
     // botUart1->setObVals();
