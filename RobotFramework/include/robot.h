@@ -217,7 +217,7 @@ void setup(){
     bool subtractReleased = false;
     void autonLiftProcess(){
       if(!autoStacking){
-        printf("this is running");
+        printf("this is running\n");
         if(this->remote->autonLiftProcessAdd()){
           addPressed = true;
         }
