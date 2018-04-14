@@ -76,7 +76,7 @@ public:
       // printf("Character is currently: %c\n",this->finishedData[i]);
       i++;
     }
-    printf("STOPPED, ENCOUNTERED '&'\n");
+    //printf("STOPPED, ENCOUNTERED '&'\n");
     i--; //i is at the index of the first encountered ;
     while(i >= -1)
     {

@@ -14,7 +14,8 @@
 #include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
-//#include "uart.h"
+#include "../include/uart.h"
+#include "uart.h"
 #include "utility.h"
 class robot{
   private:
@@ -29,7 +30,7 @@ class robot{
     motor* aMotor;
     state robotState;
     int stackedCones;
-    // /botUart* uartComms;
+    botUart* uartComms;
     int targetStack;
   public:
   bool autoStacking = false;
@@ -46,7 +47,7 @@ class robot{
       this->robotState = ADJUSTHEIGHT;
       this->stackedCones = 0;
       this->targetStack = 0;
-      //this->uartComms = new botUart();
+      this->uartComms = new botUart();
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -157,6 +158,7 @@ void setup(){
       joystickInputs();
       autonLiftProcess();
       autoAbort();
+      this->uartComms->runUART();
       if(!autoStacking){
         rollerButtons();
         bigLift();
