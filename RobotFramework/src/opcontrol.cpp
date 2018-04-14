@@ -74,6 +74,7 @@ void operatorControl() {
   bot.setup();
   imeReset(0);
   imeReset(1);
+  bot.get_analog()->reset_gyro();
 /*  i2c iSqC = i2c();
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
@@ -93,13 +94,14 @@ void operatorControl() {
 // //////////////////////////////////////////////////////////////////////////////////////////////
   bot.get_digital()->resetLiftEncoders();
   while(true){
-      printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
-      printf("cones: %d\n",bot.get_stackedCones());
-      printf("targetCones: %d\n",bot.get_targetStack());
-      printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
-      printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
-      printState(bot.get_state());
-      bot.remoteListen();
+      // printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
+      // printf("cones: %d\n",bot.get_stackedCones());
+      // printf("targetCones: %d\n",bot.get_targetStack());
+      // printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
+      // printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
+      printf("yaw: %d\n", bot.get_analog()->gyro_val());
+      //printState(bot.get_state());
+      //bot.remoteListen();
       delay(50);
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////

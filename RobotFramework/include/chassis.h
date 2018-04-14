@@ -6,6 +6,7 @@
 #include "math.h"
 #include <vector>
 #include "path.h"
+#include "analogSensors.h"
 #define vSAMPLE_PERIOD 100  //Sample period for digital control
 class chassis{
 private:
@@ -15,6 +16,7 @@ private:
   float gearRatio;
   pid* chassisVelPID;
   pid* chassisPosPID;
+  pid* chassisGyroPID;
   path* waypoints;
   CartesianVector currPos;
 public:
@@ -29,6 +31,8 @@ public:
     // this->chassisPosPID->set_deadband(10);
     this->chassisPosPID = new pid(3.5,0.00,0.0,0.0);
     this->chassisPosPID->set_deadband(3);
+    this->chassisGyroPID = new pid(0.85,0.0,0.0,0.0);
+    this->chassisGyroPID->set_deadband(5);
     this->currPos.x = 0;
     this->currPos.y = 0;
     waypoints = new path(currPos);
@@ -179,47 +183,44 @@ public:
     }
   };
 
-  void turnToAngle(int targetAngle){
-    // bool atGyro = false;
-    // int tolerance = 8;//7
-  	// float KpT = 0.85;// was 0.8
-  	// float difference = (targetAngle - this->);
-    //
-  	// 	time1[T1] =0;
-  	// 	if(abs(difference) > tolerance)// || time1[T1] > 500)
-  	// 	{
-  	// 			GyroUpdate();
-  	// 		  difference = (targetGyro - gyroVal);
-    //       //calculate to see if it is faster to turn left or right
-    //       if(difference > 180)
-    //       {
-    //               difference -= 360;
-    //       }
-    //       if(difference < -180)
-    //       {
-    //               difference += 360;
-    //       }
-    //       if(abs(difference)>tolerance)
-    //       {
-    //       	time1[T1] =0;
-    //       }
-    //       int power = difference * KpT;
-    //
-    //       power = power < -100 ? -100 : power;
-    //       power = power > 100 ? 100 : power;
-    //       if(power < 0 && power > -25)
-    //       {
-    //       	power = -25*KpT;
-    //       }
-    //       if(power > 0 && power<25)
-    //       {
-    //       	power = 25*KpT;
-    //     	}
-    //
-    //       leftPower(-power);
-    //       rightPower(power);
-  	// 	}
-  	// 	atGyro = true;
+  bool atGyro = false;
+  void turnToAngle(int targetAngle, analogSensors* gyro){
+  	float difference = (targetAngle - (float)gyro->gyro_val());
+    printf("%f", difference);
+  	//	time1[T1] =0;
+  		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+  		{
+  			  difference = (targetAngle - (float)gyro->gyro_val());
+          //calculate to see if it is faster to turn left or right
+          if(difference > 180)
+          {
+                  difference -= 360;
+          }
+          if(difference < -180)
+          {
+                  difference += 360;
+          }
+          if(abs(difference)>this->chassisGyroPID->get_deadband())
+          {
+          	//time1[T1] =0;
+          }
+          int power = difference * this->chassisGyroPID->get_kP();
+
+          power = power < -100 ? -100 : power;
+          power = power > 100 ? 100 : power;
+          if(power < 0 && power > -25)
+          {
+          	power = -25*this->chassisGyroPID->get_kP();
+          }
+          if(power > 0 && power<25)
+          {
+          	power = 25*this->chassisGyroPID->get_kP();
+        	}
+
+          leftPower(-power);
+          rightPower(power);
+  		}
+  		atGyro = true;
   };
 
   int get_wheelDiameter(){
