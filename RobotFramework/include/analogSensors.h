@@ -44,7 +44,7 @@ class analogSensors{
         return this->rollerPotentiometer;
       };
       int get_potentiometerVal(){
-        return this->rollerPotentiometer.getValue(); 
+        return this->rollerPotentiometer.getValue();
       };
 
 };
