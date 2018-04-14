@@ -347,7 +347,7 @@ void autoLoad( ){
           case BOTTOM:
             //Move Primary lift to lowest position
             if(this->stackedCones > 2){ //if the cone stack gets to high, lower the speed to drop a bit so it doesn't damage the bot
-              this->arm->set_primaryLiftPosPID(2.0,0.0,0.0);
+              this->arm->set_primaryLiftPosPID(5.0,0.0,0.0);
               printf("I should have changed");
             }
             this->ef->set_Power(-100);
@@ -356,7 +356,7 @@ void autoLoad( ){
             this->arm->secondaryLiftPosition(400, this->analog->get_potentiometerVal());
             if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) <= 3 && this->analog->get_potentiometerVal() < 400){
               robotState = INTAKE;
-              this->arm->set_primaryLiftPosPID(11.0,0.0,0.0);
+              this->arm->set_primaryLiftPosPID(10.5,0.0,0.0);
               this->arm->haltPrimaryLift();
               this->arm->haltSecondaryLift();
             }
@@ -364,9 +364,9 @@ void autoLoad( ){
 
           case INTAKE:
             //Intake Cone
-            if(this->analog->get_potentiometerVal() > 400 || average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) > 7){
-              robotState = BOTTOM;
-            }
+            // if(this->analog->get_potentiometerVal() > 400 || average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) > 7){
+            //   robotState = BOTTOM;
+            // }
             if(this->digital->get_limitSwitch() == 0){
               robotState = CONEHEIGHT;
               this->ef->halt();
