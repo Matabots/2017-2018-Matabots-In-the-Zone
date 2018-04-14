@@ -31,7 +31,7 @@ public:
     // this->chassisPosPID->set_deadband(10);
     this->chassisPosPID = new pid(3.5,0.00,0.0,0.0);
     this->chassisPosPID->set_deadband(3);
-    this->chassisGyroPID = new pid(0.85,0.0,0.0,0.0);
+    this->chassisGyroPID = new pid(4.0,0.0,1.0,0.0);
     this->chassisGyroPID->set_deadband(5);
     this->currPos.x = 0;
     this->currPos.y = 0;
@@ -186,7 +186,7 @@ public:
   bool atGyro = false;
   void turnToAngle(int targetAngle, analogSensors* gyro){
   	float difference = (targetAngle - (float)gyro->gyro_val());
-    printf("%f", difference);
+    printf("%f\n", difference);
   	//	time1[T1] =0;
   		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
   		{
@@ -200,21 +200,17 @@ public:
           {
                   difference += 360;
           }
-          if(abs(difference)>this->chassisGyroPID->get_deadband())
-          {
-          	//time1[T1] =0;
-          }
           int power = difference * this->chassisGyroPID->get_kP();
 
           power = power < -100 ? -100 : power;
           power = power > 100 ? 100 : power;
-          if(power < 0 && power > -25)
+          if(power < 0 && power > -10)
           {
-          	power = -25*this->chassisGyroPID->get_kP();
+          	power = -10*this->chassisGyroPID->get_kP();
           }
-          if(power > 0 && power<25)
+          if(power > 0 && power<10)
           {
-          	power = 25*this->chassisGyroPID->get_kP();
+          	power = 10*this->chassisGyroPID->get_kP();
         	}
 
           leftPower(-power);

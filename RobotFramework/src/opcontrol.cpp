@@ -100,6 +100,7 @@ void operatorControl() {
       // printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
       // printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
       printf("yaw: %d\n", bot.get_analog()->gyro_val());
+      bot.get_drive()->turnToAngle(25, bot.get_analog());
       //printState(bot.get_state());
       //bot.remoteListen();
       delay(50);
