@@ -86,12 +86,14 @@ void set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
       if((potentiometer) > (targetCount)){
         this->secondaryLift[i]->set_Power(-100);//=70
         printf("running %d\n",this->secondaryLift[i]->get_Power() );
+        printf("# lift: %d\n",this->secondaryLift.size());
       }
       else if((potentiometer) < (targetCount)){
         this->secondaryLift[i]->set_Power((0.15*(targetCount-potentiometer)));
       }
       else{
         haltSecondaryLift();
+        printf("I AM STOPPING THE LIFT BECAUSE I AM A SHIT");
       }
     }
   };
