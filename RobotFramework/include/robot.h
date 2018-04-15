@@ -14,8 +14,7 @@
 #include "./utility/vector.h"
 #include "ports.h"
 #include "potentiometer.h"
-#include "../include/uart.h"
-//#include "uart.h"
+#include "botUart.h"
 #include "utility.h"
 class robot{
   private:
@@ -159,7 +158,7 @@ void setup(){
       joystickInputs();
       autonLiftProcess();
       autoAbort();
-      //this->uartComms->runUART();
+      this->uartComms->runUART();
       if(!autoStacking){
         rollerButtons();
         bigLift();
