@@ -76,7 +76,8 @@ void setup(){
   ////////////// CSUN1 Carbon  ////////////////////////
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog1);
-      this->digital->set_limitSwitch(digital5);
+      this->digital->set_leftLimitSwitch(digital5);
+      //this->digital->set_rightLimitSwitch(digital6);
       this->digital->set_leftLiftEncoder(digital3, digital4, false);
       this->digital->set_rightLiftEncoder(digital11, digital12, true);
       //this->digital->set_LeftEncoder(digital8, digital9, true);
@@ -260,22 +261,23 @@ void setup(){
     bool toggleUp = true;
     void smallLift(){
       // motorSet(5, speed);
-      // if(this->remote->smallLiftToggle() ){
-      //   this->arm->secondaryLiftPower(-100);
-      //   // if(this->analog->get_potentiometerVal() < 1800){
-      //   //   toggleUp = false;
-      //   // }
-      //   delay(50);
-      // }
+      if(this->remote->smallLiftToggle() ){
+        this->arm->secondaryLiftPower(-100);
+        // if(this->analog->get_potentiometerVal() < 1800){
+        //   toggleUp = false;
+        // }
+        delay(50);
+      }
       // else if(this->remote->smallLiftToggle()){
       //   this->arm->secondaryLiftPower(100);
       //   // if(this->analog->get_potentiometerVal() > 3000 ){
       //   //   toggleUp = true;
       //   // }
       //   delay(50);
-      // }else{
-      //   this->arm->haltSecondaryLift();
       // }
+      else{
+        this->arm->haltSecondaryLift();
+      }
     };
 
     void goalLift(){
@@ -367,7 +369,7 @@ void autoLoad( ){
             // if(this->analog->get_potentiometerVal() > 400 || average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) > 7){
             //   robotState = BOTTOM;
             // }
-            if(this->digital->get_limitSwitch() == 0){
+            if(this->digital->get_leftLimitSwitch() == 0 || this->digital->get_rightLimitSwitch() == 0){
               robotState = CONEHEIGHT;
               this->ef->halt();
             }

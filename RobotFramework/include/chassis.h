@@ -31,7 +31,8 @@ public:
     // this->chassisPosPID->set_deadband(10);
     this->chassisPosPID = new pid(3.5,0.00,0.0,0.0);
     this->chassisPosPID->set_deadband(3);
-    this->chassisGyroPID = new pid(4.0,0.0,1.0,0.0);
+    this->chassisGyroPID = new pid(3.0,0.0,80.0,0.0);//60
+    //this->chassisGyroPID->set_toleranceI(25);
     this->chassisGyroPID->set_deadband(5);
     this->currPos.x = 0;
     this->currPos.y = 0;
@@ -216,6 +217,10 @@ public:
           leftPower(-power);
           rightPower(power);
   		}
+      else{
+        haltLeft();
+        haltRight();
+      }
   		atGyro = true;
   };
 
