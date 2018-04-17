@@ -21,6 +21,7 @@
 //required includes
 #include "main.h"
 #include "robot.h"
+#include "autonScripts.h"
 //#include "../include/uart.h"
 //#include "uart.h"
 
@@ -77,6 +78,8 @@ void operatorControl() {
   imeReset(2);
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
+  delay(1000);
+  runRedNoPreload(bot);
 /*  i2c iSqC = i2c();
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
@@ -95,7 +98,7 @@ void operatorControl() {
   // //int motor_velocity = 0;
 // //////////////////////////////////////////////////////////////////////////////////////////////
   //while(true)
-    
+
 
       // printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
       // printf("cones: %d\n",bot.get_stackedCones());

@@ -278,6 +278,9 @@ public:
       //printf("vel: %f",vel_output);
     //  printf("vel: %f \n",vel_output);
     }
+    else{
+      set_Power(0);
+    }
   };
 
   //control the motor to spin to a target degree

@@ -342,18 +342,20 @@ void raiseGoalLift(){
 void driveIn(float inch)
 {
   while (!this->drive->atPos) {
-    this->drive->rightPosition(inch);
-    this->drive->leftPosition(inch);
-    delay(50);
+    this->drive->moveDistance(inch);
   }
+  this->drive->haltLeft();
+  this->drive->haltRight();
 };
 
 void turnToAngle(int targetAngle)
 {
   while(!this->drive->atGyro){
   this->drive->turnToAngle(targetAngle, this->analog);
-  delay(50);
+  printf("yaw: %d\n", this->analog->gyro_val());
   }
+  this->drive->haltLeft();
+  this->drive->haltRight();
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define SECONDARY_BOT  400

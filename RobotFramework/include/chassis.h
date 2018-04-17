@@ -173,8 +173,19 @@ public:
   };
 
   bool atPos = false;
-  void moveToPos(CartesianVector vector){
+  void moveDistance(float inch){
     atPos = false;
+    leftPosition(inch);
+    rightPosition(inch);
+    if(abs(this->getLeftMotorAt(0)->get_posPID()->get_error()) <  this->getLeftMotorAt(0)->get_posPID()->get_deadband()){
+      leftPower(0);
+      rightPower(0);
+      atPos = true;
+    }
+  }
+
+
+  void moveToPos(CartesianVector vector){
     double deltaX = vector.x - this->currPos.x;
     double deltaY = vector.y - this->currPos.y;
     int length = (int)(sqrt(pow(abs(deltaX),2)+pow(abs(deltaY),2)));
@@ -190,6 +201,7 @@ public:
   bool atGyro = false;
   void turnToAngle(int targetAngle, analogSensors* gyro){
     atGyro = false;
+    targetAngle = targetAngle/2;
   	float difference = (targetAngle - (float)gyro->gyro_val());
     printf("%f\n", difference);
   	//	time1[T1] =0;
