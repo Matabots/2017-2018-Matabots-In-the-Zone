@@ -98,6 +98,35 @@ void set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
     }
   };
 
+  bool atTop = true;
+  bool atBottom = false;
+  void goalLiftUp(){
+    for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
+      if(get_goalLiftAt(0)->get_count() < 5){
+        goalLiftPower(127);
+        atTop = false;
+      }
+      else{
+        haltGoalLift();
+        atTop = true;
+        atBottom = false;
+      }
+    }
+  };
+  void goalLiftDown(){
+    for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
+      if(get_goalLiftAt(0)->get_count() > -850){
+        goalLiftPower(-127);
+        atBottom = false;
+      }
+      else{
+        haltGoalLift();
+        atBottom = true;
+        atTop = false;
+      }
+    }
+  };
+
   void secondaryLiftPower(int power){
     for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
       this->secondaryLift[i]->set_Power(power);

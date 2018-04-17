@@ -31,6 +31,7 @@ class robot{
     int stackedCones;
     botUart* uartComms;
     int targetStack;
+    bool hasMobileGoal;
   public:
   bool autoStacking = false;
     //default constructor to allocate memory
@@ -47,6 +48,7 @@ class robot{
       this->stackedCones = 0;
       this->targetStack = 0;
       this->uartComms = new botUart();
+      this->hasMobileGoal = false;
     };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
@@ -149,6 +151,12 @@ void setup(){
     }
     int get_targetStack(){
       return this->targetStack;
+    }
+    bool get_mobileGoalStatus(){
+      return this->hasMobileGoal;
+    }
+    void set_mobileGoalStatus(bool mobileGoalStatus){
+      this->hasMobileGoal = mobileGoalStatus;
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////These are the operator control functions////////////////////////////////////////
@@ -319,6 +327,34 @@ void setup(){
 ////////////////////////////////////////////////////////Routines related to movement will belong here////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void lowerGoalLift(){
+  while(!this->arm->atBottom){
+  this->arm->goalLiftDown();
+  }
+};
+
+void raiseGoalLift(){
+  while(!this->arm->atTop){
+    this->arm->goalLiftUp();
+  }
+};
+
+void driveIn(float inch)
+{
+  while (!this->drive->atPos) {
+    this->drive->rightPosition(inch);
+    this->drive->leftPosition(inch);
+    delay(50);
+  }
+};
+
+void turnToAngle(int targetAngle)
+{
+  while(!this->drive->atGyro){
+  this->drive->turnToAngle(targetAngle, this->analog);
+  delay(50);
+  }
+};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define SECONDARY_BOT  400
 #define SECONDARY_TOP 1500

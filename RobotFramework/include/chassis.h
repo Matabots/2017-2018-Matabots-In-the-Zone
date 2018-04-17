@@ -29,7 +29,7 @@ public:
                             //0.45                      //0.85,0,0 for gyro turn
     // this->chassisPosPID = new pid(0.85,0.024,0.016,0.0);
     // this->chassisPosPID->set_deadband(10);
-    this->chassisPosPID = new pid(3.5,0.00,0.0,0.0);
+    this->chassisPosPID = new pid(3.5,0.0,0.0,0.0); //3.5,0...
     this->chassisPosPID->set_deadband(3);
     this->chassisGyroPID = new pid(3.0,0.0,80.0,0.0);//60
     //this->chassisGyroPID->set_toleranceI(25);
@@ -172,7 +172,9 @@ public:
     }
   };
 
+  bool atPos = false;
   void moveToPos(CartesianVector vector){
+    atPos = false;
     double deltaX = vector.x - this->currPos.x;
     double deltaY = vector.y - this->currPos.y;
     int length = (int)(sqrt(pow(abs(deltaX),2)+pow(abs(deltaY),2)));
@@ -181,11 +183,13 @@ public:
     if(abs(length) <  this->getLeftMotorAt(0)->get_posPID()->get_deadband()){
       leftPower(0);
       rightPower(0);
+      atPos = true;
     }
   };
 
   bool atGyro = false;
   void turnToAngle(int targetAngle, analogSensors* gyro){
+    atGyro = false;
   	float difference = (targetAngle - (float)gyro->gyro_val());
     printf("%f\n", difference);
   	//	time1[T1] =0;
@@ -220,8 +224,8 @@ public:
       else{
         haltLeft();
         haltRight();
+    		atGyro = true;
       }
-  		atGyro = true;
   };
 
   int get_wheelDiameter(){
