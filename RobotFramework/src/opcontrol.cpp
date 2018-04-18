@@ -81,6 +81,8 @@ void operatorControl() {
 
   delay(1000);
   runRedNoPreload(bot);
+
+  // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
   // while(true)
