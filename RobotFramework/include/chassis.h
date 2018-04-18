@@ -199,12 +199,11 @@ public:
   };
 
   bool atGyro = false;
-  void turnToAngle(int targetAngle, analogSensors* gyro){
+  void spinToAngle(int targetAngle, analogSensors* gyro){
     atGyro = false;
     targetAngle = targetAngle/2;
   	float difference = (targetAngle - (float)gyro->gyro_val());
     printf("%f\n", difference);
-  	//	time1[T1] =0;
   		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
   		{
   			  difference = (targetAngle - (float)gyro->gyro_val());
@@ -232,6 +231,85 @@ public:
 
           leftPower(-power);
           rightPower(power);
+  		}
+      else{
+        haltLeft();
+        haltRight();
+    		atGyro = true;
+      }
+  };
+
+  void turnRightToAngle(int targetAngle, analogSensors* gyro){
+    atGyro = false;
+    targetAngle = targetAngle;
+  	float difference = (targetAngle - (float)gyro->gyro_val());
+    printf("%f\n", difference);
+  		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+  		{
+  			  difference = (targetAngle - (float)gyro->gyro_val());
+          //calculate to see if it is faster to turn left or right
+          if(difference > 180)
+          {
+                  difference -= 360;
+          }
+          if(difference < -180)
+          {
+                  difference += 360;
+          }
+          int power = difference * this->chassisGyroPID->get_kP();
+
+          power = power < -100 ? -100 : power;
+          power = power > 100 ? 100 : power;
+          if(power < 0 && power > -10)
+          {
+          	power = -10*this->chassisGyroPID->get_kP();
+          }
+          if(power > 0 && power<10)
+          {
+          	power = 10*this->chassisGyroPID->get_kP();
+        	}
+
+          haltLeft();
+          rightPower(power);
+  		}
+      else{
+        haltLeft();
+        haltRight();
+    		atGyro = true;
+      }
+  };
+  void turnLeftToAngle(int targetAngle, analogSensors* gyro){
+    atGyro = false;
+    targetAngle = targetAngle;
+  	float difference = (targetAngle - (float)gyro->gyro_val());
+    printf("%f\n", difference);
+  		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+  		{
+  			  difference = (targetAngle - (float)gyro->gyro_val());
+          //calculate to see if it is faster to turn left or right
+          if(difference > 180)
+          {
+                  difference -= 360;
+          }
+          if(difference < -180)
+          {
+                  difference += 360;
+          }
+          int power = difference * this->chassisGyroPID->get_kP();
+
+          power = power < -100 ? -100 : power;
+          power = power > 100 ? 100 : power;
+          if(power < 0 && power > -10)
+          {
+          	power = -10*this->chassisGyroPID->get_kP();
+          }
+          if(power > 0 && power<10)
+          {
+          	power = 10*this->chassisGyroPID->get_kP();
+        	}
+
+          haltRight();
+          leftPower(-power);
   		}
       else{
         haltLeft();

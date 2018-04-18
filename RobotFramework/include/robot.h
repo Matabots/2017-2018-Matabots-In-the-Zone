@@ -342,6 +342,9 @@ void raiseGoalLift(){
 
 void driveIn(float inch)
 {
+imeReset(0);
+imeReset(1);
+  this->drive->atPos = false;
   while (!this->drive->atPos) {
     this->drive->moveDistance(inch);
   }
@@ -349,11 +352,34 @@ void driveIn(float inch)
   this->drive->haltRight();
 };
 
-void turnToAngle(int targetAngle)
+void spinToAngle(int targetAngle)
 {
+imeReset(0);
+imeReset(1);
+  this->drive->atGyro = false;
   while(!this->drive->atGyro){
-  this->drive->turnToAngle(targetAngle, this->analog);
+  this->drive->spinToAngle(targetAngle, this->analog);
   printf("yaw: %d\n", this->analog->gyro_val());
+  }
+  this->drive->haltLeft();
+  this->drive->haltRight();
+};
+void turnLeftToAngle(int targetAngle){
+  imeReset(0);
+  imeReset(1);
+  this->drive->atGyro = false;
+  while(!this->drive->atGyro){
+    this->drive->turnLeftToAngle(targetAngle, this->analog);
+  }
+  this->drive->haltLeft();
+  this->drive->haltRight();
+};
+void turnRightToAngle(int targetAngle){
+  this->drive->atGyro = false;
+  imeReset(0);
+  imeReset(1);
+  while(!this->drive->atGyro){
+    this->drive->turnRightToAngle(targetAngle, this->analog);
   }
   this->drive->haltLeft();
   this->drive->haltRight();
@@ -365,7 +391,7 @@ void turnToAngle(int targetAngle)
 #define MAX_HEIGHT 8
 int primaryBottomHeight = 3; //change between 3 and height of loading station
 
-void autoLoad( ){
+void autoLoad(){
   if(this->stackedCones == this->targetStack){
     autoStacking = false;
     addReleased = false;
@@ -378,8 +404,6 @@ void autoLoad( ){
 
           case ADJUSTHEIGHT:
             //Lower Secondary Lift to Lowest Position
-
-            printf("TRIGGER 1");
             this->ef->halt();
             this->arm->primaryLiftPosition(CONE_HEIGHT*(this->stackedCones), this->digital->leftLiftEncoderVal());
             this->arm->secondaryLiftPosition(SECONDARY_BOT, this->analog->get_potentiometerVal());
@@ -388,7 +412,6 @@ void autoLoad( ){
                 this->ef->set_Power(-100);
                 this->arm->haltPrimaryLift();
                 this->arm->haltSecondaryLift();
-                printf("TRIGGER 2");
             }
           break;
           case BOTTOM:

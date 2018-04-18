@@ -273,6 +273,8 @@ public:
     // // printf("PID: %f \n",this->posPID->get_kP());
     // // printf("trg: %f \n", setPointDeg);
     double vel_output = this->posPID->calculateOutput(in, dt);
+    vel_output = vel_output < 25 && vel_output > 0? 25 : vel_output;
+    vel_output = vel_output > -25 && vel_output < 0 ? -25 : vel_output;
     if(abs(setPointIn-in) > (this->posPID->get_deadband())){
       set_Power(vel_output); //replace with velocity control when you get chance
       //printf("vel: %f",vel_output);
