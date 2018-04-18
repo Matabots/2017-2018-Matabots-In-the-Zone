@@ -165,7 +165,8 @@ void setup(){
       joystickInputs();
       autonLiftProcess();
       autoAbort();
-      this->uartComms->runUART();
+      printf("Remote Listening\n");
+      // this->uartComms->runUART();
       if(!autoStacking){
         rollerButtons();
         bigLift();

@@ -31,6 +31,7 @@
  */
 
 void autonomous() {
+  printf("On auton\n");
     //declare a robot and setup the ports
     // robot bot = robot();
     // bot.setup();

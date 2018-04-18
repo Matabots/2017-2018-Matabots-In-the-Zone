@@ -78,8 +78,15 @@ void operatorControl() {
   imeReset(2);
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
-  delay(1000);
   runRedNoPreload(bot);
+  //delay(1000);
+  // runRedNoPreload(bot);
+  // while(true)
+  // {
+  //   printf("Listening");
+  //   bot.remoteListen();
+  //   delay(50);
+  // }
 /*  i2c iSqC = i2c();
   usartInit(uart1, 9600, SERIAL_DATABITS_8);
   char* pntr;
@@ -97,21 +104,21 @@ void operatorControl() {
   // printf("Begin operatorControl\n");
   // //int motor_velocity = 0;
 // //////////////////////////////////////////////////////////////////////////////////////////////
-  //while(true)
-
-
-      // printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
-      // printf("cones: %d\n",bot.get_stackedCones());
-      // printf("targetCones: %d\n",bot.get_targetStack());
-      // printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
-      // printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
-      //printf("yaw: %d\n", bot.get_analog()->gyro_val());
-      //bot.get_drive()->turnToAngle(165, bot.get_analog());
-      // printState(bot.get_state());
-      // bot.remoteListen();
-      //bot.driveIn(55);
-      // delay(50);
-    // }
+  // while(true)
+  // {
+  //
+  //     printf("left: %d\n",bot.get_digital()->leftLiftEncoderVal());
+  //     printf("cones: %d\n",bot.get_stackedCones());
+  //     printf("targetCones: %d\n",bot.get_targetStack());
+  //     printf("right: %d\n",bot.get_digital()->rightLiftEncoderVal());
+  //     printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
+  //     printf("yaw: %d\n", bot.get_analog()->gyro_val());
+  //     bot.get_drive()->turnToAngle(165, bot.get_analog());
+  //     printState(bot.get_state());
+  //     bot.remoteListen();
+  //     bot.driveIn(55);
+  //     delay(50);
+  //   }
 ////////////////////////////////////////////////////////////////////////////////////////////////
   // int motVel;
   // int timer = millis();
