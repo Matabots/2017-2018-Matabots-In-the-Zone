@@ -11,7 +11,7 @@
  */
 
 #include "main.h"
-#include <API.h>
+
 // #define degreesToRadians(angleDegrees) (angleDegrees * PI / 180.0)
 // #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / PI)
 
@@ -31,7 +31,6 @@
  */
 
 void autonomous() {
-  printf("On auton\n");
     //declare a robot and setup the ports
     // robot bot = robot();
     // bot.setup();
