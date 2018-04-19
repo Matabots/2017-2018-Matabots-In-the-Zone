@@ -2,12 +2,14 @@
 #define ANALOGSENSORS_H
 
 #include "potentiometer.h"
+#include "lineSensor.h"
 #include "ports.h"
 class analogSensors{
   private:
   //potentiometers defined first
   potentiometer rollerPotentiometer;
   //all other analog sensors here
+  lineSensor lineSenor;
   Gyro gyro;
   int deltaGyro;
   public:
@@ -46,6 +48,13 @@ class analogSensors{
       int get_potentiometerVal(){
         return this->rollerPotentiometer.getValue();
       };
+      lineSensor get_lineSensor(){
+        return this->lineSenor;
+      }
+      int get_lineSensorVal(){
+        return this->lineSenor.getValue();
+      };
+
 
 };
 #endif
