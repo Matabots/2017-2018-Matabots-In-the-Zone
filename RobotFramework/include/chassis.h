@@ -318,6 +318,23 @@ public:
       }
   };
 
+  //unfinished, robot gives inconsistent values
+  void driveToLine(int power, analogSensors* leftLine, analogSensors* rightLine){
+    power = power/abs(power);
+    if(leftLine->get_leftLineSensorVal() < 250){
+      leftPower(power*.5*(350-leftLine->get_leftLineSensorVal()));
+    }
+    else{
+      haltLeft();
+    }
+    if(rightLine->get_rightLineSensorVal() < 250){
+      rightPower(power*.5*(350-rightLine->get_rightLineSensorVal()));
+    }
+    else
+    {
+      haltRight();
+    }
+  };
   int get_wheelDiameter(){
     return this->wheelDiameter;
   };

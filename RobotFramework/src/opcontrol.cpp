@@ -79,17 +79,18 @@ void operatorControl() {
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
 
+
   delay(1000);
-  runRedNoPreload(bot);
+  //runRedNoPreload(bot);
 
   // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
-  // while(true)
-  // {
-  //   printf("Listening");
-  //   bot.remoteListen();
-  //   delay(50);
-  // }
+  while(true)
+  {
+    printf("Listening");
+    bot.remoteListen();
+    delay(50);
+  }
 
 }

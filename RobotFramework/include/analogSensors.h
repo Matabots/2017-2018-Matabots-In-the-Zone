@@ -9,7 +9,8 @@ class analogSensors{
   //potentiometers defined first
   potentiometer rollerPotentiometer;
   //all other analog sensors here
-  lineSensor lineSenor;
+  lineSensor leftLineSensor;
+  lineSensor rightLineSensor;
   Gyro gyro;
   int deltaGyro;
   public:
@@ -48,11 +49,23 @@ class analogSensors{
       int get_potentiometerVal(){
         return this->rollerPotentiometer.getValue();
       };
-      lineSensor get_lineSensor(){
-        return this->lineSenor;
+      void set_leftLineSensor(int port){
+        this->leftLineSensor.set_lineSensor(port);
+      };
+      void set_rightLineSensor(int port){
+        this->rightLineSensor.set_lineSensor(port);
       }
-      int get_lineSensorVal(){
-        return this->lineSenor.getValue();
+      lineSensor get_leftLineSensor(){
+        return this->leftLineSensor;
+      }
+      int get_leftLineSensorVal(){
+        return this->leftLineSensor.getValue();
+      };
+      lineSensor get_rightLineSensor(){
+        return this->rightLineSensor;
+      }
+      int get_rightLineSensorVal(){
+        return this->rightLineSensor.getValue();
       };
 
 

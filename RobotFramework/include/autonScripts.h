@@ -8,13 +8,13 @@ void runRedNoPreload(robot bot){
   printf("this has ended\n");
   bot.setPreloadHeight();
   bot.lowerGoalLift();
-  bot.driveIn(43);
+  bot.driveIn(45);
   delay(250);
   bot.raiseGoalLift();
   bot.scorePreload();
   delay(250);
   //bot.spinToAngle(0);
-  bot.driveIn(8);
+  bot.driveIn(6);
   bot.set_targetStack(2);
   while(bot.get_stackedCones() < bot.get_targetStack()){
     bot.autoLoad();
@@ -23,18 +23,20 @@ void runRedNoPreload(robot bot){
   bot.driveIn(-20);
   bot.set_primaryBottomHeight(true);
   delay(250);
-  bot.spinToAngle(100);
+  bot.spinToAngle(110);
   bot.driveIn(-3);
   delay(250);
-  bot.set_targetStack(3);
-
-  printf("targetStack");
+  bot.set_targetStack(8);
   while(bot.get_stackedCones() < bot.get_targetStack()){
+    printf("stacking cones to %d\n",bot.get_targetStack() );
     bot.autoLoad();
   }
-
-  printf("autoload Ran");
-  bot.set_primaryBottomHeight(false);
+  while(true){
+    bot.get_drive()->haltLeft();
+    bot.get_drive()->haltRight();
+  }
+  // printf("autoload Ran");
+  // bot.set_primaryBottomHeight(false);
 };
 
 

@@ -78,6 +78,9 @@ void setup(){
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog1);
       this->digital->set_leftLimitSwitch(digital5);
+      this->digital->set_rightLimitSwitch(digital6);
+      this->analog->set_leftLineSensor(analog2);
+      this->analog->set_rightLineSensor(analog3);
       //this->digital->set_rightLimitSwitch(digital6);
       this->digital->set_leftLiftEncoder(digital3, digital4, false);
       this->digital->set_rightLiftEncoder(digital11, digital12, true);
@@ -397,24 +400,14 @@ void turnRightToAngle(int targetAngle){
 #define MAX_HEIGHT 8
 int primaryBottomHeight = 3; //change between 3 and height of loading station at 45
 
-//set to true for loading in the preLoad area. false for picking up cones from the ground
-void set_primaryBottomHeight(bool toPreLoad){
-  if(toPreLoad){
-    primaryBottomHeight = 47;
-  }
-  else{
-    primaryBottomHeight = 3;
-  }
-};
 
 void setPreloadHeight(){
-  while(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) < CONE_HEIGHT+2)
+  while(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) < CONE_HEIGHT+5)
   {
-    this->arm->primaryLiftPosition(CONE_HEIGHT+2, this->digital->leftLiftEncoderVal());
+    this->arm->primaryLiftPosition(CONE_HEIGHT+5, this->digital->leftLiftEncoderVal());
   }
 
   this->arm->haltPrimaryLift();
-
 };
 
 void scorePreload(){
@@ -423,6 +416,15 @@ void scorePreload(){
   this->stackedCones++;
   this->ef->halt();
   this->ef->halt();
+};
+//set to true for loading in the preLoad area. false for picking up cones from the ground
+void set_primaryBottomHeight(bool toPreLoad){
+  if(toPreLoad){
+    primaryBottomHeight = 47;
+  }
+  else{
+    primaryBottomHeight = 3;
+  }
 };
 
 void autoLoad(){
@@ -519,6 +521,118 @@ void autoLoad(){
         };
       };
     };
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define SECONDARY_BOT_CSUN2  400
+#define SECONDARY_TOP_CSUN2 1500
+#define CONE_HEIGHT 10
+#define MAX_HEIGHT 8
+int primaryBottomHeightCSUN2 = 3; //change between 3 and height of loading station at 45
+
+//set to true for loading in the preLoad area. false for picking up cones from the ground
+void set_primaryBottomHeightCSUN2(bool toPreLoad){
+  if(toPreLoad){
+    primaryBottomHeightCSUN2 = 47;
+  }
+  else{
+    primaryBottomHeightCSUN2 = 3;
+  }
+};
+
+    void autoLoadCSUN2(){
+      if(this->stackedCones == this->targetStack){
+        autoStacking = false;
+        addReleased = false;
+        addPressed = false;
+        subtractPressed = false;
+        subtractReleased = false;
+      }
+      if(this->stackedCones < this->targetStack && this->stackedCones < MAX_HEIGHT){
+        switch(robotState){
+
+              case ADJUSTHEIGHT:
+                //Lower Secondary Lift to Lowest Position
+                this->ef->halt();
+                if(primaryBottomHeightCSUN2 == 47 && CONE_HEIGHT*(this->stackedCones) < primaryBottomHeightCSUN2){
+                  this->arm->primaryLiftPosition(primaryBottomHeightCSUN2, this->digital->leftLiftEncoderVal());
+                  if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= primaryBottomHeightCSUN2){
+                      robotState = BOTTOM;
+                      this->ef->set_Power(-100);
+                      this->arm->haltPrimaryLift();
+                      this->arm->haltSecondaryLift();
+                  }
+                }
+                else{
+                  this->arm->primaryLiftPosition(CONE_HEIGHT*(this->stackedCones), this->digital->leftLiftEncoderVal());
+                  this->arm->secondaryLiftPosition(SECONDARY_BOT_CSUN2, this->analog->get_potentiometerVal());
+                  if(this->analog->get_potentiometerVal() < SECONDARY_BOT_CSUN2){
+                      robotState = BOTTOM;
+                      this->ef->set_Power(-100);
+                      this->arm->haltPrimaryLift();
+                      this->arm->haltSecondaryLift();
+                  }
+
+                }
+
+              break;
+              case BOTTOM:
+                //Move Primary lift to lowest position
+                if(this->stackedCones > 2){ //if the cone stack gets to high, lower the speed to drop a bit so it doesn't damage the bot
+                  this->arm->set_primaryLiftPosPID(5.0,0.0,0.0);
+                }
+                this->ef->set_Power(-100);
+                this->arm->primaryLiftPosition(primaryBottomHeightCSUN2, this->digital->leftLiftEncoderVal());
+
+                this->arm->secondaryLiftPosition(SECONDARY_BOT_CSUN2, this->analog->get_potentiometerVal());
+                if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) <= primaryBottomHeightCSUN2 && this->analog->get_potentiometerVal() < SECONDARY_BOT_CSUN2){
+                  robotState = INTAKE;
+                  this->arm->set_primaryLiftPosPID(10.5,0.0,0.0);
+                  this->arm->haltPrimaryLift();
+                  this->arm->haltSecondaryLift();
+                }
+              break;
+
+              case INTAKE:
+                //Intake Cone
+                // if(this->analog->get_potentiometerVal() > SECONDARY_BOT_CSUN2 || average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) > 7){
+                //   robotState = BOTTOM;
+                // }
+                // if(this->digital->get_leftLimitSwitch() == 0 || this->digital->get_rightLimitSwitch() == 0){
+                   robotState = CONEHEIGHT;
+                //   this->ef->halt();
+                // }
+              break;
+              //this is a change
+              case CONEHEIGHT:
+                //Raise Primary Lift to correct height (10deg/cone)
+
+                this->arm->primaryLiftPosition(CONE_HEIGHT*(this->stackedCones+1), this->digital->leftLiftEncoderVal());
+
+                this->ef->halt();
+                //Raise Secondary Lift to correct height
+                  if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones-1)){
+                      this->arm->secondaryLiftPosition(SECONDARY_TOP_CSUN2, this->analog->get_potentiometerVal());
+                  }
+
+                if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones+1) && this->analog->get_potentiometerVal() > SECONDARY_TOP_CSUN2){
+                  robotState = OUTTAKE;
+                  this->arm->haltSecondaryLift();
+                  this->arm->haltPrimaryLift();
+                  delay(500);
+                }
+              break;
+
+              case OUTTAKE:
+                //Outtake
+                this->ef->set_Power(75);
+                delay(400);
+                this->stackedCones++;
+                this->ef->halt();
+                robotState = ADJUSTHEIGHT;
+              break;
+            };
+          };
+        };
 };
 
 #endif
