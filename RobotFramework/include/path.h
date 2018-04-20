@@ -1,6 +1,6 @@
 #ifndef PATH_H
 #define PATH
-#include "./utility/vector.h"
+#include "vector.h"
 #include <vector>
 #include <API.h>
 #include "math.h"
