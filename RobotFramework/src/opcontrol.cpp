@@ -21,7 +21,7 @@
 //required includes
 #include "main.h"
 #include "robot.h"
-#include "autonScripts.h"
+// #include "autonScripts.h"
 //#include "../include/uart.h"
 //#include "uart.h"
 
