@@ -6,8 +6,8 @@
  *  Contains abstractions for units
  */
 
- #ifndef INCLUDE_UNITS_H_
- #define INCLUDE_UNITS_H_
+ #ifndef UNITS_H_
+ #define UNITS_H_
 
  #include <API.h>
 
