@@ -11,7 +11,7 @@
 #include "i2c.h"
 #include <vector>
 #include "motor.h"
-#include "./utility/vector.h"
+#include "vector.h"
 #include "ports.h"
 #include "potentiometer.h"
 #include "botUart.h"
