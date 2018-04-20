@@ -90,7 +90,7 @@
       this->velocity =  (int)(motor_velocity/2);
       return (this->velocity);
   };
-  void motor::set_velPID(double kPInput=0, double kIInput=0, double kDInput=0, double kFInput=0){
+  void motor::set_velPID(double kPInput, double kIInput, double kDInput, double kFInput){
     this->velPID = new pid(kPInput,kIInput,kDInput,kFInput);
   }
   void motor::set_velPID(pid* controller){
@@ -296,4 +296,4 @@
     //  printf("vel: %f \n",vel_output);
     }
   };
-};
+// };

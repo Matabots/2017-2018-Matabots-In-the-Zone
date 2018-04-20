@@ -1,6 +1,6 @@
 #include "units.h"
 
-void units::printState(state rState){
+void printState(state rState){
   switch(rState){
     case BOTTOM:
       printf("BOTTOM\n");
@@ -21,11 +21,11 @@ void units::printState(state rState){
   }
 };
 
-double units::avg(double num1, double num2){
+double avg(double num1, double num2){
   return (num1-num2)/2;
 };
 
-double units::getTypeTicks(motorType motor){
+double getTypeTicks(motorType motor){
   if(motor == TORQUE){
     return 627.2;
   }
@@ -40,7 +40,7 @@ double units::getTypeTicks(motorType motor){
   }
 };
 
-int units::imeVelocity(int velocity, motorType motor){
+int imeVelocity(int velocity, motorType motor){
   if(motor == TORQUE){//
     return velocity/39.2;
   }
@@ -55,7 +55,7 @@ int units::imeVelocity(int velocity, motorType motor){
   }
 };
 
-double units::ticksToRotations(Encoder enc){
+double ticksToRotations(Encoder enc){
     return encoderGet(enc)/360;
 };
 
@@ -66,7 +66,7 @@ double units::ticksToRotations(Encoder enc){
  * @param  motor           The motor type
  * @return                 Rotations
  */
- double units::ticksToRotations(int ticks, motorType motor){
+ double ticksToRotations(int ticks, motorType motor){
    if(motor == TORQUE){
      return ticks/627.2;
    }
@@ -81,7 +81,7 @@ double units::ticksToRotations(Encoder enc){
    }
  };
 
-double units::ticksToDegrees(int ticks, motorType motor){
+double ticksToDegrees(int ticks, motorType motor){
   return ticksToRotations(ticks, motor)/360;
 };
 /**
@@ -91,7 +91,7 @@ double units::ticksToDegrees(int ticks, motorType motor){
  * @param  motor            Motor Type
  * @return                  Ticks
  */
- int units::rotationsToTicks(double rotations, motorType motor){
+ int rotationsToTicks(double rotations, motorType motor){
    if(motor == TORQUE){//
      return rotations*627.2;
    }
@@ -106,7 +106,7 @@ double units::ticksToDegrees(int ticks, motorType motor){
    }
  };
 
- int units::rotationsToTicks(Encoder enc){
+ int rotationsToTicks(Encoder enc){
    return encoderGet(enc)*360;
  };
 
@@ -119,10 +119,10 @@ double units::ticksToDegrees(int ticks, motorType motor){
  *
  * @return               Inches
  */
- double units::ticksToInches(int ticks, double wheelDiameter, motorType motor) {
+ double ticksToInches(int ticks, double wheelDiameter, motorType motor) {
      return (ticksToRotations(ticks, motor) * wheelDiameter*PI);
  };
- double units::ticksToInches(Encoder enc, double wheelDiameter) {
+ double ticksToInches(Encoder enc, double wheelDiameter) {
      return (ticksToRotations(enc) * wheelDiameter*PI);
  };
 
@@ -136,9 +136,9 @@ double units::ticksToDegrees(int ticks, motorType motor){
  * @return               Ticks
  */
 
-  double units::inchesToDeg(double inches, double wheelDiameter, motorType motor) {
+  double inchesToDeg(double inches, double wheelDiameter, motorType motor) {
       return (360*inches)/(wheelDiameter * PI);
   };
-  double units::degToInches(double deg, double wheelDiameter){
+  double degToInches(double deg, double wheelDiameter){
     return (wheelDiameter*PI*deg)/360;
   };

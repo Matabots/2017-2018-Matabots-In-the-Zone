@@ -52,9 +52,9 @@ control::control(int autonLift, int autonAbort, int clearStacked, int bigLift, i
     return joystickGetAnalog(1, 3);
   };
 
-  int absRightJoystickVal() {
+  int control::absRightJoystickVal() {
     return (joystickGetAnalog(1, 2) < 0 ? -joystickGetAnalog(1, 2) : joystickGetAnalog(1, 2));
   };
-  int absLeftJoystickVal() {
+  int control::absLeftJoystickVal() {
     return (joystickGetAnalog(1, 3) < 0 ? -joystickGetAnalog(1, 3) : joystickGetAnalog(1, 3));
   };

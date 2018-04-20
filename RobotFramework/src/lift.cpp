@@ -48,7 +48,7 @@ void lift::addGoalLift(int port, bool reverse){
   this->goalLift.push_back(goalMotor);
 }
 
-void lift::set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
+void lift::set_primaryLiftPosPID(double kP, double kI, double kD, double kF) {
   pid* posPID = new pid(kP,kI,kD,kF);
   for(std::vector<motor*>::size_type i = 0; i != this->primaryLift.size(); i++) {
     this->primaryLift[i]->set_posPID(posPID);
