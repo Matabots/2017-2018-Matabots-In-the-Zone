@@ -66,6 +66,9 @@ class digitalSensors{
     int rightLiftEncoderVal(){
       return encoderGet(this->rightLiftEncoder)/2; //for some reason the right side is counting 2x as much
     };
+    int rightLiftEncoderValModern(){
+      return encoderGet(this->rightLiftEncoder);
+    };
 
     void set_LeftEncoder(int port1, int port2, bool direction){
       this->leftEncoder = encoderInit(port1, port2, direction);

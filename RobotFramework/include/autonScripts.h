@@ -18,6 +18,7 @@ void runRedNoPreload(robot bot){
   bot.set_targetStack(2);
   while(bot.get_stackedCones() < bot.get_targetStack()){
     bot.autoLoad();
+    delay(50);
   }
   delay(250);
   bot.driveIn(-20);
@@ -28,12 +29,16 @@ void runRedNoPreload(robot bot){
   delay(250);
   bot.set_targetStack(8);
   while(bot.get_stackedCones() < bot.get_targetStack()){
-    printf("stacking cones to %d\n",bot.get_targetStack() );
+    printf("stacked cones: %d\n", bot.get_stackedCones());
     bot.autoLoad();
+    delay(50);
   }
+
   while(true){
+    printf("stacking cones to %d\n",bot.get_targetStack() );
     bot.get_drive()->haltLeft();
     bot.get_drive()->haltRight();
+    delay(50);
   }
   // printf("autoload Ran");
   // bot.set_primaryBottomHeight(false);

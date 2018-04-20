@@ -72,25 +72,23 @@ void operatorControl() {
   printf("ime's: %d \n",count);
   printf("this changed");
   robot bot = robot();
-  bot.setup();
-  imeReset(0);
-  imeReset(1);
-  imeReset(2);
+  bot.setupCSUN1();
+
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
-
-
-  delay(1000);
-  //runRedNoPreload(bot);
+  
+  runRedNoPreload(bot);
 
   // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
-  while(true)
-  {
-    printf("Listening");
-    bot.remoteListen();
-    delay(50);
-  }
+  // while(true)
+  // {
+  //   printf("left: %d \n", bot.get_digital()->leftLiftEncoderVal());
+  //   printf("port: %d\n", bot.get_digital()->)
+  //   printf("right: %d \n", bot.get_digital()->rightLiftEncoderValModern());
+  //   bot.remoteListen();
+  //   delay(50);
+  // }
 
 }

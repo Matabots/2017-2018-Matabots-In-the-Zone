@@ -53,7 +53,7 @@ class robot{
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////this function will often be changed and is at the top///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void setup(){
+void setupCSUN1(){
       //add motors, sensors, reset values for sensors here
   ///////////////////////////////////////////
   ////////////// BEA (OLD) ////////////////////////
@@ -81,24 +81,47 @@ void setup(){
       this->digital->set_rightLimitSwitch(digital6);
       this->analog->set_leftLineSensor(analog2);
       this->analog->set_rightLineSensor(analog3);
-      //this->digital->set_rightLimitSwitch(digital6);
       this->digital->set_leftLiftEncoder(digital3, digital4, false);
       this->digital->set_rightLiftEncoder(digital11, digital12, true);
-      //this->digital->set_LeftEncoder(digital8, digital9, true);
-      // this->digital->set_coneLiftEncoder(digital4, digital5, false);
       this->drive->addLeftMotor(motor2, false);
       this->drive->addLeftMotor(motor3, true);
       this->drive->addRightMotor(motor8, false);
       this->drive->addRightMotor(motor9, true);
       this->arm->addPrimaryLift(motor4, false);
       this->arm->addPrimaryLift(motor7, true);
-
       this->arm->addSecondaryLift(motor6, true);
-
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);
       this->ef->addRoller(motor5, true);
 
+      imeReset(0);
+      imeReset(1);
+      imeReset(2);
+};
+void setupCSUN2(){
+      //add motors, sensors, reset values for sensors here
+
+      // this->analog->set_gyro(analog8, 0);
+      //this->analog->set_potentiometer(analog1);
+      // this->digital->set_leftLimitSwitch(digital5);
+      // this->digital->set_rightLimitSwitch(digital6);
+      // this->analog->set_leftLineSensor(analog2);
+      // this->analog->set_rightLineSensor(analog3);
+      this->digital->set_rightLiftEncoder(digital7, digital8, false);
+      this->digital->set_leftLiftEncoder(digital5, digital6, true);
+      this->drive->addLeftMotor(motor2, false);
+      this->drive->addLeftMotor(motor3, true);
+      this->drive->addRightMotor(motor8, false);
+      this->drive->addRightMotor(motor9, true);
+      this->arm->addPrimaryLift(motor4, false);
+      this->arm->addPrimaryLift(motor7, true);
+      this->arm->addSecondaryLift(motor6, true);
+      this->arm->addGoalLift(motor1, true);
+      this->arm->addGoalLift(motor10, false);
+      this->ef->addRoller(motor5, true);
+
+      imeReset(0);
+      imeReset(1);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,6 +544,8 @@ void autoLoad(){
         };
       };
     };
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////CSUN 2 AUTO LOAD CODE////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SECONDARY_BOT_CSUN2  400
