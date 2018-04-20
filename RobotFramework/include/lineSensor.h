@@ -7,26 +7,12 @@ private:
   int value;
   int lineSensorPort;
 public:
-  lineSensor(){
+  lineSensor();
 
-  }
-
-  void set_lineSensor(int port)
-  {
-    this->lineSensorPort = port;
-  }
-  int get_lineSensor()
-  {
-    return this->lineSensorPort;
-  }
-  void updateValues()
-  {
-    this->value = analogRead(this->lineSensorPort);
-  }
-  int getValue()
-  {
-    return analogRead(this->lineSensorPort);
-  }
+  void set_lineSensor(int port);
+  int get_lineSensor();
+  void updateValues();
+  int getValue();
 
 };
 #endif
