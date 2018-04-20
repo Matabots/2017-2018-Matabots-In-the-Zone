@@ -72,7 +72,7 @@ void operatorControl() {
   printf("ime's: %d \n",count);
   printf("this changed");
   robot bot = robot();
-  bot.setupCSUN1();
+  bot.setupCSUN2();
 
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
@@ -87,7 +87,7 @@ void operatorControl() {
     printf("left: %d \n", bot.get_digital()->leftLiftEncoderVal());
     printf("right: %d \n", bot.get_digital()->rightLiftEncoderValModern());
     bot.remoteListen();
-    delay(50);
+    delay(100);
   }
 
 }

@@ -108,7 +108,7 @@ void setupCSUN2(){
       // this->analog->set_leftLineSensor(analog2);
       // this->analog->set_rightLineSensor(analog3);
       this->digital->set_rightLiftEncoder(digital7, digital8, false);
-      this->digital->set_leftLiftEncoder(digital5, digital6, true);
+      this->digital->set_leftLiftEncoder(digital5, digital6, false);
       this->drive->addLeftMotor(motor2, false);
       this->drive->addLeftMotor(motor3, true);
       this->drive->addRightMotor(motor8, false);
