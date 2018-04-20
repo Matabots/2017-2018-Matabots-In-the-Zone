@@ -25,7 +25,8 @@ typedef enum state{
   INTAKE,
   CONEHEIGHT,
   OUTTAKE,
-  ADJUSTHEIGHT
+  ADJUSTHEIGHT,
+  RESTABOVE
 }state;
 
 void printState(state rState){
@@ -45,7 +46,9 @@ void printState(state rState){
     case ADJUSTHEIGHT:
       printf("ADJUSTHEIGHT\n");
     break;
-
+    case RESTABOVE:
+      printf("RESTABOVE\n");
+    break;
   }
 };
 

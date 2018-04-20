@@ -38,7 +38,7 @@ public:
     this->goalLift = motors;
   }
   void addPrimaryLift(int port, bool reverse){
-    motor* liftMotor = new motor(port,10.5,0.0,0.0,0.0);
+    motor* liftMotor = new motor(port,10.0,0.0,0.0,0.0);//10.5
     liftMotor->set_Direction(reverse);
     liftMotor->set_type(ENC);
     liftMotor->get_posPID()->set_deadband(1);
@@ -84,7 +84,7 @@ void set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
   void secondaryLiftPosition(int targetCount, int potentiometer){
     for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
       if((potentiometer) > (targetCount)){
-        this->secondaryLift[i]->set_Power(-100);//=70
+        this->secondaryLift[i]->set_Power(-70);//=70
         printf("running %d\n",this->secondaryLift[i]->get_Power() );
         printf("# lift: %d\n",this->secondaryLift.size());
       }
@@ -93,7 +93,6 @@ void set_primaryLiftPosPID(double kP, double kI, double kD, double kF=0) {
       }
       else{
         haltSecondaryLift();
-        printf("I AM STOPPING THE LIFT BECAUSE I AM A SHIT");
       }
     }
   };

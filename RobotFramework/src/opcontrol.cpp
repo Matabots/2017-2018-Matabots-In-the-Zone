@@ -76,19 +76,18 @@ void operatorControl() {
 
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
-  
-  runRedNoPreload(bot);
+
+  //runRedNoPreload(bot);
 
   // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
-  // while(true)
-  // {
-  //   printf("left: %d \n", bot.get_digital()->leftLiftEncoderVal());
-  //   printf("port: %d\n", bot.get_digital()->)
-  //   printf("right: %d \n", bot.get_digital()->rightLiftEncoderValModern());
-  //   bot.remoteListen();
-  //   delay(50);
-  // }
+  while(true)
+  {
+    printf("left: %d \n", bot.get_digital()->leftLiftEncoderVal());
+    printf("right: %d \n", bot.get_digital()->rightLiftEncoderValModern());
+    bot.remoteListen();
+    delay(50);
+  }
 
 }

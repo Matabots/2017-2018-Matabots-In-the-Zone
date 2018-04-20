@@ -31,9 +31,9 @@ public:
     // this->chassisPosPID->set_deadband(10);
     this->chassisPosPID = new pid(3.5,0.0,0.0,0.0); //3.5,0...
     this->chassisPosPID->set_deadband(3);
-    this->chassisGyroPID = new pid(3.0,0.0,80.0,0.0);//60
+    this->chassisGyroPID = new pid(2.75,0.0,80.0,0.0);//60
     //this->chassisGyroPID->set_toleranceI(25);
-    this->chassisGyroPID->set_deadband(5);
+    this->chassisGyroPID->set_deadband(6);
     this->currPos.x = 0;
     this->currPos.y = 0;
     waypoints = new path(currPos);
@@ -220,13 +220,13 @@ public:
 
           power = power < -100 ? -100 : power;
           power = power > 100 ? 100 : power;
-          if(power < 0 && power > -10)
+          if(power < 0 && power > -15)
           {
-          	power = -10*this->chassisGyroPID->get_kP();
+          	power = -15*this->chassisGyroPID->get_kP();
           }
-          if(power > 0 && power<10)
+          if(power > 0 && power<15)
           {
-          	power = 10*this->chassisGyroPID->get_kP();
+          	power = 15*this->chassisGyroPID->get_kP();
         	}
 
           leftPower(-power);
@@ -260,13 +260,13 @@ public:
 
           power = power < -100 ? -100 : power;
           power = power > 100 ? 100 : power;
-          if(power < 0 && power > -10)
+          if(power < 0 && power > -15)
           {
           	power = -10*this->chassisGyroPID->get_kP();
           }
-          if(power > 0 && power<10)
+          if(power > 0 && power<15)
           {
-          	power = 10*this->chassisGyroPID->get_kP();
+          	power = 15*this->chassisGyroPID->get_kP();
         	}
 
           haltLeft();
@@ -299,13 +299,13 @@ public:
 
           power = power < -100 ? -100 : power;
           power = power > 100 ? 100 : power;
-          if(power < 0 && power > -10)
+          if(power < 0 && power > -15)
           {
-          	power = -10*this->chassisGyroPID->get_kP();
+          	power = -15*this->chassisGyroPID->get_kP();
           }
-          if(power > 0 && power<10)
+          if(power > 0 && power<15)
           {
-          	power = 10*this->chassisGyroPID->get_kP();
+          	power = 15*this->chassisGyroPID->get_kP();
         	}
 
           haltRight();
