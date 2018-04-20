@@ -15,7 +15,7 @@ chassis::chassis(){
   this->chassisGyroPID->set_deadband(5);
   this->currPos.x = 0;
   this->currPos.y = 0;
-  waypoints = new path(currPos);
+  this->waypoints = new path(this->currPos);
 };
 void chassis::updatePos(){
   this->currPos.x = this->currPos.x + ticksToInches(((this->getLeftMotorAt(0)->get_count())-this->getLeftMotorAt(0)->get_prevCount()),this->wheelDiameter,this->getLeftMotorAt(0)->get_motorType());
@@ -25,15 +25,15 @@ void chassis::generatePathTo(CartesianVector targetPos){
   this->waypoints->set_minStep(2);
   this->waypoints->fillWaypointList(this->currPos, targetPos, 7);
 };
-std::vector<motor*> chassis::get_leftMotors(){
-  return this->leftMotors;
-};
+// std::vector<motor*> chassis::get_leftMotors(){
+//   return this->leftMotors;
+// };
 void chassis::set_leftMotors(std::vector<motor*> motors){
   this->leftMotors = motors;
 };
-std::vector<motor*> chassis::get_rightMotors(){
-  return this->rightMotors;
-};
+// std::vector<motor*> chassis::get_rightMotors(){
+//   return this->rightMotors;
+// };
 void chassis::set_rightMotors(std::vector<motor*> motors){
   this->rightMotors = motors;
 };

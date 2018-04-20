@@ -4,7 +4,7 @@
 #include "ports.h"
 #include "motor.h"
 #include "math.h"
-#include <vector>
+#include "vector.h"
 #include "path.h"
 #include "analogSensors.h"
 #define vSAMPLE_PERIOD 100  //Sample period for digital control

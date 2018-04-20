@@ -54,7 +54,11 @@
   //  }
 
 //
+
+
+
 void operatorControl() {
+extern robot bot;
 //     lcdInit(uart1);
 //     lcdClear(uart1);
   // printf("Ran setup.\n");
@@ -68,19 +72,19 @@ void operatorControl() {
   //   lcdInit(uart2);
     // lcdClear(uart2);
 
-  int count = imeInitializeAll();
-  printf("ime's: %d \n",count);
-  printf("this changed");
-  robot bot = robot();
-  bot.setup();
-  imeReset(0);
-  imeReset(1);
-  imeReset(2);
-  bot.get_digital()->resetLiftEncoders();
-  bot.get_analog()->reset_gyro();
-
-
-  delay(1000);
+  // int count = imeInitializeAll();
+  // printf("ime's: %d \n",count);
+  // printf("this changed");
+  // robot bot = robot();
+  // bot.setup();
+  // imeReset(0);
+  // imeReset(1);
+  // imeReset(2);
+  // bot.get_digital()->resetLiftEncoders();
+  // bot.get_analog()->reset_gyro();
+  //
+  //
+  // delay(1000);
   //runRedNoPreload(bot);
 
   // runRedNoPreload(bot);

@@ -41,6 +41,7 @@
 #ifndef MAIN_H_
 #include <API.h>
 #include <math.h>
+#include "robot.h"
 // This prevents multiple inclusion, which isn't bad for this file but is good practice
 #define MAIN_H_
 
@@ -68,6 +69,7 @@ extern "C" {
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
+
 void autonomous();
 /**
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
