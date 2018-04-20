@@ -10,13 +10,15 @@ chassis::chassis(){
   // this->chassisPosPID->set_deadband(10);
   this->chassisPosPID = new pid(3.5,0.0,0.0,0.0); //3.5,0...
   this->chassisPosPID->set_deadband(3);
-  this->chassisGyroPID = new pid(3.0,0.0,80.0,0.0);//60
+  this->chassisGyroPID = new pid(2.75,0.0,80.0,0.0);//60
   //this->chassisGyroPID->set_toleranceI(25);
-  this->chassisGyroPID->set_deadband(5);
+  this->chassisGyroPID->set_deadband(6);
   this->currPos.x = 0;
   this->currPos.y = 0;
-  this->waypoints = new path(this->currPos);
+  waypoints = new path(currPos);
 };
+
+
 void chassis::updatePos(){
   this->currPos.x = this->currPos.x + ticksToInches(((this->getLeftMotorAt(0)->get_count())-this->getLeftMotorAt(0)->get_prevCount()),this->wheelDiameter,this->getLeftMotorAt(0)->get_motorType());
   this->currPos.y = 0;
@@ -25,15 +27,15 @@ void chassis::generatePathTo(CartesianVector targetPos){
   this->waypoints->set_minStep(2);
   this->waypoints->fillWaypointList(this->currPos, targetPos, 7);
 };
-// std::vector<motor*> chassis::get_leftMotors(){
-//   return this->leftMotors;
-// };
+std::vector<motor*>* chassis::get_leftMotors(){
+  return &this->leftMotors;
+};
 void chassis::set_leftMotors(std::vector<motor*> motors){
   this->leftMotors = motors;
 };
-// std::vector<motor*> chassis::get_rightMotors(){
-//   return this->rightMotors;
-// };
+std::vector<motor*>* chassis::get_rightMotors(){
+  return &this->rightMotors;
+};
 void chassis::set_rightMotors(std::vector<motor*> motors){
   this->rightMotors = motors;
 };
@@ -148,6 +150,8 @@ void chassis::haltRight(){
     this->rightMotors[i]->set_Power(0);
   }
 };
+
+bool atPos = false;
 void chassis::moveDistance(float inch){
   atPos = false;
   leftPosition(inch);
@@ -173,14 +177,15 @@ void chassis::moveToPos(CartesianVector vector){
   }
 };
 
+bool atGyro = false;
 void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
   atGyro = false;
   targetAngle = targetAngle/2;
-  float difference = (targetAngle - (float)gyro->gyro_val());
+	float difference = (targetAngle - (float)gyro->gyro_val());
   printf("%f\n", difference);
-    if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
-    {
-        difference = (targetAngle - (float)gyro->gyro_val());
+		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+		{
+			  difference = (targetAngle - (float)gyro->gyro_val());
         //calculate to see if it is faster to turn left or right
         if(difference > 180)
         {
@@ -194,33 +199,33 @@ void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
 
         power = power < -100 ? -100 : power;
         power = power > 100 ? 100 : power;
-        if(power < 0 && power > -10)
+        if(power < 0 && power > -15)
         {
-          power = -10*this->chassisGyroPID->get_kP();
+        	power = -15*this->chassisGyroPID->get_kP();
         }
-        if(power > 0 && power<10)
+        if(power > 0 && power<15)
         {
-          power = 10*this->chassisGyroPID->get_kP();
-        }
+        	power = 15*this->chassisGyroPID->get_kP();
+      	}
 
         leftPower(-power);
         rightPower(power);
-    }
+		}
     else{
       haltLeft();
       haltRight();
-      atGyro = true;
+  		atGyro = true;
     }
 };
 
 void chassis::turnRightToAngle(int targetAngle, analogSensors* gyro){
   atGyro = false;
   targetAngle = targetAngle;
-  float difference = (targetAngle - (float)gyro->gyro_val());
+	float difference = (targetAngle - (float)gyro->gyro_val());
   printf("%f\n", difference);
-    if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
-    {
-        difference = (targetAngle - (float)gyro->gyro_val());
+		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+		{
+			  difference = (targetAngle - (float)gyro->gyro_val());
         //calculate to see if it is faster to turn left or right
         if(difference > 180)
         {
@@ -234,32 +239,32 @@ void chassis::turnRightToAngle(int targetAngle, analogSensors* gyro){
 
         power = power < -100 ? -100 : power;
         power = power > 100 ? 100 : power;
-        if(power < 0 && power > -10)
+        if(power < 0 && power > -15)
         {
-          power = -10*this->chassisGyroPID->get_kP();
+        	power = -10*this->chassisGyroPID->get_kP();
         }
-        if(power > 0 && power<10)
+        if(power > 0 && power<15)
         {
-          power = 10*this->chassisGyroPID->get_kP();
-        }
+        	power = 15*this->chassisGyroPID->get_kP();
+      	}
 
         haltLeft();
         rightPower(power);
-    }
+		}
     else{
       haltLeft();
       haltRight();
-      atGyro = true;
+  		atGyro = true;
     }
 };
 void chassis::turnLeftToAngle(int targetAngle, analogSensors* gyro){
   atGyro = false;
   targetAngle = targetAngle;
-  float difference = (targetAngle - (float)gyro->gyro_val());
+	float difference = (targetAngle - (float)gyro->gyro_val());
   printf("%f\n", difference);
-    if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
-    {
-        difference = (targetAngle - (float)gyro->gyro_val());
+		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+		{
+			  difference = (targetAngle - (float)gyro->gyro_val());
         //calculate to see if it is faster to turn left or right
         if(difference > 180)
         {
@@ -273,22 +278,22 @@ void chassis::turnLeftToAngle(int targetAngle, analogSensors* gyro){
 
         power = power < -100 ? -100 : power;
         power = power > 100 ? 100 : power;
-        if(power < 0 && power > -10)
+        if(power < 0 && power > -15)
         {
-          power = -10*this->chassisGyroPID->get_kP();
+        	power = -15*this->chassisGyroPID->get_kP();
         }
-        if(power > 0 && power<10)
+        if(power > 0 && power<15)
         {
-          power = 10*this->chassisGyroPID->get_kP();
-        }
+        	power = 15*this->chassisGyroPID->get_kP();
+      	}
 
         haltRight();
         leftPower(-power);
-    }
+		}
     else{
       haltLeft();
       haltRight();
-      atGyro = true;
+  		atGyro = true;
     }
 };
 
@@ -319,4 +324,4 @@ void chassis::set_wheelDiameter(int dia){
 
 path* chassis::get_waypoints(){
   return this->waypoints;
-};
+}

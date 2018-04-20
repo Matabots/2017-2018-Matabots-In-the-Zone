@@ -19,6 +19,7 @@ class digitalSensors{
 
   public:
     digitalSensors();
+
     void set_leftLimitSwitch(int port);
     int get_leftLimitSwitch();
     void set_rightLimitSwitch(int port);
@@ -36,6 +37,7 @@ class digitalSensors{
     void set_rightLiftEncoder(int port1, int port2, bool direction);
     Encoder get_rightLiftEncoder();
     int rightLiftEncoderVal();
+    int rightLiftEncoderValModern();
 
     void set_LeftEncoder(int port1, int port2, bool direction);
     Encoder get_LeftEncoder();

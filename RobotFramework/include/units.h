@@ -6,8 +6,8 @@
  *  Contains abstractions for units
  */
 
- #ifndef UNITS_H_
- #define UNITS_H_
+ #ifndef INCLUDE_UNITS_H_
+ #define INCLUDE_UNITS_H_
 
  #include <API.h>
 
@@ -25,7 +25,8 @@ typedef enum state{
   INTAKE,
   CONEHEIGHT,
   OUTTAKE,
-  ADJUSTHEIGHT
+  ADJUSTHEIGHT,
+  RESTABOVE
 }state;
 
 void printState(state rState);
@@ -35,6 +36,7 @@ double avg(double num1, double num2);
 double getTypeTicks(motorType motor);
 
 int imeVelocity(int velocity, motorType motor);
+
 double ticksToRotations(Encoder enc);
 
 /**

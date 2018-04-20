@@ -34,7 +34,7 @@ robot bot;
 void autonomous() {
     //declare a robot and setup the ports
     bot = robot();
-    bot.setup();
+    bot.setupCSUN1();
     while(true)
     {
       printf("BIG ENOURMOUS TITS\n");

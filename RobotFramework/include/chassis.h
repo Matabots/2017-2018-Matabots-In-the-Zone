@@ -23,11 +23,12 @@ public:
 
   chassis();
 
+
   void updatePos();
   void generatePathTo(CartesianVector targetPos);
-  std::vector<motor*> get_leftMotors();
+  std::vector<motor*>* get_leftMotors();
   void set_leftMotors(std::vector<motor*> motors);
-  std::vector<motor*> get_rightMotors();
+  std::vector<motor*>* get_rightMotors();
   void set_rightMotors(std::vector<motor*> motors);
   motor* getLeftMotorAt(int pos);
   motor* getRightMotorAt(int pos);
@@ -77,5 +78,7 @@ public:
   void set_wheelDiameter(int dia);
 
   path* get_waypoints();
+
 };
+
 #endif

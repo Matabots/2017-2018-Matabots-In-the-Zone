@@ -1,5 +1,6 @@
 #include "units.h"
 
+
 void printState(state rState){
   switch(rState){
     case BOTTOM:
@@ -17,7 +18,9 @@ void printState(state rState){
     case ADJUSTHEIGHT:
       printf("ADJUSTHEIGHT\n");
     break;
-
+    case RESTABOVE:
+      printf("RESTABOVE\n");
+    break;
   }
 };
 
@@ -83,7 +86,7 @@ double ticksToRotations(Encoder enc){
 
 double ticksToDegrees(int ticks, motorType motor){
   return ticksToRotations(ticks, motor)/360;
-};
+}
 /**
  * Converts rotations to ticks
  * @method rotationsToTicks
@@ -108,7 +111,7 @@ double ticksToDegrees(int ticks, motorType motor){
 
  int rotationsToTicks(Encoder enc){
    return encoderGet(enc)*360;
- };
+ }
 
 /**
  * Convert ticks to inches
@@ -141,4 +144,4 @@ double ticksToDegrees(int ticks, motorType motor){
   };
   double degToInches(double deg, double wheelDiameter){
     return (wheelDiameter*PI*deg)/360;
-  };
+  }
