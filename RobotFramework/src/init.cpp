@@ -41,6 +41,7 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
  robot bot;
+ TaskHandle callUart;
 void initialize() {
 
     int count = imeInitializeAll();
@@ -48,6 +49,8 @@ void initialize() {
     printf("this changed");
     bot=robot();
     bot.setupCSUN1();
+    
+
   // printf("Begin initalize()");
 
   // setTeamName("CSUN Vex Robotics");

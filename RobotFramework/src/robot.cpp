@@ -161,7 +161,6 @@ void robot::setupCSUN2(){
       autonLiftProcess();
       autoAbort();
       printf("Remote Listening\n");
-      // this->uartComms->runUART();
       if(!autoStacking){
         rollerButtons();
         bigLift();
@@ -169,6 +168,10 @@ void robot::setupCSUN2(){
         goalLift();
       }
     };
+    void robot::uart()
+    {
+      this->uartComms->runUART();
+    }
     void robot::joystickInputs(){
       rightJoystick();
       leftJoystick();

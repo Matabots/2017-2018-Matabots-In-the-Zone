@@ -21,7 +21,7 @@
 //required includes
 #include "main.h"
 #include "robot.h"
-// #include "autonScripts.h"
+#include "autonScripts.h"
 //#include "../include/uart.h"
 //#include "uart.h"
 
@@ -59,6 +59,11 @@
 
 void operatorControl() {
 extern robot bot;
+extern TaskHandle callUart;
+
+taskDelete(callUart);
+
+// taskResume(callUart);
 //     lcdInit(uart1);
 //     lcdClear(uart1);
   // printf("Ran setup.\n");
