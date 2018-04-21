@@ -72,17 +72,14 @@ extern robot bot;
   //   lcdInit(uart2);
     // lcdClear(uart2);
 
-<<<<<<< HEAD
   int count = imeInitializeAll();
   printf("ime's: %d \n",count);
   printf("this changed");
-  robot bot = robot();
   bot.setupCSUN1();
 
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
 
-=======
   // int count = imeInitializeAll();
   // printf("ime's: %d \n",count);
   // printf("this changed");
@@ -96,7 +93,6 @@ extern robot bot;
   //
   //
   // delay(1000);
->>>>>>> 4a831f2023e237a8e2d7d430b063411dcf627159
   //runRedNoPreload(bot);
 
   // runRedNoPreload(bot);
@@ -104,10 +100,7 @@ extern robot bot;
   // runRedNoPreload(bot);
   while(true)
   {
-<<<<<<< HEAD
-=======
     printf("Listening");
->>>>>>> 4a831f2023e237a8e2d7d430b063411dcf627159
     bot.remoteListen();
     delay(50);
   }

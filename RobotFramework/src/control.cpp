@@ -30,6 +30,9 @@ control::control(int autonLift, int autonAbort, int clearStacked, int bigLift, i
   int control::smallLiftToggle(){
     return joystickGetDigital(1, this->smallLift, JOY_RIGHT);
   };
+  int control::smallLiftToggleUp(){
+    return joystickGetDigital(1, this->smallLift, JOY_LEFT);
+  }
   int control::clearConeStack(){
     return joystickGetDigital(1, this->clearStack, JOY_LEFT);
   };
