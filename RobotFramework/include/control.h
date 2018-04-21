@@ -12,8 +12,8 @@ private:
     int clearStack;
     int team;
 public:
-    control(int autonLift, int autonAbort, int clearStacked, int bigLift, int smallLift, int goalLift, int roller, int team);
-
+    control();
+    void setupcontrol(int autonLift, int autonAbort, int clearStacked, int bigLift, int smallLift, int goalLift, int roller, int team);
     int autonLiftProcessAdd();
     int autonLiftProcessSubtract();
     int autoLiftAbort();

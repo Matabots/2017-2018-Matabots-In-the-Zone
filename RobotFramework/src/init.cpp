@@ -47,7 +47,7 @@ void initialize() {
     printf("ime's: %d \n",count);
     printf("this changed");
     bot=robot();
-    bot.setupCSUN1();
+    bot.setupCSUN2();
   // printf("Begin initalize()");
 
   // setTeamName("CSUN Vex Robotics");

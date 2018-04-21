@@ -6,7 +6,7 @@
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new roller();
-      this->remote = new control(8, 7, 8, 5, 5, 6, 6, 1);
+      this->remote = new control();
       this->communications = new i2c();
       this->aMotor = new motor();
       this->robotState = ADJUSTHEIGHT;
@@ -40,6 +40,7 @@ void robot::setupCSUN1(){
 
   ///////////////////////////////////////////
   ////////////// CSUN1 Carbon  ////////////////////////
+      this->remote->setupcontrol(8, 7, 8, 5, 5, 6, 6, 1);
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog1);
       this->digital->set_leftLimitSwitch(digital5);
@@ -65,13 +66,13 @@ void robot::setupCSUN1(){
 };
 void robot::setupCSUN2(){
       //add motors, sensors, reset values for sensors here
-
-      // this->analog->set_gyro(analog8, 0);
-      //this->analog->set_potentiometer(analog1);
-      // this->digital->set_leftLimitSwitch(digital5);
-      // this->digital->set_rightLimitSwitch(digital6);
-      // this->analog->set_leftLineSensor(analog2);
-      // this->analog->set_rightLineSensor(analog3);
+      this->remote->setupcontrol(8, 7, 8, 5, 5, 6, 6, 2);
+      this->analog->set_gyro(analog8, 0);
+      this->analog->set_potentiometer(analog1);
+      this->digital->set_leftLimitSwitch(digital5);
+      this->digital->set_rightLimitSwitch(digital6);
+      this->analog->set_leftLineSensor(analog2);
+      this->analog->set_rightLineSensor(analog3);
       this->digital->set_rightLiftEncoder(digital7, digital8, false);
       this->digital->set_leftLiftEncoder(digital5, digital6, false);
       this->drive->addLeftMotor(motor2, false);
@@ -165,8 +166,8 @@ void robot::setupCSUN2(){
       if(!autoStacking){
         rollerButtons();
         bigLift();
-        smallLift();
-        goalLift();
+        // smallLift();
+        // goalLift();
       }
     };
     void robot::joystickInputs(){

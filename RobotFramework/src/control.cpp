@@ -1,6 +1,18 @@
 #include "control.h"
 
-control::control(int autonLift, int autonAbort, int clearStacked, int bigLift, int smallLift, int goalLift, int roller,int team){
+control::control(){
+  //setup all controller bindings here
+  this->bigLiftVar = 0;
+  this->smallLift = 0; //8R toggle
+  this->clearStack = 0;//8L wipe the stack
+  this->goalLifter = 0; //7U up 7d down
+  this->roller = 0; //toggle buttons intake 8u 8d outtake
+  this->autonLift = 0;
+  this->autonAbort = 0; //7right
+  this->team = 0;
+};
+
+void control::setupcontrol(int autonLift, int autonAbort, int clearStacked, int bigLift, int smallLift, int goalLift, int roller,int team){
     //setup all controller bindings here
     this->bigLiftVar = bigLift;
     this->smallLift = smallLift; //8R toggle
