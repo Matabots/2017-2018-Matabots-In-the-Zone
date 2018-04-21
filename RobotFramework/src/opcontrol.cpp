@@ -13,15 +13,15 @@
  */
 
 //optional or test includes
-#include "../include/utility/drive.h"
-#include "../include/utility/arm.h"
-#include "../include/utility/motors.h"
+// #include "../include/utility/drive.h"
+// #include "../include/utility/arm.h"
+// #include "../include/utility/motors.h"
 // #include <iostream>
 // #include <string>
 //required includes
 #include "main.h"
 #include "robot.h"
-#include "autonScripts.h"
+// #include "autonScripts.h"
 //#include "../include/uart.h"
 //#include "uart.h"
 
@@ -54,7 +54,11 @@
   //  }
 
 //
+
+
+
 void operatorControl() {
+extern robot bot;
 //     lcdInit(uart1);
 //     lcdClear(uart1);
   // printf("Ran setup.\n");
@@ -68,6 +72,7 @@ void operatorControl() {
   //   lcdInit(uart2);
     // lcdClear(uart2);
 
+<<<<<<< HEAD
   int count = imeInitializeAll();
   printf("ime's: %d \n",count);
   printf("this changed");
@@ -77,6 +82,21 @@ void operatorControl() {
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();
 
+=======
+  // int count = imeInitializeAll();
+  // printf("ime's: %d \n",count);
+  // printf("this changed");
+  // robot bot = robot();
+  // bot.setup();
+  // imeReset(0);
+  // imeReset(1);
+  // imeReset(2);
+  // bot.get_digital()->resetLiftEncoders();
+  // bot.get_analog()->reset_gyro();
+  //
+  //
+  // delay(1000);
+>>>>>>> 4a831f2023e237a8e2d7d430b063411dcf627159
   //runRedNoPreload(bot);
 
   // runRedNoPreload(bot);
@@ -84,8 +104,12 @@ void operatorControl() {
   // runRedNoPreload(bot);
   while(true)
   {
+<<<<<<< HEAD
+=======
+    printf("Listening");
+>>>>>>> 4a831f2023e237a8e2d7d430b063411dcf627159
     bot.remoteListen();
-    delay(100);
+    delay(50);
   }
 
 }

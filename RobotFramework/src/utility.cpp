@@ -6,7 +6,8 @@
  * Common utility functions incorporated by multiple utilitys
  */
 
-#include "main.h"
+
+#include "utility.h"
 
 int clamp(int d, int min, int max, int overrideMin, int overrideMax) {
   const int t = abs(d) < min ? overrideMin : d;
@@ -15,4 +16,7 @@ int clamp(int d, int min, int max, int overrideMin, int overrideMax) {
 
 int abs(int value) {
   return (value < 0 ? -value : value);
+}
+double average(double num1, double num2){
+  return (num1+num2)/2;
 }

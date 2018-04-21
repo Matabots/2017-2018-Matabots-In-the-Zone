@@ -10,8 +10,8 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
-#include "main.h"
-
+ #include "main.h"
+ #include "robot.h"
 // #define degreesToRadians(angleDegrees) (angleDegrees * PI / 180.0)
 // #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / PI)
 
@@ -29,11 +29,18 @@
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
+robot bot;
 
 void autonomous() {
     //declare a robot and setup the ports
-    // robot bot = robot();
-    // bot.setup();
+    bot = robot();
+    bot.setupCSUN1();
+    while(true)
+    {
+      printf("BIG ENOURMOUS TITS\n");
+      bot.remoteListen();
+      delay(50);
+    }
     // bot.joystickInputs();
     //some testing of classes
     // chassis drive = chassis();

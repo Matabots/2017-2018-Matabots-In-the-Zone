@@ -9,21 +9,11 @@ private:
 
 public:
 
-      gameobject(){
-
-      }
-      void setX(int x){
-        this->x = x;
-      }
-      int getX(){
-        return this->x;
-      }
-      void setY(int y){
-        this->y = y;
-      }
-      int getY(){
-        return this->y;
-      }
+      gameobject();
+      void setX(int x);
+      int getX();
+      void setY(int y);
+      int getY();
 };
 
 #endif

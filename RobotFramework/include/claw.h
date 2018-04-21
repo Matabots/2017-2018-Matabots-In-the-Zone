@@ -8,30 +8,14 @@ private:
 
 public:
 
-  claw(){
-    this->clawMotor = new motor();
-  }
+  claw();
 
-  void set_Direction(bool reverse){
-    this->clawMotor->set_Direction(reverse);
-  };
-  void set_Port(int port){
-    this->clawMotor->set_Port(port);
-  };
-  void set_Power(int power){
-    this->clawMotor->set_Power(power);
-  };
-  void halt(){
-    this->clawMotor->set_Power(0);
-  };
-  bool get_Direction(){
-    return this->clawMotor->get_Direction();
-  };
-  int get_Speed(){
-    return this->clawMotor->get_Speed();
-  };
-  void set_ClawMotor(int port){
-     this->clawMotor->set_Port(port);
-  };
+  void set_Direction(bool reverse);
+  void set_Port(int port);
+  void set_Power(int power);
+  void halt();
+  bool get_Direction();
+  int get_Speed();
+  void set_ClawMotor(int port);
 };
 #endif

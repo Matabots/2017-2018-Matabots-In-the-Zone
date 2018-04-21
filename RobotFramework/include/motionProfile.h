@@ -1,22 +1,14 @@
 #ifndef MOTIONPROFILE_H
-#define MOTIONPROFILE
+#define MOTIONPROFILE_H
 #include <API.h>
 #include "main.h"
 
 class motionProfile{
-
 private:
   int targetVel;
   int tAccel; //milliseconds
   int totalTime;
-
 public:
-
-  motionProfile(){
-
-  }
-
+  motionProfile();
 };
-
-
 #endif

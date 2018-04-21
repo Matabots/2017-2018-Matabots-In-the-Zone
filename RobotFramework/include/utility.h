@@ -5,8 +5,8 @@
  * @brief This header file defines utility functions
  */
 
-#ifndef INCLUDE_UTILITY_H_
-#define INCLUDE_UTILITY_H_
+#ifndef UTILITY_H_
+#define UTILITY_H_
 
 /**
  * Clamps a int to a value
@@ -18,6 +18,7 @@
  * @param  overrideMax The value to set if d > max
  * @return
  */
+
 int clamp(int d, int min, int max, int overrideMin, int overrideMax);
 
 /**
@@ -28,8 +29,6 @@ int clamp(int d, int min, int max, int overrideMin, int overrideMax);
  */
 int abs(int value);
 
-double average(double num1, double num2){
-  return (num1+num2)/2;
-}
+double average(double num1, double num2);
 
 #endif /* INCLUDE_UTILITY_H_ */
