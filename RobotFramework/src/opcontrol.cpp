@@ -72,10 +72,6 @@ extern robot bot;
   //   lcdInit(uart2);
     // lcdClear(uart2);
 
-  int count = imeInitializeAll();
-  printf("ime's: %d \n",count);
-  printf("this changed");
-  bot.setupCSUN1();
 
   bot.get_digital()->resetLiftEncoders();
   bot.get_analog()->reset_gyro();

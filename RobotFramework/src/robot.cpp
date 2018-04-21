@@ -6,7 +6,7 @@
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new roller();
-      this->remote = new control(8, 7, 8, 5, 6, 6);
+      this->remote = new control(8, 7, 8, 5, 5, 6, 6, 1);
       this->communications = new i2c();
       this->aMotor = new motor();
       this->robotState = ADJUSTHEIGHT;
@@ -250,7 +250,7 @@ void robot::setupCSUN2(){
     };
     void robot::bigLift(){
       if(abs(this->remote->bigLift()) > 20){
-        this->arm->primaryLiftPower(100);
+        this->arm->primaryLiftPower(this->remote->bigLift());
         delay(50);
       }else{
         this->arm->haltPrimaryLift();

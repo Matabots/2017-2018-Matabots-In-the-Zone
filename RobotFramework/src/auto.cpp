@@ -29,12 +29,12 @@
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
-robot bot;
 
 void autonomous() {
     //declare a robot and setup the ports
-    bot = robot();
-    bot.setupCSUN1();
+    // bot = robot();
+    // bot.setupCSUN1();
+    extern robot bot;
     while(true)
     {
       printf("BIG ENOURMOUS TITS\n");
