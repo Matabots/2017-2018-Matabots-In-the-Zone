@@ -67,7 +67,7 @@ void robot::setupCSUN1(){
 };
 void robot::setupCSUN2(){
       //add motors, sensors, reset values for sensors here
-      this->remote->setupcontrol(6, 7, 8, 5, 8, 5, 8, 2);
+      this->remote->setupcontrol(6, 7, 8, 7, 8, 5, 8, 2);
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog1);
       this->digital->set_leftLimitSwitch(digital4);
@@ -171,6 +171,10 @@ void robot::setupCSUN2(){
         smallLift();
         goalLift();
       }
+      // if(this->remote->get_team() == 1)
+      // {
+      //   setLiftAboveStation();
+      // }
     };
     void robot::uart()
     {
@@ -226,41 +230,64 @@ void robot::setupCSUN2(){
     bool subtractPressed = false;
     bool subtractReleased = false;
     void robot::autonLiftProcess(){
-      if(!autoStacking){
-        printf("this is running");
-        if(this->remote->autonLiftProcessAdd()){
-          addPressed = true;
+
+        if(!autoStacking){
+          printf("this is running");
+          if(this->remote->autonLiftProcessAdd()){
+            addPressed = true;
+          }
+          if(!this->remote->autonLiftProcessAdd()){
+            addReleased = true;
+          }
+          if(this->remote->autonLiftProcessSubtract()){
+            subtractPressed = true;
+          }
+          if(!this->remote->autonLiftProcessSubtract()){
+            subtractReleased = true;
+          }
+          if(addPressed && addReleased && this->targetStack < 8){
+            this->targetStack += 1;
+            autoStacking = true;
+          }
+          if(subtractPressed && subtractReleased && this->stackedCones > 0 ){
+            this->targetStack -= 1;
+            this->stackedCones -=1;
+            autoStacking = true;
+          }
         }
-        if(!this->remote->autonLiftProcessAdd()){
-          addReleased = true;
+        else{
+          if(this->remote->get_team() == 2){
+            autoLoadCSUN2();
+          }
+          else{
+            autoLoad();
+          }
+          printf("lift is running");
         }
-        if(this->remote->autonLiftProcessSubtract()){
-          subtractPressed = true;
+
+    };
+    void robot::bigLift(){
+      if(this->remote->get_team() == 2){
+        printf("this is cusn2");
+        if(this->remote->bigLift() == 1){
+          this->arm->primaryLiftPower(100);
+          printf("joy %d\n",this->remote->bigLift());
         }
-        if(!this->remote->autonLiftProcessSubtract()){
-          subtractReleased = true;
+        else if(this->remote->bigLift() == -1){
+          this->arm->primaryLiftPower(-100);
+          printf("joy %d\n",this->remote->bigLift());
         }
-        if(addPressed && addReleased && this->targetStack < 8){
-          this->targetStack += 1;
-          autoStacking = true;
-        }
-        if(subtractPressed && subtractReleased && this->stackedCones > 0 ){
-          this->targetStack -= 1;
-          this->stackedCones -=1;
-          autoStacking = true;
+        else{
+          this->arm->haltPrimaryLift();
         }
       }
       else{
-        printf("lift is running");
-        autoLoad();
-      }
-    };
-    void robot::bigLift(){
-      if(abs(this->remote->bigLift()) > 20){
-        this->arm->primaryLiftPower(this->remote->bigLift());
-        delay(50);
-      }else{
-        this->arm->haltPrimaryLift();
+        if(abs(this->remote->bigLift()) > 20){
+          this->arm->primaryLiftPower(this->remote->bigLift());
+          delay(50);
+        }else{
+          this->arm->haltPrimaryLift();
+        }
       }
     };
 
@@ -294,6 +321,19 @@ void robot::setupCSUN2(){
         delay(50);
       }else{
         this->arm->haltGoalLift();
+      }
+    };
+
+    void robot::setLiftAboveStation(){
+      if(this->remote->defaultPosition())
+      {
+        this->arm->primaryLiftPosition(40+CONE_HEIGHT, this->digital->leftLiftEncoderVal());
+        this->arm->secondaryLiftPosition(SECONDARY_BOT, this->analog->get_potentiometerVal());
+        if(this->arm->get_primaryLiftAt(0)->get_posPID()->get_error() != 0){
+            //this->ef->set_Power(-100);
+            this->arm->haltPrimaryLift();
+            this->arm->haltSecondaryLift();
+        }
       }
     };
 

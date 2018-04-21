@@ -86,7 +86,7 @@ void control::setupcontrol(int autonLift, int autonAbort, int clearStacked, int 
       if( (joystickGetDigital(1, this->bigLiftVar, JOY_UP)) != 0){
        return joystickGetDigital(1, this->bigLiftVar, JOY_UP);
      }else if ( joystickGetDigital(1, this->bigLiftVar, JOY_DOWN)!= 0){
-       return joystickGetDigital(1, this->bigLiftVar, JOY_DOWN);
+       return -1*joystickGetDigital(1, this->bigLiftVar, JOY_DOWN);
      }else{
        return 0;
      }
@@ -128,7 +128,12 @@ void control::setupcontrol(int autonLift, int autonAbort, int clearStacked, int 
       return joystickGetAnalog(1, 3);
     }
   };
-
+  int control::defaultPosition(){
+    return joystickGetDigital(2, 8, JOY_UP);
+  }
+  int control::get_team(){
+    return this->team;
+  };
   int control::absRightJoystickVal() {
     return (joystickGetAnalog(1, 2) < 0 ? -joystickGetAnalog(1, 2) : joystickGetAnalog(1, 2));
   };
