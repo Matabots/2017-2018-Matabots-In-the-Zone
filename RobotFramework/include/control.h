@@ -41,6 +41,9 @@ public:
     int smallLiftToggle(){
       return joystickGetDigital(1, this->smallLift, JOY_RIGHT);
     };
+    int smallLiftToggleUp(){
+      return joystickGetDigital(1, this->smallLift, JOY_LEFT);
+    };
     int clearConeStack(){
       return joystickGetDigital(1, this->clearStack, JOY_LEFT);
     };

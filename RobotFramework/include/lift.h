@@ -38,7 +38,7 @@ public:
     this->goalLift = motors;
   }
   void addPrimaryLift(int port, bool reverse){
-    motor* liftMotor = new motor(port,10.0,0.0,0.0,0.0);//10.5
+    motor* liftMotor = new motor(port,9.5,0.0,0.0,0.0);//10.5
     liftMotor->set_Direction(reverse);
     liftMotor->set_type(ENC);
     liftMotor->get_posPID()->set_deadband(1);
