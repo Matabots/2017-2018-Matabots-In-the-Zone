@@ -27,8 +27,10 @@ public:
     int leftJoystickVal();
     int smallLiftUp();
     int smallLiftDown();
+    int defaultPosition();
     int absRightJoystickVal();
     int absLeftJoystickVal();
+    int get_team();
 
     // int autonLiftProcessAdd();
     // int autonLiftProcessSubtract();

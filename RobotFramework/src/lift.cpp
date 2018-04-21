@@ -9,6 +9,9 @@
   void lift::set_primaryLift(std::vector<motor*> motors){
     this->primaryLift = motors;
   };
+  motor* lift::get_primaryLiftAt(int pos){
+    return this->primaryLift[pos];
+  };
   std::vector<motor*> lift::get_secondaryLift(){
     return this->secondaryLift;
   };

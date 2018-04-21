@@ -20,6 +20,7 @@ public:
   void set_secondaryLift(std::vector<motor*> motors);
   std::vector<motor*> get_goalLift();
   motor* get_goalLiftAt(int x);
+  motor* get_primaryLiftAt(int pos);
   void set_goalLift(std::vector<motor*> motors);
   void addPrimaryLift(int port, bool reverse);
 
