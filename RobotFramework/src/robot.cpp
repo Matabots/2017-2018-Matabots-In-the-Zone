@@ -6,7 +6,7 @@
       this->digital = new digitalSensors();
       this->arm = new lift();
       this->ef = new roller();
-      this->remote = new control(6, 7, 8, 5, 8, 7, 8);
+      this->remote = new control(8, 7, 8, 5, 6, 6);
       this->communications = new i2c();
       this->aMotor = new motor();
       this->robotState = ADJUSTHEIGHT;

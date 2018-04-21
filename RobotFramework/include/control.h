@@ -5,28 +5,26 @@ class control{
 private:
     int autonLift;
     int autonAbort;
-    int bigLift;
     int smallLift;
     int goalLifter;
     int roller;
     int clearStack;
 public:
-  control(int autonLift, int autonAbort, int clearStacked, int bigLift, int smallLift, int goalLift, int roller);
+  control(int autonLift, int autonAbort, int clearStacked, int smallLift, int goalLift, int roller);
 
     int autonLiftProcessAdd();
     int autonLiftProcessSubtract();
     int autoLiftAbort();
     int rollerOpen();
     int rollerClose();
-    int smallLiftToggle();
     int clearConeStack();
-    int bigLiftUp();
-    int bigLiftDown();
+    int bigLift();
     int goalLiftUp();
     int goalLiftDown();
     int rightJoystickVal();
     int leftJoystickVal();
-    int smallLiftToggleUp();
+    int smallLiftUp();
+    int smallLiftDown();
     int absRightJoystickVal();
     int absLeftJoystickVal();
 
