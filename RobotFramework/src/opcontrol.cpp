@@ -60,7 +60,6 @@
 void operatorControl() {
 extern robot bot;
 // extern TaskHandle callUart;
-
 // taskDelete(callUart);
 
 // taskResume(callUart);
@@ -78,8 +77,6 @@ extern robot bot;
     // lcdClear(uart2);
 
 
-  bot.get_digital()->resetLiftEncoders();
-  bot.get_analog()->reset_gyro();
 
   // int count = imeInitializeAll();
   // printf("ime's: %d \n",count);
@@ -101,8 +98,12 @@ extern robot bot;
   // runRedNoPreload(bot);
   while(true)
   {
-    printf("Listening");
-    bot.remoteListen();
+     printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
+       printf("rightEnc: %d\n",bot.get_digital()->rightLiftEncoderVal());
+       printf("gyro: %d\n",bot.get_analog()->gyro_val());
+       printf("limitSwitch: %d\n", bot.get_digital()->get_leftLimitSwitch());
+       printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
+    //bot.remoteListen();
     delay(50);
   }
 

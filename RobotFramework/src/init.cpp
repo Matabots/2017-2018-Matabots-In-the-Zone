@@ -51,6 +51,8 @@ void initialize() {
     bot.setupCSUN2();
   // printf("Begin initalize()");
 
+     bot.get_digital()->resetLiftEncoders();
+     bot.get_analog()->reset_gyro();
   // setTeamName("CSUN Vex Robotics");
 
   // imeInitializeAll();
