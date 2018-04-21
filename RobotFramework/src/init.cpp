@@ -41,6 +41,7 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
  robot bot;
+ // TaskHandle callUart;
 void initialize() {
 
     int count = imeInitializeAll();

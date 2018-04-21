@@ -5,6 +5,6 @@
 
 void runRedNoPreload(robot bot);
 
-
+void runUart(void * parameter);
 
 #endif

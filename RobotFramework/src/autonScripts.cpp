@@ -1,5 +1,7 @@
 #include "autonScripts.h"
 
+
+
 void runRedNoPreload(robot bot){
   //bot.driveIn(55);
   printf("this has ended\n");
@@ -40,3 +42,13 @@ void runRedNoPreload(robot bot){
   // printf("autoload Ran");
    bot.set_primaryBottomHeight(false);
 };
+
+void runUart(void * parameter)
+{
+  extern robot bot;
+  while(true)
+  {
+    bot.uart();
+    delay(50);
+  }
+}

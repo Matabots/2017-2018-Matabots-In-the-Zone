@@ -66,7 +66,7 @@ void robot::setupCSUN1(){
 };
 void robot::setupCSUN2(){
       //add motors, sensors, reset values for sensors here
-      this->remote->setupcontrol(8, 7, 8, 5, 5, 6, 6, 2);
+      this->remote->setupcontrol(6, 7, 8, 5, 8, 5, 8, 2);
       this->analog->set_gyro(analog8, 0);
       this->analog->set_potentiometer(analog1);
       this->digital->set_leftLimitSwitch(digital5);
@@ -162,14 +162,17 @@ void robot::setupCSUN2(){
       autonLiftProcess();
       autoAbort();
       printf("Remote Listening\n");
-      // this->uartComms->runUART();
       if(!autoStacking){
         rollerButtons();
         bigLift();
         // smallLift();
-        // goalLift();
+        goalLift();
       }
     };
+    void robot::uart()
+    {
+      this->uartComms->runUART();
+    }
     void robot::joystickInputs(){
       rightJoystick();
       leftJoystick();

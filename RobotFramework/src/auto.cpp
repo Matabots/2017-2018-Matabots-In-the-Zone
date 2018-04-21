@@ -12,6 +12,7 @@
 
  #include "main.h"
  #include "robot.h"
+ #include "autonscripts.h"
 // #define degreesToRadians(angleDegrees) (angleDegrees * PI / 180.0)
 // #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / PI)
 
@@ -35,6 +36,8 @@ void autonomous() {
     // bot = robot();
     // bot.setupCSUN1();
     extern robot bot;
+    // extern TaskHandle callUart;
+    // callUart = taskCreate(runUart, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
     while(true)
     {
       printf("BIG ENOURMOUS TITS\n");
