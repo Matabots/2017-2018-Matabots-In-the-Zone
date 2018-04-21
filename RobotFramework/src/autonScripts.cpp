@@ -7,10 +7,14 @@ void runRedNoPreload(robot bot){
   printf("this has ended\n");
   bot.setPreloadHeight();
   bot.lowerGoalLift();
+  delay(250);
   bot.driveIn(47);
+  // printf("%ld\n", bot.intakeTimer);
   delay(250);
   bot.raiseGoalLift();
   bot.scorePreload();
+  bot.set_primaryBottomHeight(false);
+  // printf("%ld\n", bot.intakeTimer);
   delay(250);
   bot.get_drive()->rightPosition(5);
   bot.driveIn(7);
@@ -19,11 +23,13 @@ void runRedNoPreload(robot bot){
     bot.autoLoad();
     delay(50);
   }
+  // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.driveIn(-22);
+  bot.driveIn(-19);
   bot.set_primaryBottomHeight(true);
   delay(250);
-  bot.spinToAngle(107);
+  bot.spinToAngle(80);
+  delay(250);
   bot.driveIn(-6);
   delay(250);
   bot.set_targetStack(8);

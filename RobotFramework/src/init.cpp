@@ -9,8 +9,8 @@
  * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
  */
 
- #include "main.h"
-  #include "robot.h"
+#include "main.h"
+ #include "robot.h"
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
  * VEX Cortex is starting up. As the scheduler is still paused, most API functions will fail.
@@ -43,12 +43,8 @@ void initializeIO() {
  robot bot;
  // TaskHandle callUart;
 void initialize() {
-
-    int count = imeInitializeAll();
-    printf("ime's: %d \n",count);
-    printf("this changed");
-    bot=robot();
-    bot.setupCSUN2();
+  int count = imeInitializeAll();
+  printf("%d\n", count);
   // printf("Begin initalize()");
 
   // setTeamName("CSUN Vex Robotics");

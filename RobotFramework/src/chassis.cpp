@@ -8,11 +8,11 @@ chassis::chassis(){
                           //0.45                      //0.85,0,0 for gyro turn
   // this->chassisPosPID = new pid(0.85,0.024,0.016,0.0);
   // this->chassisPosPID->set_deadband(10);
-  this->chassisPosPID = new pid(3.5,0.0,0.0,0.0); //3.5,0...
-  this->chassisPosPID->set_deadband(3);
-  this->chassisGyroPID = new pid(2.75,0.0,80.0,0.0);//60
+  this->chassisPosPID = new pid(6.5,0.0,0.0,0.0); //3.5,0...
+  this->chassisPosPID->set_deadband(5);
+  this->chassisGyroPID = new pid(6,0.0,30.0,0.0);//60
   //this->chassisGyroPID->set_toleranceI(25);
-  this->chassisGyroPID->set_deadband(6);
+  this->chassisGyroPID->set_deadband(7);
   this->currPos.x = 0;
   this->currPos.y = 0;
   waypoints = new path(currPos);
