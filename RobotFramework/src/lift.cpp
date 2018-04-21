@@ -71,12 +71,13 @@ void lift::set_primaryLiftPosPID(double kP, double kI, double kD, double kF) {
   void lift::secondaryLiftPosition(int targetCount, int potentiometer){
     for(std::vector<motor*>::size_type i = 0; i != this->secondaryLift.size(); i++) {
       if((potentiometer) > (targetCount)){
-        this->secondaryLift[i]->set_Power(-70);//=70
+        // this->secondaryLift[i]->set_Power(-70);//=70
+        this->secondaryLift[i]->set_Power((0.2*(targetCount-potentiometer)));
         printf("running %d\n",this->secondaryLift[i]->get_Power() );
         printf("# lift: %d\n",this->secondaryLift.size());
       }
       else if((potentiometer) < (targetCount)){
-        this->secondaryLift[i]->set_Power((0.15*(targetCount-potentiometer)));
+        this->secondaryLift[i]->set_Power((0.2*(targetCount-potentiometer)));
       }
       else{
         haltSecondaryLift();

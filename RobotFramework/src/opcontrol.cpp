@@ -21,7 +21,7 @@
 //required includes
 #include "main.h"
 #include "robot.h"
-#include "autonScripts.h"
+// #include "autonScripts.h"
 //#include "../include/uart.h"
 //#include "uart.h"
 
@@ -96,6 +96,8 @@ extern robot bot;
   // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
+  delay(1000);
+ bot.set_targetStack(5);
   while(true)
   {
      printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
