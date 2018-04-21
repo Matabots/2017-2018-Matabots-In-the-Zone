@@ -21,7 +21,7 @@
 //required includes
 #include "main.h"
 #include "robot.h"
-#include "autonScripts.h"
+// #include "autonScripts.h"
 //#include "../include/uart.h"
 //#include "uart.h"
 
@@ -96,14 +96,17 @@ extern robot bot;
   // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
+  delay(1000);
+ bot.set_targetStack(5);
   while(true)
   {
-     printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
-       printf("rightEnc: %d\n",bot.get_digital()->rightLiftEncoderVal());
-       printf("gyro: %d\n",bot.get_analog()->gyro_val());
-       printf("limitSwitch: %d\n", bot.get_digital()->get_leftLimitSwitch());
-       printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
+    printf("pot: %d",bot.get_analog()->get_potentiometerVal());
+    printf("stackCones %d",bot.get_stackedCones());
+    printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
+    printf("rightEnc: %d\n",bot.get_digital()->rightLiftEncoderVal());
+   bot.autoLoadCSUN2();
     //bot.remoteListen();
+    printf("running");
     delay(50);
   }
 

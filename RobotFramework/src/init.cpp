@@ -44,11 +44,13 @@ void initializeIO() {
  // TaskHandle callUart;
 void initialize() {
   int count = imeInitializeAll();
+  bot = robot();
+  bot.setupCSUN2();
   printf("%d\n", count);
   // printf("Begin initalize()");
 
-     bot.get_digital()->resetLiftEncoders();
-     bot.get_analog()->reset_gyro();
+   // bot.get_digital()->resetLiftEncoders();
+   // bot.get_analog()->reset_gyro();
   // setTeamName("CSUN Vex Robotics");
 
   // imeInitializeAll();
