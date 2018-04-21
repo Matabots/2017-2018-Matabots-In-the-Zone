@@ -12,7 +12,7 @@
 
  #include "main.h"
  #include "robot.h"
- #include "autonscripts.h"
+ // #include "autonScripts.h"
 // #define degreesToRadians(angleDegrees) (angleDegrees * PI / 180.0)
 // #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / PI)
 
@@ -33,17 +33,54 @@
 
 void autonomous() {
     //declare a robot and setup the ports
-    // bot = robot();
-    // bot.setupCSUN1();
-    extern robot bot;
-    // extern TaskHandle callUart;
-    // callUart = taskCreate(runUart, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-    while(true)
-    {
-      printf("BIG ENOURMOUS TITS\n");
-      bot.remoteListen();
+
+    bot = robot();
+    bot.setupCSUN1();
+    //bot.driveIn(55);
+    printf("this has ended\n");
+    bot.setPreloadHeight();
+    bot.lowerGoalLift();
+    bot.driveIn(47);
+    delay(250);
+    bot.raiseGoalLift();
+    bot.scorePreload();
+    delay(250);
+    bot.get_drive()->rightPosition(5);
+    bot.driveIn(7);
+    bot.set_targetStack(2);
+    while(bot.get_stackedCones() < bot.get_targetStack()){
+      bot.autoLoad();
       delay(50);
     }
+    delay(250);
+    bot.driveIn(-22);
+    bot.set_primaryBottomHeight(true);
+    delay(250);
+    bot.spinToAngle(107);
+    bot.driveIn(-6);
+    delay(250);
+    bot.set_targetStack(8);
+    while(bot.get_stackedCones() < bot.get_targetStack()){
+      printf("stacked cones: %d\n", bot.get_stackedCones());
+      bot.autoLoad();
+      delay(50);
+    }
+
+    while(true){
+      printf("stacking cones to %d\n",bot.get_targetStack() );
+      bot.get_drive()->haltLeft();
+      bot.get_drive()->haltRight();
+      delay(50);
+    }
+    // printf("autoload Ran");
+     bot.set_primaryBottomHeight(false);
+    // runRedNoPreload(bot);
+    // while(true)
+    // {
+    //   printf("BIG ENOURMOUS TITS\n");
+    //   bot.remoteListen();
+    //   delay(50);
+    // }
     // bot.joystickInputs();
     //some testing of classes
     // chassis drive = chassis();
