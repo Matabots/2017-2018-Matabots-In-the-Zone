@@ -2,7 +2,7 @@
 
 control::control(int autonLift, int autonAbort, int clearStacked, int smallLift, int goalLift, int roller){
     //setup all controller bindings here
-    this->bigLift = bigLift;
+    //this->bigLift = bigLift;
     this->smallLift = smallLift; //8R toggle
     this->clearStack = clearStacked;//8L wipe the stack
     //this->goalLifter = goalLift; //7U up 7d down

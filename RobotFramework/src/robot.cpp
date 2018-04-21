@@ -249,11 +249,8 @@ void robot::setupCSUN2(){
       }
     };
     void robot::bigLift(){
-      if(this->remote->bigLiftUp()){
+      if(abs(this->remote->bigLift()) > 20){
         this->arm->primaryLiftPower(100);
-        delay(50);
-      }else if(this->remote->bigLiftDown()){
-        this->arm->primaryLiftPower(-100);
         delay(50);
       }else{
         this->arm->haltPrimaryLift();
@@ -263,15 +260,15 @@ void robot::setupCSUN2(){
     bool toggleUp = true;
     void robot::smallLift(){
       // motorSet(5, speed);
-      if(this->remote->smallLiftToggle() ){
-        this->arm->secondaryLiftPower(-100);
+      if(this->remote->smallLiftUp() ){
+        this->arm->secondaryLiftPower(100);
         // if(this->analog->get_potentiometerVal() < 1800){
         //   toggleUp = false;
         // }
         delay(50);
       }
-      else if(this->remote->smallLiftToggleUp()){
-        this->arm->secondaryLiftPower(100);
+      else if(this->remote->smallLiftDown()){
+        this->arm->secondaryLiftPower(-100);
         // if(this->analog->get_potentiometerVal() > 3000 ){
         //   toggleUp = true;
         // }
