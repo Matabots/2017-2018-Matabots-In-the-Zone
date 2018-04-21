@@ -19,6 +19,7 @@ private:
   pid* chassisGyroPID;
   path* waypoints;
   CartesianVector currPos;
+  unsigned long intakeTimer;
 public:
 
   chassis();

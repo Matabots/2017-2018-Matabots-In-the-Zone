@@ -126,8 +126,8 @@ void turnRightToAngle(int targetAngle);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#define SECONDARY_BOT  400
-#define SECONDARY_TOP 1500
+#define SECONDARY_BOT  500
+#define SECONDARY_TOP 1400
 #define CONE_HEIGHT 10
 #define MAX_HEIGHT 8
 //int primaryBottomHeight = 3; //change between 3 and height of loading station at 45

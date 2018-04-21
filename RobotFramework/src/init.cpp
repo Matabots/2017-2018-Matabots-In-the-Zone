@@ -45,10 +45,13 @@ void initializeIO() {
 void initialize() {
   int count = imeInitializeAll();
   printf("%d\n", count);
+
+      bot = robot();
+      bot.setupCSUN1();
+        bot.get_digital()->resetLiftEncoders();
+        bot.get_analog()->reset_gyro();
   // printf("Begin initalize()");
 
-     bot.get_digital()->resetLiftEncoders();
-     bot.get_analog()->reset_gyro();
   // setTeamName("CSUN Vex Robotics");
 
   // imeInitializeAll();

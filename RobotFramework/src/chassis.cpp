@@ -8,9 +8,9 @@ chassis::chassis(){
                           //0.45                      //0.85,0,0 for gyro turn
   // this->chassisPosPID = new pid(0.85,0.024,0.016,0.0);
   // this->chassisPosPID->set_deadband(10);
-  this->chassisPosPID = new pid(6.5,0.0,0.0,0.0); //3.5,0...
+  this->chassisPosPID = new pid(7.0,0.0,0.0,0.0); //3.5,0...
   this->chassisPosPID->set_deadband(5);
-  this->chassisGyroPID = new pid(6,0.0,30.0,0.0);//60
+  this->chassisGyroPID = new pid(6,0.0,10.0,0.0);//60
   //this->chassisGyroPID->set_toleranceI(25);
   this->chassisGyroPID->set_deadband(7);
   this->currPos.x = 0;
@@ -183,7 +183,8 @@ void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
   targetAngle = targetAngle/2;
 	float difference = (targetAngle - (float)gyro->gyro_val());
   printf("%f\n", difference);
-		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
+  long intakeTimer = millis();
+		if(abs(difference) > this->chassisGyroPID->get_deadband() && millis()-intakeTimer > 2000)// || time1[T1] > 500)
 		{
 			  difference = (targetAngle - (float)gyro->gyro_val());
         //calculate to see if it is faster to turn left or right
@@ -197,15 +198,15 @@ void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
         }
         int power = difference * this->chassisGyroPID->get_kP();
 
-        power = power < -100 ? -100 : power;
+        power = power < -100 ? -100 : power; //was at -100, and 100
         power = power > 100 ? 100 : power;
-        if(power < 0 && power > -15)
+        if(power < 0 && power > -25)
         {
-        	power = -15*this->chassisGyroPID->get_kP();
+        	power = -25*this->chassisGyroPID->get_kP();
         }
-        if(power > 0 && power<15)
+        if(power > 0 && power<25)
         {
-        	power = 15*this->chassisGyroPID->get_kP();
+        	power = 25*this->chassisGyroPID->get_kP();
       	}
 
         leftPower(-power);
