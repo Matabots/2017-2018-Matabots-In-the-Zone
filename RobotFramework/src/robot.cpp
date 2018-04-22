@@ -60,6 +60,8 @@ void robot::setupCSUN1(){
       this->arm->addGoalLift(motor1, true);
       this->arm->addGoalLift(motor10, false);
       this->ef->addRoller(motor5, true);
+      analogCalibrate(this->analog->get_leftLineSensor().get_lineSensor());
+      analogCalibrate(this->analog->get_rightLineSensor().get_lineSensor());
 
       imeReset(0);
       imeReset(1);

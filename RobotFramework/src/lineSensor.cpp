@@ -14,9 +14,9 @@ int lineSensor::get_lineSensor()
 }
 void lineSensor::updateValues()
 {
-  this->value = analogRead(this->lineSensorPort);
+  this->value = analogReadCalibrated(this->lineSensorPort);
 }
 int lineSensor::getValue()
 {
-  return analogRead(this->lineSensorPort);
+  return analogReadCalibrated(this->lineSensorPort);
 }

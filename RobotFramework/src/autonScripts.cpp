@@ -28,7 +28,7 @@ void runRedNoPreload(robot bot){
   bot.driveIn(-19);
   bot.set_primaryBottomHeight(true);
   delay(250);
-  bot.spinToAngle(80);
+  bot.spinToAngle(83);
   delay(250);
   bot.driveIn(-6);
   delay(250);
