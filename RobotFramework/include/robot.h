@@ -135,7 +135,7 @@ void autoLoad();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SECONDARY_BOT_CSUN2  1900
-#define SECONDARY_TOP_CSUN2 3300
+#define SECONDARY_TOP_CSUN2 3500
 #define CONE_HEIGHT_CSUN2 8
 #define MAX_HEIGHT 8
 //int primaryBottomHeightCSUN2 = 3; //change between 3 and height of loading station at 45

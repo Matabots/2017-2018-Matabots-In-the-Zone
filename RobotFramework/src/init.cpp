@@ -45,7 +45,7 @@ void initializeIO() {
 void initialize() {
   int count = imeInitializeAll();
   bot = robot();
-  bot.setupCSUN1();
+  bot.setupCSUN2();
   printf("%d\n", count);
 
   bot.get_digital()->resetLiftEncoders();
