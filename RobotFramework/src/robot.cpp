@@ -385,6 +385,7 @@ void robot::driveIn(float inch)
 {
 imeReset(0);
 imeReset(1);
+delay(100);
   this->drive->atPos = false;
   while (!this->drive->atPos) {
     this->drive->moveDistance(inch);
@@ -397,8 +398,6 @@ imeReset(1);
 
 void robot::spinToAngle(int targetAngle)
 {
-imeReset(0);
-imeReset(1);
   this->drive->atGyro = false;
   while(!this->drive->atGyro){
   this->drive->spinToAngle(targetAngle, this->analog);
@@ -493,6 +492,7 @@ void robot::autoLoad(){
             else{
               this->arm->secondaryLiftPosition(SECONDARY_BOT, this->analog->get_potentiometerVal());
               if(this->analog->get_potentiometerVal() < SECONDARY_BOT){
+                  intakeTimer = millis();
                   robotState = BOTTOM;
                   this->ef->set_Power(-100);
                   this->arm->haltPrimaryLift();
@@ -511,7 +511,7 @@ void robot::autoLoad(){
 
             this->arm->secondaryLiftPosition(SECONDARY_BOT, this->analog->get_potentiometerVal());
             printf("At bottom\n");
-            if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) <= primaryBottomHeight+2 && this->analog->get_potentiometerVal() < SECONDARY_BOT){
+            if((average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) <= primaryBottomHeight+2 && this->analog->get_potentiometerVal() < SECONDARY_BOT) || millis()-intakeTimer > 2000){
 
               intakeTimer = millis();
               robotState = INTAKE;
@@ -530,6 +530,7 @@ void robot::autoLoad(){
             printf("Intaking\n");
             this->ef->set_Power(-100);
             if(this->digital->get_leftLimitSwitch() == 0 || this->digital->get_rightLimitSwitch() == 0 || millis()-intakeTimer > 2000){
+              intakeTimer = millis();
               robotState = CONEHEIGHT;
               this->ef->halt();
             }
@@ -546,7 +547,7 @@ void robot::autoLoad(){
                   this->arm->secondaryLiftPosition(SECONDARY_TOP, this->analog->get_potentiometerVal());
               }
 
-            if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones+1) && this->analog->get_potentiometerVal() > SECONDARY_TOP){
+            if((average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones+1) && this->analog->get_potentiometerVal() > SECONDARY_TOP)|| millis()-intakeTimer > 3000){
               robotState = OUTTAKE;
               this->arm->haltSecondaryLift();
               this->arm->haltPrimaryLift();

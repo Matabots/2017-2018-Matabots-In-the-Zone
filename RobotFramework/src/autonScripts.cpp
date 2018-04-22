@@ -30,7 +30,7 @@ void runRedNoPreload(robot bot){
   delay(250);
   bot.spinToAngle(80);
   delay(250);
-  bot.driveIn(-8);
+  bot.driveIn(-6);
   delay(250);
   bot.set_targetStack(8);
   while(bot.get_stackedCones() < bot.get_targetStack()){

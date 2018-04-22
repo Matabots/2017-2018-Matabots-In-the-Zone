@@ -10,7 +10,7 @@ chassis::chassis(){
   // this->chassisPosPID->set_deadband(10);
   this->chassisPosPID = new pid(7.0,0.0,0.0,0.0); //3.5,0...
   this->chassisPosPID->set_deadband(5);
-  this->chassisGyroPID = new pid(6,0.0,10.0,0.0);//60
+  this->chassisGyroPID = new pid(6.0,0.0,10.0,0.0);//60
   //this->chassisGyroPID->set_toleranceI(25);
   this->chassisGyroPID->set_deadband(7);
   this->currPos.x = 0;
@@ -183,8 +183,7 @@ void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
   targetAngle = targetAngle/2;
 	float difference = (targetAngle - (float)gyro->gyro_val());
   printf("%f\n", difference);
-  long intakeTimer = millis();
-		if(abs(difference) > this->chassisGyroPID->get_deadband() && millis()-intakeTimer > 2000)// || time1[T1] > 500)
+		if(abs(difference) > this->chassisGyroPID->get_deadband())// || time1[T1] > 500)
 		{
 			  difference = (targetAngle - (float)gyro->gyro_val());
         //calculate to see if it is faster to turn left or right
