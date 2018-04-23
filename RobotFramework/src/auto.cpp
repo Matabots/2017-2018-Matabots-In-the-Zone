@@ -33,7 +33,7 @@
 
 void autonomous() {
     //declare a robot and setup the ports
-extern robot bot;
+    extern robot bot;
     //bot.driveIn(55);
     if (bot.get_remote()->get_team() == 1)
     {
@@ -43,6 +43,7 @@ extern robot bot;
     {
       wuRunRedPreload(bot);
     }
+
 
     // runRedNoPreload(bot);
     // while(true)
