@@ -11,10 +11,12 @@ chassis::chassis(){
   this->chassisPosPID = new pid(7.0,0.0,0.0,0.0); //3.5,0...
   this->chassisPosPID->set_deadband(5);
   this->chassisGyroPID = new pid(6.0,0.0,10.0,0.0);//60
-  this->chassisLinePID = new pid(0.5,0.0,0.0,0.0);
+  this->chassisLeftLinePID = new pid(7.0,0.0,0.0,0.0);
+  this->chassisRightLinePID = new pid(7.0,0.0,0.0,0.0);
   //this->chassisGyroPID->set_toleranceI(25);
   this->chassisGyroPID->set_deadband(7);
-  this->chassisLinePID->set_deadband(50);
+  this->chassisLeftLinePID->set_deadband(50);
+  this->chassisRightLinePID->set_deadband(50);
   this->currPos.x = 0;
   this->currPos.y = 0;
   waypoints = new path(currPos);
@@ -300,30 +302,39 @@ void chassis::turnLeftToAngle(int targetAngle, analogSensors* gyro){
 };
 
 //unfinished, robot gives inconsistent values
-void chassis::driveToLine(int power, analogSensors* analogSens){
+void chassis::driveToLine(int power, analogSensors* analogSens, int targetLight){
   // power = power/abs(power);
-
-
   printf("Left Line Senor Value: %d\n", analogSens->get_leftLineSensorVal());
   printf("Right Line Senor Value: %d\n", analogSens->get_rightLineSensorVal());
+  this->chassisLeftLinePID->set_setPoint(targetLight);
+  this->chassisRightLinePID->set_setPoint(targetLight);
+  this->chassisLeftLinePID->set_MinMaxOutput(power, -30);
+  this->chassisRightLinePID->set_MinMaxOutput(power, -30);
+
   long timeInterval = millis();
-  while(this->chassisLinePID->get_error() != 0 && (millis() - timeInterval) <= 2000)
+  bool onLine = false;
+  bool leftOnLine = false;
+  bool rightOnLine = false;
+  leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
+  rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
+  while(!onLine)
   {
-    if(abs(analogSens->get_leftLineSensorVal()) > 450)
-    {
-      leftPower(this->chassisLinePID->calculateOutput(abs(analogSens->get_leftLineSensorVal()), 50));
-    }
-    if(abs(analogSens->get_rightLineSensorVal()) > 450)
-    {
-      rightPower(this->chassisLinePID->calculateOutput(abs(analogSens->get_rightLineSensorVal()), 50));
-    }
-    else
-    {
-      leftPower(power);
-      rightPower(power);
-    }
-
-
+    leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
+    rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
+      if (this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50) == 0)
+      {
+        leftOnLine = true;
+      }
+      if (this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50) == 0)
+      {
+        rightOnLine = true;
+      }
+      if ((leftOnLine && rightOnLine) || timeInterval - millis() <= 2000)
+      {
+        onLine = true;
+        haltLeft();
+        haltRight();
+      }
   }
 }
 int chassis::get_wheelDiameter(){

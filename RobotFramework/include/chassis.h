@@ -17,7 +17,8 @@ private:
   pid* chassisVelPID;
   pid* chassisPosPID;
   pid* chassisGyroPID;
-  pid* chassisLinePID;
+  pid* chassisLeftLinePID;
+  pid* chassisRightLinePID;
   path* waypoints;
   CartesianVector currPos;
   unsigned long intakeTimer;
@@ -74,7 +75,7 @@ public:
   void turnLeftToAngle(int targetAngle, analogSensors* gyro);
 
   //unfinished, robot gives inconsistent values
-  void driveToLine(int power, analogSensors* analogSens);
+  void driveToLine(int power, analogSensors* analogSens, int targetLight);
   int get_wheelDiameter();
 
   void set_wheelDiameter(int dia);

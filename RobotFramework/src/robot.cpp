@@ -46,8 +46,8 @@ void robot::setupCSUN1(){
       this->analog->set_potentiometer(analog1);
       this->digital->set_leftLimitSwitch(digital5);
       this->digital->set_rightLimitSwitch(digital6);
-      this->analog->set_leftLineSensor(analog2);
-      this->analog->set_rightLineSensor(analog3);
+      this->analog->set_leftLineSensor(analog4);
+      this->analog->set_rightLineSensor(analog5);
       this->digital->set_leftLiftEncoder(digital3, digital4, false);
       this->digital->set_rightLiftEncoder(digital11, digital12, true);
       this->drive->addLeftMotor(motor2, false);
