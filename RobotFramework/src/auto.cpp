@@ -35,14 +35,14 @@ void autonomous() {
     //declare a robot and setup the ports
     extern robot bot;
     //bot.driveIn(55);
-    // if (bot.get_remote()->get_team() == 1)
-    // {
+    if (bot.get_remote()->get_team() == 1)
+    {
       carbonRunRedPreload(bot);
-    // }
-    // else if (bot.get_remote()->get_team() == 2)
-    // {
-      // wuRunRedPreload(bot);
-    // }
+    }
+    else if (bot.get_remote()->get_team() == 2)
+    {
+      wuRunRedPreload(bot);
+    }
 
 
     // runRedNoPreload(bot);

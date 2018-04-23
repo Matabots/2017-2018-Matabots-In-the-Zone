@@ -119,11 +119,11 @@ void wuRunRedPreload(robot bot){
   bot.setPreloadHeight();
   delay(50);
   bot.timedLowerGoalLift(900);
-  // delay(250);
-  // bot.driveIn(47);
-  // // printf("%ld\n", bot.intakeTimer);
-  // delay(250);
-  // bot.raiseGoalLift();
+  delay(250);
+  //bot.driveIn(47);
+  // printf("%ld\n", bot.intakeTimer);
+  delay(250);
+  bot.timedRaiseGoalLift(900);
   // bot.scorePreload();
   // bot.set_primaryBottomHeight(false);
   // // printf("%ld\n", bot.intakeTimer);
