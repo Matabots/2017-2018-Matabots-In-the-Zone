@@ -375,12 +375,33 @@ void robot::lowerGoalLift(){
   delay(50);
   }
 };
+void robot::timedLowerGoalLift(long timer)
+{
+  long startTime = millis();
+  while((long)millis()-startTime <= timer)
+  {
+    this->arm->goalLiftPower(-127);
+    delay(50);
+  }
+  this->arm->goalLiftPower(0);
+};
 
 void robot::raiseGoalLift(){
   while(!this->arm->atTop){
     this->arm->goalLiftUp();
     delay(50);
   }
+};
+void robot::timedRaiseGoalLift(long timer)
+{
+
+  long startTime = millis();
+  while(((long)millis()-startTime) <= timer)
+  {
+    this->arm->goalLiftPower(127);
+    delay(50);
+  }
+  this->arm->goalLiftPower(0);
 };
 
 void robot::driveIn(float inch)
