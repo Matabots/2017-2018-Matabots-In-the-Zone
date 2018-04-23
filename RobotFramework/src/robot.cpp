@@ -46,6 +46,7 @@ void robot::setupCSUN1(){
       this->analog->set_potentiometer(analog1);
       this->digital->set_leftLimitSwitch(digital5);
       this->digital->set_rightLimitSwitch(digital6);
+      this->analog->set_jukeSwitch(analog7);
       this->analog->set_leftLineSensor(analog4);
       this->analog->set_rightLineSensor(analog5);
       this->digital->set_leftLiftEncoder(digital3, digital4, false);
@@ -62,6 +63,7 @@ void robot::setupCSUN1(){
       this->ef->addRoller(motor5, true);
       analogCalibrate(this->analog->get_leftLineSensor().get_lineSensor());
       analogCalibrate(this->analog->get_rightLineSensor().get_lineSensor());
+      analogCalibrate(this->analog->get_jukeSwitch().get_Potentiometer());
 
       imeReset(0);
       imeReset(1);

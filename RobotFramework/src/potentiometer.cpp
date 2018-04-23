@@ -10,8 +10,8 @@
     return this->potentiometerPort;
   };
   void potentiometer::updateValues(){
-    this->value = analogRead(this->potentiometerPort);
-  }
+    this->value = analogReadCalibrated(this->potentiometerPort);
+  };
   int potentiometer::getValue(){
-    return analogRead(this->potentiometerPort);
-  }
+    return analogReadCalibrated(this->potentiometerPort);
+  };
