@@ -3,7 +3,8 @@
 
 #include "robot.h"
 
-void runRedNoPreload(robot bot);
+void runRedPreload(robot bot);
+void runBluePreload(robot bot);
 
 void runUart(void * parameter);
 

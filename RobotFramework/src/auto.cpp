@@ -35,7 +35,7 @@ void autonomous() {
     //declare a robot and setup the ports
 extern robot bot;
     //bot.driveIn(55);
-    runRedNoPreload(bot);
+    runRedPreload(bot);
 
     // runRedNoPreload(bot);
     // while(true)
