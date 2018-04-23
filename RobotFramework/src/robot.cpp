@@ -432,9 +432,9 @@ void robot::spinToAngle(int targetAngle)
 {
   this->drive->atGyro = false;
   while(!this->drive->atGyro){
-  this->drive->spinToAngle(targetAngle, this->analog);
-  printf("yaw: %d\n", this->analog->gyro_val());
-  delay(50);
+    this->drive->spinToAngle(targetAngle, this->analog);
+    printf("yaw: %d\n", this->analog->gyro_val());
+    delay(50);
   }
   this->drive->haltLeft();
   this->drive->haltRight();
@@ -514,7 +514,7 @@ void robot::autoLoad(){
             this->ef->halt();
             if(primaryBottomHeight == 40 && CONE_HEIGHT*(this->stackedCones) < primaryBottomHeight){
               this->arm->primaryLiftPosition(primaryBottomHeight, this->digital->leftLiftEncoderVal());
-              if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= primaryBottomHeight){
+              if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= primaryBottomHeight || millis()-intakeTimer > 2000){
                   robotState = BOTTOM;
                   //this->ef->set_Power(-100);
                   this->arm->haltPrimaryLift();
@@ -575,11 +575,12 @@ void robot::autoLoad(){
 
             this->ef->halt();
             //Raise Secondary Lift to correct height
-              if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones-1)){
+              if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones-1)|| millis()-intakeTimer > 2000){
                   this->arm->secondaryLiftPosition(SECONDARY_TOP, this->analog->get_potentiometerVal());
               }
 
             if((average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= CONE_HEIGHT*(this->stackedCones+1) && this->analog->get_potentiometerVal() > SECONDARY_TOP)|| millis()-intakeTimer > 3000){
+              intakeTimer = millis();
               robotState = OUTTAKE;
               this->arm->haltSecondaryLift();
               this->arm->haltPrimaryLift();
@@ -594,8 +595,10 @@ void robot::autoLoad(){
             this->ef->halt();
             if(isAutonomous() == false){
               robotState = RESTABOVE;
+              intakeTimer = millis();
             }else{
               robotState = ADJUSTHEIGHT;
+              intakeTimer = millis();
               this->stackedCones++;
               this->arm->haltPrimaryLift();
               this->arm->haltSecondaryLift();
@@ -604,11 +607,11 @@ void robot::autoLoad(){
           case RESTABOVE:
 
             this->arm->secondaryLiftPosition(SECONDARY_BOT, this->analog->get_potentiometerVal());
-            if(this->analog->get_potentiometerVal() < SECONDARY_BOT)
+            if(this->analog->get_potentiometerVal() < SECONDARY_BOT || millis()-intakeTimer > 3000)
             {
               this->arm->primaryLiftPosition(primaryBottomHeight + CONE_HEIGHT,   (int)average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()));
-              if(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= primaryBottomHeight+CONE_HEIGHT)
-              {
+              if((average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) >= primaryBottomHeight+CONE_HEIGHT)|| millis()-intakeTimer > 2000)
+              {intakeTimer = millis();
                   robotState = ADJUSTHEIGHT;
                   this->stackedCones++;
                   this->arm->haltPrimaryLift();
