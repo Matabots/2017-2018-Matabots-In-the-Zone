@@ -271,7 +271,7 @@ void robot::setupCSUN2(){
     void robot::bigLift(){
       if(this->remote->get_team() == 2){
         printf("this is cusn2");
-        if(this->remote->bigLift() == 1){
+        if(this->remote->bigLift() == 1 ){
           this->arm->primaryLiftPower(100);
           printf("joy %d\n",this->remote->bigLift());
         }
@@ -285,7 +285,12 @@ void robot::setupCSUN2(){
       }
       else{
         if(abs(this->remote->bigLift()) > 20){
-          this->arm->primaryLiftPower(this->remote->bigLift());
+          if(this->remote->bigLift() < 0 && average(this->get_digital()->leftLiftEncoderVal(),this->get_digital()->rightLiftEncoderVal()) < 25){
+                this->arm->primaryLiftPower((int)(this->remote->bigLift()*0.25));
+          }
+          else{
+            this->arm->primaryLiftPower(this->remote->bigLift());
+          }
           delay(50);
         }else{
           this->arm->haltPrimaryLift();

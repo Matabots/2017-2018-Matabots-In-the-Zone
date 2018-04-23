@@ -304,38 +304,38 @@ void chassis::turnLeftToAngle(int targetAngle, analogSensors* gyro){
 //unfinished, robot gives inconsistent values
 void chassis::driveToLine(int power, analogSensors* analogSens, int targetLight){
   // power = power/abs(power);
-  printf("Left Line Senor Value: %d\n", analogSens->get_leftLineSensorVal());
-  printf("Right Line Senor Value: %d\n", analogSens->get_rightLineSensorVal());
-  this->chassisLeftLinePID->set_setPoint(targetLight);
-  this->chassisRightLinePID->set_setPoint(targetLight);
-  this->chassisLeftLinePID->set_MinMaxOutput(power, -30);
-  this->chassisRightLinePID->set_MinMaxOutput(power, -30);
-
-  long timeInterval = millis();
-  bool onLine = false;
-  bool leftOnLine = false;
-  bool rightOnLine = false;
-  leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
-  rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
-  while(!onLine)
-  {
-    leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
-    rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
-      if (this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50) == 0)
-      {
-        leftOnLine = true;
-      }
-      if (this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50) == 0)
-      {
-        rightOnLine = true;
-      }
-      if ((leftOnLine && rightOnLine) || timeInterval - millis() <= 2000)
-      {
-        onLine = true;
-        haltLeft();
-        haltRight();
-      }
-  }
+  // printf("Left Line Senor Value: %d\n", analogSens->get_leftLineSensorVal());
+  // printf("Right Line Senor Value: %d\n", analogSens->get_rightLineSensorVal());
+  // this->chassisLeftLinePID->set_setPoint(targetLight);
+  // this->chassisRightLinePID->set_setPoint(targetLight);
+  // this->chassisLeftLinePID->set_MinMaxOutput(power, -30);
+  // this->chassisRightLinePID->set_MinMaxOutput(power, -30);
+  //
+  // long timeInterval = millis();
+  // bool onLine = false;
+  // bool leftOnLine = false;
+  // bool rightOnLine = false;
+  // leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
+  // rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
+  // while(!onLine)
+  // {
+  //   leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
+  //   rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
+  //     if (this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50) == 0)
+  //     {
+  //       leftOnLine = true;
+  //     }
+  //     if (this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50) == 0)
+  //     {
+  //       rightOnLine = true;
+  //     }
+  //     if ((leftOnLine && rightOnLine) || timeInterval - millis() <= 2000)
+  //     {
+  //       onLine = true;
+  //       haltLeft();
+  //       haltRight();
+  //     }
+  // }
 }
 int chassis::get_wheelDiameter(){
   return this->wheelDiameter;
