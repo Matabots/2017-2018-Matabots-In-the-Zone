@@ -170,10 +170,10 @@ void robot::setupCSUN2(){
       autoAbort();
       printf("Remote Listening\n");
       if(!autoStacking){
-        // rollerButtons();
-        // bigLift();
-        // smallLift();
-        // goalLift();
+         rollerButtons();
+         bigLift();
+         smallLift();
+         goalLift();
       }
       // if(this->remote->get_team() == 1)
       // {
