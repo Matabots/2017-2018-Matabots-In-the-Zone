@@ -7,6 +7,7 @@ analogSensors::analogSensors()
   this->rollerPotentiometer = potentiometer();
   // this->gyro = gyroInit(analog1, 0);
   // this->rollerPotentiometer.set_Potentiometer(analog2);
+  this->jukeSwitch = potentiometer();
 };
 void analogSensors::set_deltaGyro(int num){
   this->deltaGyro = num;
@@ -34,6 +35,15 @@ potentiometer analogSensors::get_potentiometer(){
 };
 int analogSensors::get_potentiometerVal(){
   return this->rollerPotentiometer.getValue();
+};
+void analogSensors::set_jukeSwitch(int port){
+  this->jukeSwitch.set_Potentiometer(port);
+};
+potentiometer analogSensors::get_jukeSwitch(){
+  return this->jukeSwitch;
+};
+int analogSensors::get_jukeSwitchVal(){
+  return this->jukeSwitch.getValue();
 };
 void analogSensors::set_leftLineSensor(int port){
   this->leftLineSensor.set_lineSensor(port);
