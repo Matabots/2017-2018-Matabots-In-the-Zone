@@ -92,7 +92,6 @@ extern robot bot;
   //
   // delay(1000);
   //runRedNoPreload(bot);
-
   // runRedNoPreload(bot);
   //delay(1000);
   // runRedNoPreload(bot);
@@ -105,9 +104,10 @@ extern robot bot;
       // printf("gyro: %d\n",bot.get_analog()->gyro_val());
       // printf("limitSwitch: %d\n", bot.get_digital()->get_leftLimitSwitch());
       // // printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
-      printf("left line sens: %d\n", bot.get_analog()->get_leftLineSensorVal());
-      printf("right line sens: %d\n", bot.get_analog()->get_rightLineSensorVal());
+      // printf("left line sens: %d\n", bot.get_analog()->get_leftLineSensorVal());
+      // printf("right line sens: %d\n", bot.get_analog()->get_rightLineSensorVal());
       bot.remoteListen();
+
       delay(50);
   }
 

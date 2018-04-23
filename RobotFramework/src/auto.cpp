@@ -35,7 +35,6 @@ void autonomous() {
     //declare a robot and setup the ports
 extern robot bot;
     //bot.driveIn(55);
-<<<<<<< HEAD
     if (bot.get_remote()->get_team() == 1)
     {
       carbonRunRedPreload(bot);
@@ -44,9 +43,6 @@ extern robot bot;
     {
       wuRunRedPreload(bot);
     }
-=======
-    carbonRunRedPreload(bot);
->>>>>>> b69abcb358e32d3afb959b28e4790af2f3a7097a
 
     // runRedNoPreload(bot);
     // while(true)
