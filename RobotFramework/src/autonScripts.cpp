@@ -4,7 +4,6 @@
 
 void carbonRunRedPreload(robot bot){
   //bot.driveIn(55);
-  bot.get_drive()->driveToLine(-80, bot.get_analog(), 450);
   // printf("this has ended\n");
   // bot.setPreloadHeight();
   // bot.lowerGoalLift();

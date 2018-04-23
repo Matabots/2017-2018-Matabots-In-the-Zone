@@ -11,12 +11,12 @@ chassis::chassis(){
   this->chassisPosPID = new pid(7.0,0.0,0.0,0.0); //3.5,0...
   this->chassisPosPID->set_deadband(5);
   this->chassisGyroPID = new pid(6.0,0.0,10.0,0.0);//60
-  this->chassisLeftLinePID = new pid(0.8,0.0,0.0,0.0);
-  this->chassisRightLinePID = new pid(0.8,0.0,0.0,0.0);
+  this->chassisLeftLinePID = new pid(10.0,0.0,0.0,0.0);
+  this->chassisRightLinePID = new pid(10.0,0.0,0.0,0.0);
   //this->chassisGyroPID->set_toleranceI(25);
   this->chassisGyroPID->set_deadband(7);
-  this->chassisLeftLinePID->set_deadband(100);
-  this->chassisRightLinePID->set_deadband(100);
+  this->chassisLeftLinePID->set_deadband(200);
+  this->chassisRightLinePID->set_deadband(200);
   this->currPos.x = 0;
   this->currPos.y = 0;
   waypoints = new path(currPos);
@@ -308,29 +308,43 @@ void chassis::driveToLine(int power, analogSensors* analogSens, int targetLight)
   printf("Right Line Senor Value: %d\n", analogSens->get_rightLineSensorVal());
   this->chassisLeftLinePID->set_setPoint(targetLight);
   this->chassisRightLinePID->set_setPoint(targetLight);
-  this->chassisLeftLinePID->set_MinMaxOutput(power, -30);
-  this->chassisRightLinePID->set_MinMaxOutput(power, -30);
+  this->chassisLeftLinePID->set_MinMaxOutput(power, -25);
+  this->chassisRightLinePID->set_MinMaxOutput(power, -25);
 
-  // long timeInterval = millis();
+  long timeInterval = millis();
   bool onLine = false;
   bool leftOnLine = false;
   bool rightOnLine = false;
-  leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
-  rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
+  int leftSawWhite = 1;
+  int rightSawWhite = 1;
+  leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 20));
+  rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 20));
   while(onLine==false)
   {
-    leftPower(this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 50));
-    rightPower(this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 50));
+    leftPower(leftSawWhite*this->chassisLeftLinePID->calculateOutput(analogSens->get_leftLineSensorVal(), 20));
+    rightPower(rightSawWhite*this->chassisRightLinePID->calculateOutput(analogSens->get_rightLineSensorVal(), 20));
     printf("%lf\n",this->chassisLeftLinePID->get_error());
     printf("%lf\n",this->chassisRightLinePID->get_error());
-      printf("spicy\n");
-      if (this->chassisLeftLinePID->get_error() == 0)
+      // printf("spicy\n");
+      if (abs(this->chassisLeftLinePID->get_error()) <= (this->chassisLeftLinePID->get_deadband()))
       {
         leftOnLine = true;
+        leftSawWhite = -1;
+        haltLeft();
       }
-      if (this->chassisRightLinePID->get_error() == 0)
+      else
+      {
+        leftOnLine = false;
+      }
+      if (abs(this->chassisRightLinePID->get_error()) <= (this->chassisRightLinePID->get_deadband()))
       {
         rightOnLine = true;
+        rightSawWhite = -1;
+        haltRight();
+      }
+      else
+      {
+        rightOnLine = false;
       }
       //second one is commented to make  sure the sensors are causing it to stop
       if ((leftOnLine==true && rightOnLine==true))// || (millis() - timeInterval) >= 500)
@@ -339,6 +353,7 @@ void chassis::driveToLine(int power, analogSensors* analogSens, int targetLight)
         haltLeft();
         haltRight();
       }
+      delay(50);
   }
 }
 int chassis::get_wheelDiameter(){
