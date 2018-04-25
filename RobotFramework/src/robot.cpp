@@ -63,7 +63,8 @@ void robot::setupCSUN1(){
       this->ef->addRoller(motor5, true);
       analogCalibrate(this->analog->get_leftLineSensor().get_lineSensor());
       analogCalibrate(this->analog->get_rightLineSensor().get_lineSensor());
-      analogCalibrate(this->analog->get_jukeSwitch().get_Potentiometer());
+      // analogCalibrate(this->analog->get_jukeSwitch().get_Potentiometer());
+      // this->analog->get_jukeSwitch().reset();
 
       imeReset(0);
       imeReset(1);
@@ -290,7 +291,7 @@ void robot::setupCSUN2(){
       else{
         if(abs(this->remote->bigLift()) > 20){
           if(this->remote->bigLift() < 0 && average(this->get_digital()->leftLiftEncoderVal(),this->get_digital()->rightLiftEncoderVal()) < 25){
-                this->arm->primaryLiftPower((int)(this->remote->bigLift()*0.25));
+                this->arm->primaryLiftPower((int)(this->remote->bigLift()/3));
           }
           else{
             this->arm->primaryLiftPower(this->remote->bigLift());
@@ -347,7 +348,11 @@ void robot::setupCSUN2(){
         }
       }
     };
-
+    void robot::clearStack(){
+      if(this->remote->clearConeStack()){
+        this->stackedCones = 0;
+      }
+    }
   // void smallLift(){
   //     if(this->remote->smallLiftUp()){
   //       this->arm->groupTwoPower(100);

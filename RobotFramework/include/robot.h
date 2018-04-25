@@ -77,6 +77,7 @@ void setupCSUN2();
     void leftJoystick();
     void rightJoystick();
     void rollerButtons();
+    void clearStack();
 
     void autoAbort();
 

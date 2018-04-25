@@ -12,5 +12,6 @@ public:
   int get_Potentiometer();
   void updateValues();
   int getValue();
+  void reset();
 };
 #endif

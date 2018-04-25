@@ -32,7 +32,7 @@ class analogSensors{
       void set_jukeSwitch(int port);
       potentiometer get_jukeSwitch();
       int get_jukeSwitchVal();
-      
+
       void set_leftLineSensor(int port);
       void set_rightLineSensor(int port);
       lineSensor get_leftLineSensor();

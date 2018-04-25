@@ -101,6 +101,7 @@ extern robot bot;
   {
       printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
       printf("rightEnc: %d\n",bot.get_digital()->rightLiftEncoderVal());
+      printf("Juke switch: %d\n",bot.get_analog()->get_jukeSwitchVal());
       // printf("gyro: %d\n",bot.get_analog()->gyro_val());
       // printf("limitSwitch: %d\n", bot.get_digital()->get_leftLimitSwitch());
       // // printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());

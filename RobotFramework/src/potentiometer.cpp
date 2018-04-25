@@ -15,3 +15,7 @@
   int potentiometer::getValue(){
     return analogReadCalibrated(this->potentiometerPort);
   };
+  void potentiometer::reset()
+  {
+    this->value = 0;
+  };
