@@ -290,7 +290,7 @@ void robot::setupCSUN2(){
       else{
         if(abs(this->remote->bigLift()) > 20){
           if(this->remote->bigLift() < 0 && average(this->get_digital()->leftLiftEncoderVal(),this->get_digital()->rightLiftEncoderVal()) < 25){
-                this->arm->primaryLiftPower((int)(this->remote->bigLift()*0.25));
+                this->arm->primaryLiftPower((int)(this->remote->bigLift()/3));//x/4
           }
           else{
             this->arm->primaryLiftPower(this->remote->bigLift());
