@@ -728,10 +728,10 @@ void robot::set_primaryBottomHeightCSUN2(bool toPreLoad){
               this->arm->primaryLiftPosition(primaryBottomHeightCSUN2, average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderValModern()));
 
               this->arm->secondaryLiftPosition(SECONDARY_BOT_CSUN2, this->analog->get_potentiometerVal());
-              if((average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderValModern()) <= primaryBottomHeightCSUN2 && this->analog->get_potentiometerVal() < SECONDARY_BOT_CSUN2) || millis()-intakeTimer > 3000){
+              if((average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderValModern()) <= primaryBottomHeightCSUN2 && this->analog->get_potentiometerVal() < SECONDARY_BOT_CSUN2) || millis()-intakeTimer > 1500){
                 intakeTimer = millis();
                 robotState = INTAKE;
-                this->arm->set_primaryLiftPosPID(9.6,0.0,0.0025);//.002
+                this->arm->set_primaryLiftPosPID(9.6,0.0,0.002);//.0025
                 this->arm->haltPrimaryLift();
                 this->arm->haltSecondaryLift();
               }

@@ -57,7 +57,8 @@ void autonomous() {
       // }
       // else
       // {
-        wuRunRedPreload(bot);
+        //wuRunBluePreload(bot);
+        wuRunBluePreload(bot);
       // }
     }
 
