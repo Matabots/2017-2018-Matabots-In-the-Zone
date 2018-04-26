@@ -37,29 +37,27 @@ void autonomous() {
     //bot.driveIn(55);
     if (bot.get_remote()->get_team() == 1)
     {
-      carbonRunRedPreload(bot);
+      if (bot.get_analog()->get_jukeSwitchVal() <= 1950)
+      {
+        carbonJukeRunRedPreload(bot);
+      }
+      else
+      {
+        carbonRunRedPreload(bot);
+      }
+
     }
     else if (bot.get_remote()->get_team() == 2)
     {
-      wuRunRedPreload(bot);
+      if (bot.get_analog()->get_jukeSwitchVal() <= 1950)
+      {
+        // wuJukeRunRedPreload(bot);
+      }
+      else
+      {
+        wuRunRedPreload(bot);
+      }
     }
-
-
-    // runRedNoPreload(bot);
-    // while(true)
-    // {
-    //   printf("BIG ENOURMOUS TITS\n");
-    //   bot.remoteListen();
-    //   delay(50);
-    // }
-    // bot.joystickInputs();
-    //some testing of classes
-    // chassis drive = chassis();
-    // drive.addLeftMotor(motor2, false);
-    // bot.get_drive()->addLeftMotor(motor2, false);
-    // robot bot2 = robot();
-    // bot2.get_drive()->addRightMotor(motor3, true);
-    // delay(400);
 
 
 }
