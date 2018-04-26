@@ -73,7 +73,7 @@ void carbonRunRedPreload(robot bot){
 void carbonRunBluePreload(robot bot){
   printf("this has ended\n");
   bot.setPreloadHeight();
-  bot.lowerGoalLift();
+    bot.lowerGoalLift();
   delay(250);
   bot.driveIn(47);
   // printf("%ld\n", bot.intakeTimer);
@@ -114,9 +114,16 @@ void carbonRunBluePreload(robot bot){
    delay(250);
    bot.get_drive()->haltLeft();
    bot.get_drive()->haltRight();
-   bot.spinToAngle(225);
-   bot.get_drive()->haltLeft();
-   bot.get_drive()->haltRight();
+   delay(250);
+   bot.spinToAngle(120);
+   delay(250);
+   bot.driveIn(-6);
+   delay(250);
+   bot.driveIn(25);
+   delay(250);
+   bot.lowerGoalLift();
+   delay(250);
+   bot.driveIn(-15);
 }
 
 
