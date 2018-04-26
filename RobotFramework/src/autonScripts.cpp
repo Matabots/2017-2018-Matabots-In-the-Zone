@@ -199,7 +199,7 @@ void wuRunRedPreload(robot bot){
   delay(100);
   bot.timedLowerGoalLift(900);
   delay(250);
-  bot.driveIn(120);
+  bot.driveIn(150);
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
   bot.timedRaiseGoalLift(900);
@@ -207,7 +207,7 @@ void wuRunRedPreload(robot bot){
   bot.set_primaryBottomHeight(false);
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.get_drive()->rightPosition(15);
+  bot.get_drive()->rightPosition(25);
   bot.driveIn(21);
   bot.set_targetStack(2);
   while(bot.get_stackedCones() < bot.get_targetStack()){
@@ -264,7 +264,7 @@ void wuRunBluePreload(robot bot){
   bot.set_primaryBottomHeight(false);
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.get_drive()->rightPosition(15);
+  bot.get_drive()->rightPosition(25);
   bot.driveIn(21);
   bot.set_targetStack(2);
   while(bot.get_stackedCones() < bot.get_targetStack()){
