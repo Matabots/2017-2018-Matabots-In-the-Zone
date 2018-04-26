@@ -428,13 +428,20 @@ void robot::driveIn(float inch)
 {
 imeReset(0);
 imeReset(1);
+unsigned long time1 =0;
 delay(100);
+time1 = millis();
 if(this->get_remote()->get_team() == 2){
   inch /= 3;
 }
   this->drive->atPos = false;
-  while (!this->drive->atPos) {
+  while (!this->drive->atPos && (millis()-time1 < 3000)) {
+    // time1 = millis();
     this->drive->moveDistance(inch);
+    if(this->get_drive()->getLeftMotorAt(0)->get_Power() == 0){
+    this->drive->haltRight();
+
+    }
     //printf("Go to:%f, Now at: %d\n", this->get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband(), abs(this->get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()));
     delay(50);
   }

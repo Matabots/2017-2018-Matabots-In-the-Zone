@@ -44,8 +44,8 @@ void autonomous() {
       }
       else
       {
-        // carbonRunRedPreload(bot);
-        carbonRunBluePreload(bot);
+        carbonRunRedPreload(bot);
+        // carbonRunBluePreload(bot);
       }
 
     }

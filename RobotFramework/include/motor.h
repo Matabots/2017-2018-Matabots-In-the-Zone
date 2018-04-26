@@ -52,6 +52,7 @@ public:
   bool get_imeReversed();
   void set_imeReversed(bool val);
   int get_count();
+
   int get_prevCount();
   int get_prevTime();
   void reset_encoder();
