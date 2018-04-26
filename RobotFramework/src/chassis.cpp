@@ -74,7 +74,7 @@ void chassis::addRightMotor(int port, bool reverse){
   rightMotor->set_type(TURBO);
   rightMotor->set_velPID(this->chassisVelPID);
   rightMotor->set_posPID(this->chassisPosPID);
-  rightMotor->set_imeReversed(true);
+  // rightMotor->set_imeReversed(true);
   rightMotor->set_address(1);
   //this->rightMotors.resize(this->rightMotors.size() + 1);
   this->rightMotors.push_back(rightMotor);

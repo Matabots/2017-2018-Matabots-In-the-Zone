@@ -49,15 +49,15 @@ void autonomous() {
     }
     else if (bot.get_remote()->get_team() == 2)
     {
-      if (bot.get_analog()->get_jukeSwitchVal() <= 1950)
-      {
-        // wuJukeRunRedPreload(bot);
-      }
-      else
-      {
+      // if (bot.get_analog()->get_jukeSwitchVal() <= 1950)
+      // {
+         // wuJukeRunRedPreload(bot);
+      // }
+      // else
+      // {
         wuRunRedPreload(bot);
-      }
+      // }
     }
-    
+
 
 }
