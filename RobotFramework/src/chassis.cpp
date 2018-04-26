@@ -182,7 +182,7 @@ void chassis::moveToPos(CartesianVector vector){
     atPos = true;
   }
 };
-
+//
 bool atGyro = false;
 void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
   atGyro = false;
@@ -221,7 +221,7 @@ void chassis::spinToAngle(int targetAngle, analogSensors* gyro){
       haltLeft();
       haltRight();
   		atGyro = true;
-    }
+    };
 };
 
 void chassis::turnRightToAngle(int targetAngle, analogSensors* gyro){

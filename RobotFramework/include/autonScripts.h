@@ -6,7 +6,7 @@
 void carbonRunRedPreload(robot bot);
 void carbonRunBluePreload(robot bot);
 void carbonJukeRunRedPreload(robot bot);
-
+void debug(robot bot);
 void wuRunRedPreload(robot bot);
 void wuRunBluePreload(robot bot);
 // void wuJukeRunRedPreload(robot bot);
