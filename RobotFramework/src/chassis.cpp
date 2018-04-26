@@ -1,5 +1,5 @@
 #include "chassis.h"
-
+#include "control.h"
 chassis::chassis(){
   this->wheelDiameter = 4; //inches
   //this->chassisVelPID = new pid(10,3.48,896.9,0.0);
@@ -163,6 +163,8 @@ void chassis::moveDistance(float inch){
   if(abs(this->getLeftMotorAt(0)->get_posPID()->get_error()) <  this->getLeftMotorAt(0)->get_posPID()->get_deadband()){
     leftPower(0);
     rightPower(0);
+    printf("%f \n",abs(this->getLeftMotorAt(0)->get_posPID()->get_error()));
+    printf("%f \n",abs(this->getRightMotorAt(0)->get_posPID()->get_error()));
     atPos = true;
   }
 }

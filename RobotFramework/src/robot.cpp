@@ -84,6 +84,7 @@ void robot::setupCSUN2(){
       this->drive->addLeftMotor(motor3, true);
       this->drive->addRightMotor(motor8, false);
       this->drive->addRightMotor(motor9, true);
+
       this->arm->addPrimaryLift(motor4, false);
       this->arm->addPrimaryLift(motor7, true);
       this->arm->addSecondaryLift(motor6, true);
@@ -92,6 +93,9 @@ void robot::setupCSUN2(){
       this->ef->addRoller(motor5, true);
       imeReset(0);
       imeReset(1);
+
+            this->drive->getLeftMotorAt(0)->set_imeReversed(true);
+            this->drive->getRightMotorAt(0)->set_imeReversed(false);
        //imeReset(2);
       // imeReset(1);
 };
@@ -425,6 +429,9 @@ void robot::driveIn(float inch)
 imeReset(0);
 imeReset(1);
 delay(100);
+if(this->get_remote()->get_team() == 2){
+  inch /= 3;
+}
   this->drive->atPos = false;
   while (!this->drive->atPos) {
     this->drive->moveDistance(inch);
@@ -433,6 +440,7 @@ delay(100);
   }
   this->drive->haltLeft();
   this->drive->haltRight();
+  delay(100);
 };
 
 void robot::spinToAngle(int targetAngle)
@@ -480,12 +488,24 @@ int primaryBottomHeight = 1; //change between 3 and height of loading station at
 unsigned long intakeTimer =0;
 
 void robot::setPreloadHeight(){
-  while(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) < CONE_HEIGHT)
+  intakeTimer = millis();
+if(this->get_remote()->get_team() == 1){
+  while(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) < CONE_HEIGHT && millis()-intakeTimer < 2000)
   {
     this->arm->primaryLiftPosition(CONE_HEIGHT, average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()));
   }
 
   this->arm->haltPrimaryLift();
+}
+  if(this->get_remote()->get_team() == 2){
+    while(average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()) < CONE_HEIGHT_CSUN2  && millis()-intakeTimer < 2000)
+    {
+      this->arm->primaryLiftPosition(CONE_HEIGHT_CSUN2, average((double)this->digital->leftLiftEncoderVal(),(double)this->digital->rightLiftEncoderVal()));
+    }
+
+    this->arm->haltPrimaryLift();
+
+  }
 };
 
 void robot::scorePreload(){

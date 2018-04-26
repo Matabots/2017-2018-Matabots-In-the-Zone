@@ -97,19 +97,20 @@ extern robot bot;
   // runRedNoPreload(bot);
   // delay(1000);
  // bot.set_targetStack(5);
-  while(true)
-  {
-      printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
-      printf("rightEnc: %d\n",bot.get_digital()->rightLiftEncoderVal());
-      printf("Juke switch: %d\n",bot.get_analog()->get_jukeSwitchVal());
+ bot.driveIn(25);
+  // while(true)
+  // {
+      // printf("leftEnc: %d\n",bot.get_digital()->leftLiftEncoderVal());
+      // printf("rightEnc: %d\n",bot.get_digital()->rightLiftEncoderVal());
+      // printf("Juke switch: %d\n",bot.get_analog()->get_jukeSwitchVal());
       // printf("gyro: %d\n",bot.get_analog()->gyro_val());
       // printf("limitSwitch: %d\n", bot.get_digital()->get_leftLimitSwitch());
       // // printf("pot: %d\n",bot.get_analog()->get_potentiometerVal());
       // printf("left line sens: %d\n", bot.get_analog()->get_leftLineSensorVal());
       // printf("right line sens: %d\n", bot.get_analog()->get_rightLineSensorVal());
-      bot.remoteListen();
+      //bot.remoteListen();
 
       delay(50);
-  }
+  // }
 
 }
