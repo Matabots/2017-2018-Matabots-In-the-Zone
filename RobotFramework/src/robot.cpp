@@ -736,7 +736,7 @@ void robot::set_primaryBottomHeightCSUN2(bool toPreLoad){
               //   robotState = BOTTOM;
               // }
               this->ef->set_Power(-100);
-              if(this->digital->get_leftLimitSwitch() == 0 || millis()-intakeTimer > 2000){
+              if(this->digital->get_leftLimitSwitch() == 0 || millis()-intakeTimer > 1000){
                 intakeTimer = millis();
                  robotState = CONEHEIGHT;
                 this->ef->halt();
