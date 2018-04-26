@@ -1,6 +1,10 @@
 #include "autonScripts.h"
 
+void debug(robot bot){
+  bot.spinToAngle(360);
 
+  delay(50);
+};
 
 void carbonRunRedPreload(robot bot){
   printf("this has ended\n");
