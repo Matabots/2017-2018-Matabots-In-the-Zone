@@ -48,8 +48,8 @@ void carbonRunRedPreload(robot bot){
    delay(250);
    bot.driveIn(40);
    delay(250);
-   bot.get_drive()->haltLeft();
-   bot.get_drive()->haltRight();
+  //  bot.get_drive()->haltLeft();
+  //  bot.get_drive()->haltRight();
    delay(250);
    bot.spinToAngle(240);
    delay(250);
@@ -239,8 +239,8 @@ void wuRunRedPreload(robot bot){
   //  bot.get_drive()->haltLeft();
   //  bot.get_drive()->haltRight();
   //  bot.spinToAngle(225);
-   bot.get_drive()->haltLeft();
-   bot.get_drive()->haltRight();
+  //  bot.get_drive()->haltLeft();
+  //  bot.get_drive()->haltRight();
 //  bot.get_drive()->haltRight();
 };
 

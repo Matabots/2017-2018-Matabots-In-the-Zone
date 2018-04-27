@@ -40,7 +40,6 @@ void autonomous() {
       if (bot.get_analog()->get_jukeSwitchVal() <= 1950)
       {
         carbonJukeRunRedPreload(bot);
-
       }
       else
       {
@@ -58,7 +57,7 @@ void autonomous() {
       // else
       // {
         //wuRunBluePreload(bot);
-        wuRunBluePreload(bot);
+        wuRunRedPreload(bot);
       // }
     }
 
