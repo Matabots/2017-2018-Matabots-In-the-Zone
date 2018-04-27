@@ -43,8 +43,8 @@ void autonomous() {
       }
       else
       {
-        carbonRunRedPreload(bot);
-        // carbonRunBluePreload(bot);
+        // carbonRunRedPreload(bot);
+        carbonRunBluePreload(bot);
       }
 
     }
@@ -56,7 +56,7 @@ void autonomous() {
       // }
       // else
       // {
-        //wuRunBluePreload(bot);
+        // wuRunBluePreload(bot);
         wuRunRedPreload(bot);
       // }
     }

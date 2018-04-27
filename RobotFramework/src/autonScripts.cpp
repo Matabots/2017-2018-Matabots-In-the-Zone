@@ -196,6 +196,8 @@ void carbonJukeRunRedPreload(robot bot){
 void wuRunRedPreload(robot bot){
   printf("this has ended\n");
   bot.setPreloadHeight();
+  // delay(100);
+  // bot.timedRaiseGoalLift(900);
   delay(100);
   bot.timedLowerGoalLift(900);
   delay(250);
@@ -205,22 +207,22 @@ void wuRunRedPreload(robot bot){
   bot.timedRaiseGoalLift(900);
   bot.scorePreload();
   bot.set_primaryBottomHeight(false);
-  // printf("%ld\n", bot.intakeTimer);
-  delay(250);
-  bot.get_drive()->rightPosition(25);
-  bot.driveIn(21);
-  bot.set_targetStack(2);
-  while(bot.get_stackedCones() < bot.get_targetStack()){
-    bot.autoLoad();
-    delay(50);
-  }
+  // // printf("%ld\n", bot.intakeTimer);
+  // delay(250);
+  // bot.get_drive()->rightPosition(25);
+  // bot.driveIn(21);
+  // bot.set_targetStack(2);
+  // while(bot.get_stackedCones() < bot.get_targetStack()){
+  //   bot.autoLoad();
+  //   delay(50);
+  // }
   //atest for branch
   // printf("%ld\n", bot.intakeTimer);
-  // delay(250);
-  // bot.driveIn(-19);
+  delay(250);
+  bot.driveIn(-30);
   // bot.set_primaryBottomHeight(true);
-  // delay(250);
-  // bot.spinToAngle(269);
+  delay(250);
+  bot.spinToAngle(269);
   // delay(250);
   // bot.driveIn(-7.75);
   // delay(250);
@@ -297,8 +299,8 @@ void wuRunBluePreload(robot bot){
   //  bot.get_drive()->haltLeft();
   //  bot.get_drive()->haltRight();
   //  bot.spinToAngle(225);
-   bot.get_drive()->haltLeft();
-   bot.get_drive()->haltRight();
+  //  bot.get_drive()->haltLeft();
+  //  bot.get_drive()->haltRight();
 }
 
 

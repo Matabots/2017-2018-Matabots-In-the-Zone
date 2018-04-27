@@ -440,7 +440,7 @@ if(this->get_remote()->get_team() == 2){
     this->drive->moveDistance(inch);
     if(this->get_drive()->getLeftMotorAt(0)->get_Power() == 0){
     this->drive->haltRight();
-
+    // printf("in drive in\n");
     }
     //printf("Go to:%f, Now at: %d\n", this->get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband(), abs(this->get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()));
     delay(50);
