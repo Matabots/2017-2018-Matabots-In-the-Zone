@@ -43,8 +43,8 @@ void autonomous() {
       }
       else
       {
+        // carbonRunRedPreload(bot);
         carbonRunRedPreload(bot);
-        // carbonRunBluePreload(bot);
       }
 
     }

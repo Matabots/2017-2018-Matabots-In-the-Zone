@@ -74,7 +74,7 @@ void chassis::addRightMotor(int port, bool reverse){
   rightMotor->set_type(TURBO);
   rightMotor->set_velPID(this->chassisVelPID);
   rightMotor->set_posPID(this->chassisPosPID);
-  // rightMotor->set_imeReversed(true);
+  rightMotor->set_imeReversed(true);
   rightMotor->set_address(1);
   //this->rightMotors.resize(this->rightMotors.size() + 1);
   this->rightMotors.push_back(rightMotor);
@@ -167,6 +167,8 @@ void chassis::moveDistance(float inch){
     printf("%f \n",abs(this->getRightMotorAt(0)->get_posPID()->get_error()));
     atPos = true;
   }
+
+
 }
 
 

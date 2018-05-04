@@ -19,7 +19,7 @@ void carbonRunRedPreload(robot bot){
   bot.set_primaryBottomHeight(false);
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.get_drive()->rightPosition(5);
+  //bot.get_drive()->rightPosition(5);
   bot.driveIn(7);
   bot.set_targetStack(2);
   while(bot.get_stackedCones() < bot.get_targetStack()){
@@ -28,13 +28,16 @@ void carbonRunRedPreload(robot bot){
   }
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.driveIn(-19);
+  bot.driveIn(-15);
   bot.set_primaryBottomHeight(true);
   delay(250);
   bot.spinToAngle(91);
   delay(250);
-  bot.driveIn(-7.75);
+  bot.driveIn(-7.25);
   delay(250);
+
+
+
   bot.set_targetStack(8);
   while(bot.get_stackedCones() < bot.get_targetStack()){
     printf("stacked cones: %d\n", bot.get_stackedCones());
@@ -55,7 +58,7 @@ void carbonRunRedPreload(robot bot){
    delay(250);
    bot.driveIn(-6);
     delay(250);
-    bot.driveIn(25);
+    bot.driveIn(35);
     delay(250);
     bot.lowerGoalLift();
     delay(250);
@@ -83,7 +86,7 @@ void carbonRunBluePreload(robot bot){
   bot.set_primaryBottomHeight(false);
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.get_drive()->rightPosition(5);
+  // bot.get_drive()->rightPosition(5);
   bot.driveIn(7);
   bot.set_targetStack(2);
   while(bot.get_stackedCones() < bot.get_targetStack()){
@@ -92,12 +95,12 @@ void carbonRunBluePreload(robot bot){
   }
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.driveIn(-19);
+  bot.driveIn(-15);
   bot.set_primaryBottomHeight(true);
   delay(250);
-  bot.spinToAngle(269);
+  bot.spinToAngle(-90);
   delay(250);
-  bot.driveIn(-7.75);
+  bot.driveIn(-7.25);
   delay(250);
   bot.set_targetStack(8);
   while(bot.get_stackedCones() < bot.get_targetStack()){
@@ -119,7 +122,7 @@ void carbonRunBluePreload(robot bot){
    delay(250);
    bot.driveIn(-6);
    delay(250);
-   bot.driveIn(25);
+   bot.driveIn(35);
    delay(250);
    bot.lowerGoalLift();
    delay(250);
@@ -160,12 +163,12 @@ void carbonJukeRunRedPreload(robot bot){
   }
   // printf("%ld\n", bot.intakeTimer);
   delay(250);
-  bot.driveIn(-19);
+  bot.driveIn(-15);
   bot.set_primaryBottomHeight(true);
   delay(250);
   bot.spinToAngle(269);
   delay(250);
-  bot.driveIn(-7.75);
+  bot.driveIn(-7.25);
   delay(250);
   bot.set_targetStack(8);
   while(bot.get_stackedCones() < bot.get_targetStack()){

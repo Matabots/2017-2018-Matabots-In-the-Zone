@@ -438,10 +438,9 @@ if(this->get_remote()->get_team() == 2){
   while (!this->drive->atPos && (millis()-time1 < 3000)) {
     // time1 = millis();
     this->drive->moveDistance(inch);
-    if(this->get_drive()->getLeftMotorAt(0)->get_Power() == 0){
-    this->drive->haltRight();
-
-    }
+    // if(this->get_drive()->getLeftMotorAt(0)->get_Power() <= 10){
+    //   this->drive->haltRight();
+    // }
     //printf("Go to:%f, Now at: %d\n", this->get_drive()->getLeftMotorAt(0)->get_posPID()->get_deadband(), abs(this->get_drive()->getLeftMotorAt(0)->get_posPID()->get_error()));
     delay(50);
   }
@@ -452,8 +451,10 @@ if(this->get_remote()->get_team() == 2){
 
 void robot::spinToAngle(int targetAngle)
 {
+unsigned long time1 =0;
+  time1 = millis();
   this->drive->atGyro = false;
-  while(!this->drive->atGyro){
+  while(!this->drive->atGyro && millis()-time1 < 1500){
     this->drive->spinToAngle(targetAngle, this->analog);
     printf("yaw: %d\n", this->analog->gyro_val());
     delay(50);

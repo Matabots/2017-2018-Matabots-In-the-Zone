@@ -137,20 +137,20 @@
   };
 
   int motor::get_count(){
-    imeGet(this->address, &this->count);
-    return this->count;
-    // if((this->imeReversed)==true){
-    //   if(imeGet(this->address, &this->count)){
-    //     return (this->count);
-    //   }
-    // }
-    // else if(this->imeReversed == true){
-    //   if(imeGet(this->address, &this->count)){
-    //     return (-1 * this->count);
-    //   }
-    // }
-    //   printf("Unable to retrive value of encoder");
-    //   return -1;
+    // imeGet(this->address, &this->count);
+    // return this->count;
+    if((this->imeReversed)==false){
+      if(imeGet(this->address, &this->count)){
+        return (this->count);
+      }
+    }
+    else if(this->imeReversed == true){
+      if(imeGet(this->address, &this->count)){
+        return (-1 * this->count);
+      }
+    }
+      printf("Unable to retrive value of encoder");
+      return -1;
 
   };
 
